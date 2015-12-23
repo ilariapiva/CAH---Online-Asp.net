@@ -4,30 +4,37 @@
 
 <script runat="server">
 
-String strsql;
+    String strsql1, strsql2;
 
 protected void Page_Load(object sender, EventArgs e)
 {
     FunctionUtilitysDB.Connessione();
 }
 
-void btnLogin_Click(object sender, EventArgs e)
+void btnSalva_Click(object sender, EventArgs e)
 {
-    var email = UserEmail.Text;
+    lblUser.Text = "";
+
     var pwd = UserPass.Text;
-    
-    strsql = "SELECT email FROM tblAccount WHERE email = '"+email+"' and pwd = '"+pwd+"' ";
-    var result = FunctionUtilitysDB.Verifica(strsql);
-    
+    var user = Username.Text;
+
+    strsql1 = "SELECT username FROM tblAccount WHERE username = '" + user + "'";
+    var result = FunctionUtilitysDB.Verifica(strsql1);
+
     if (result)
     {
-        FormsAuthentication.RedirectFromLoginPage(UserEmail.Text, Persist.Checked);
-        Response.Redirect("~/index.aspx");
+        lblUser.Text = "Questo username è già utilizzato.";
     }
-    else
+
+    if (result == false)
     {
-        lblMsg.Text = "Invalid credentials. Please try again.";
-    }
+        strsql1 = "UPDATE tblAccount SET username = '" + user + "'";
+        FunctionUtilitysDB.Scrivi(strsql1);
+        strsql2 = "UPDATE tblAccount SET pwd = HASHBYTES('SHA1', '" + pwd + "')";
+        FunctionUtilitysDB.Scrivi(strsql2);
+        lblMsg.Text = "Cambiamenti effettutati!";
+        Response.Redirect("~/index.aspx");
+    } 
 }
 </script>
 <html>
@@ -36,15 +43,23 @@ void btnLogin_Click(object sender, EventArgs e)
 </head>
 <body>
     <form id="form1" runat="server">
-        <h3>Login Page</h3>
+        <h3>Impostazioni</h3>
         <table>
             <tr>
                 <td>E-mail address:</td>
+                <td style="margin-left: 80px">
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td>Username:</td>
                 <td>
-                    <asp:TextBox ID="UserEmail" runat="server" /></td>
+                    <asp:TextBox ID="Username" runat="server" />
+                    <br />
+                    <asp:Label ID="lblUser" runat="server" ForeColor="Black"></asp:Label>
+                </td>
                 <td>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1"
-                        ControlToValidate="UserEmail"
+                        ControlToValidate="Username"
                         Display="Dynamic"
                         ErrorMessage="Cannot be empty."
                         runat="server" />
@@ -63,15 +78,13 @@ void btnLogin_Click(object sender, EventArgs e)
                         runat="server" />
                 </td>
             </tr>
-            <tr>
-                <td>Remember me?</td>
-                <td>
-                    <asp:CheckBox ID="Persist" runat="server" /></td>
-            </tr>
-        </table>
-        <asp:Button ID="btnLogin" OnClick="btnLogin_Click" Text="Login"
+            </table>
+        <asp:Button ID="btnAnnulla" Text="Annulla"
+            runat="server" style="width: 63px" />
+        &nbsp;&nbsp;
+        <asp:Button ID="btnSalva" OnClick="btnSalva_Click" Text="Salva"
             runat="server" />
-        <p>
+        &nbsp;<p>
             <asp:Label ID="lblMsg" ForeColor="Red" runat="server" />
         </p>
     </form>

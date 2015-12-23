@@ -11,36 +11,37 @@ protected void Page_Load(object sender, EventArgs e)
     FunctionUtilitysDB.Connessione();
 }
 
-protected void Register_Click(object sender, EventArgs e)
+protected void btnRegister_Click(object sender, EventArgs e)
 {
     lblEmail.Text = "";
     lblUser.Text = "";
-    
+
     var email = UserEmail.Text;
     var pwd = UserPass.Text;
     var user = Username.Text;
 
     strsql = "SELECT email FROM tblAccount WHERE email = '" + email + "'";
     var result1 = FunctionUtilitysDB.Verifica(strsql);
-    
+
     if (result1)
     {
         lblEmail.Text = "Questo indirizzo email è già utilizzato.";
     }
-    
+
     strsql = "SELECT username FROM tblAccount WHERE username = '" + user + "'";
     var result2 = FunctionUtilitysDB.Verifica(strsql);
-    
+
     if (result2)
     {
         lblUser.Text = "Questo username è già utilizzato.";
     }
-    
-    if((result1 == false) && (result2 == false))
+
+    if ((result1 == false) && (result2 == false))
     {
-        strsql = "INSERT INTO tblAccount(email, username, pwd) VALUES ('"+email+"', '"+user+"', '"+pwd+"')";
+        strsql = "INSERT INTO tblAccount(email, username, pwd) VALUES ('" + email + "', '" + user + "', HASHBYTES('SHA1', '" + pwd + "'))";
         FunctionUtilitysDB.Scrivi(strsql);
         lblMsg.Text = "Registrazione effettuata!";
+        Response.Redirect("~/login.aspx");
     }
 }
 </script>
@@ -50,7 +51,7 @@ protected void Register_Click(object sender, EventArgs e)
 </head>
 <body>
     <form id="form1" runat="server">
-        <h3>Register Page</h3>
+        <h3>Register</h3>
         <table>
             <tr>
                 <td>E-mail address:</td>
@@ -96,8 +97,8 @@ protected void Register_Click(object sender, EventArgs e)
                 </td>
             </tr>
         </table>
-        <asp:Button ID="Register" OnClick="Register_Click" Text="Register"
-            runat="server" />
+        <br />
+        <asp:Button ID="btnRegister" runat="server" OnClick="btnRegister_Click" Text="Sign Up" />
         <p>
             <asp:Label ID="lblMsg" ForeColor="Red" runat="server" />
         </p>

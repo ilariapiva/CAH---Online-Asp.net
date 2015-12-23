@@ -36,9 +36,11 @@ protected void Register_Click(object sender, EventArgs e)
         lblUser.Text = "Questo username è già utilizzato.";
     }
     
-    if(result1 == false) && (result2 == false)
+    if((result1 == false) && (result2 == false))
     {
-        //faccio la query di registrazione
+        strsql = "INSERT INTO tblAccount(email, username, pwd) VALUES ('"+email+"', '"+user+"', '"+pwd+"')";
+        FunctionUtilitysDB.Scrivi(strsql);
+        lblMsg.Text = "Registrazione effettuata!";
     }
 }
 </script>
@@ -97,7 +99,7 @@ protected void Register_Click(object sender, EventArgs e)
         <asp:Button ID="Register" OnClick="Register_Click" Text="Register"
             runat="server" />
         <p>
-            <asp:Label ID="Msg" ForeColor="red" runat="server" />
+            <asp:Label ID="lblMsg" ForeColor="Red" runat="server" />
         </p>
     </form>
 </body>

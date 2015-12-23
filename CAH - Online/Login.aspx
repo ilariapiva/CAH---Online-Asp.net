@@ -25,7 +25,7 @@ void Lgoin_Click(object sender, EventArgs e)
     }
     else
     {
-        Msg.Text = "Invalid credentials. Please try again.";
+        lblMsg.Text = "Invalid credentials. Please try again.";
     }
 }
 </script>
@@ -71,7 +71,7 @@ void Lgoin_Click(object sender, EventArgs e)
         <asp:Button ID="Submit1" OnClick="Lgoin_Click" Text="Login"
             runat="server" />
         <p>
-            <asp:Label ID="Msg" ForeColor="red" runat="server" />
+            <asp:Label ID="lblMsg" ForeColor="Red" runat="server" />
         </p>
     </form>
 </body>

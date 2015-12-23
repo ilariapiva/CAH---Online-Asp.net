@@ -27,6 +27,12 @@ namespace CAHOnline
             return ok;
         }
 
+        public static void Scrivi(String strsql)
+        {
+            cmd = new SqlCommand(strsql, cn);
+            cmd.ExecuteNonQuery();
+        }
+
         public static void Connessione()
         {
             string strcn = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";

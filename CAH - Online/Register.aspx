@@ -18,7 +18,7 @@ protected void btnRegister_Click(object sender, EventArgs e)
 
     var email = UserEmail.Text;
     var pwd = UserPass.Text;
-    var user = Username.Text;
+    var user = UserName.Text;
 
     strsql = "SELECT email FROM tblAccount WHERE email = '" + email + "'";
     var result1 = FunctionUtilitysDB.Verifica(strsql);
@@ -40,68 +40,63 @@ protected void btnRegister_Click(object sender, EventArgs e)
     {
         strsql = "INSERT INTO tblAccount(email, username, pwd) VALUES ('" + email + "', '" + user + "', HASHBYTES('SHA1', '" + pwd + "'))";
         FunctionUtilitysDB.Scrivi(strsql);
-        lblMsg.Text = "Registrazione effettuata!";
         Response.Redirect("~/login.aspx");
     }
 }
 </script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
 <html>
 <head id="Head1" runat="server">
-    <title>Forms Registration - Register</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap.css.map" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/Style.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <title>CAH - Online</title>
 </head>
 <body>
-    <form id="form1" runat="server">
-        <h3>Register</h3>
-        <table>
-            <tr>
-                <td>E-mail address:</td>
-                <td>
-                    <asp:TextBox ID="UserEmail" runat="server" />
-                    <br />
-                    <asp:Label ID="lblEmail" runat="server" ForeColor="Black"></asp:Label>
-                </td>
-                <td>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1"
-                        ControlToValidate="UserEmail"
-                        Display="Dynamic"
-                        ErrorMessage="Cannot be empty."
-                        runat="server" />
-                </td>
-            </tr>
-            <tr>
-                <td>Username:</td>
-                <td>
-                    <asp:TextBox ID="Username" runat="server" />
-                    <br />
-                    <asp:Label ID="lblUser" runat="server" ForeColor="Black"></asp:Label>
-                </td>
-                <td>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2"
-                        ControlToValidate="Username"
-                        Display="Dynamic"
-                        ErrorMessage="Cannot be empty."
-                        runat="server" />
-                </td>
-            </tr>
-            <tr>
-                <td>Password:</td>
-                <td>
-                    <asp:TextBox ID="UserPass" TextMode="Password"
-                        runat="server" />
-                </td>
-                <td>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator3"
-                        ControlToValidate="UserPass"
-                        ErrorMessage="Cannot be empty."
-                        runat="server" />
-                </td>
-            </tr>
-        </table>
-        <br />
-        <asp:Button ID="btnRegister" runat="server" OnClick="btnRegister_Click" Text="Sign Up" />
-        <p>
-            <asp:Label ID="lblMsg" ForeColor="Red" runat="server" />
-        </p>
+    <form id="form2" runat="server">
+        <div class="container">
+            <div class="flat-form">
+                <ul class="tabs">
+                    <li><a href="login.aspx">Login</a></li>
+                    <li class="active">Register</li>
+                    <li>Reset password</li>
+                </ul>
+                <div class="form-action show">
+                    <h1>Register</h1>
+                    <p>Per iniziare a giocare a CAH - Online devi registrarti.</p>
+                    <div>
+                        <ul>
+                            <li>E-mail address:
+                                <asp:TextBox ID="UserEmail" placeholder="Email" runat="server" />
+                                <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator4" ControlToValidate="UserEmail" Display="Dynamic" ErrorMessage="Cannot be empty." runat="server" />
+                                <asp:Label ID="lblEmail" runat="server" class="info-error"></asp:Label>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>Username&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <asp:TextBox ID="UserName" placeholder="Username" runat="server" />
+                                <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator3" ControlToValidate="UserName" Display="Dynamic" ErrorMessage="Cannot be empty." runat="server" />
+                                <asp:Label ID="lblUser" runat="server" class="info-error"></asp:Label>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>Password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <asp:TextBox ID="UserPass" TextMode="Password" placeholder="Password" runat="server" />
+                                <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator5" ControlToValidate="UserPass" ErrorMessage="Cannot be empty." runat="server" />
+                            </li>
+                        </ul>
+                    </div>
+                    <asp:Button ID="btnRegister" class="button" runat="server" OnClick="btnRegister_Click" Text="Sign Up" />
+                </div>
+            </div>
+        </div>
     </form>
 </body>
 </html>

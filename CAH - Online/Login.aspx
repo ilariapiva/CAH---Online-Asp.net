@@ -1,79 +1,97 @@
 ﻿<%@ Page Language="C#" %>
+
 <%@ Import Namespace="System.Data" %>
 <%@ Import Namespace="CAHOnline" %>
 
 <script runat="server">
 
-String strsql;
+    String strsql;
+    String userEmail;
 
-protected void Page_Load(object sender, EventArgs e)
-{
-    FunctionUtilitysDB.Connessione();
-}
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        FunctionUtilitysDB.Connessione();
+    }
 
-void btnLogin_Click(object sender, EventArgs e)
-{
-    var email = UserEmail.Text;
-    var pwd = UserPass.Text;
-    
-    strsql = "SELECT email FROM tblAccount WHERE email = '"+email+"' and pwd = '"+pwd+"' ";
-    var result = FunctionUtilitysDB.Verifica(strsql);
-    
-    if (result)
+    void btnLogin_Click(object sender, EventArgs e)
     {
-        FormsAuthentication.RedirectFromLoginPage(UserEmail.Text, Persist.Checked);
-        Response.Redirect("~/index.aspx");
+        var email = UserEmail.Text;
+        var pwd = UserPass.Text;
+
+        strsql = "SELECT email FROM tblAccount WHERE email = '" + email + "' and pwd = HASHBYTES('SHA1', '" + pwd + "')";
+        var result = FunctionUtilitysDB.Verifica(strsql);
+
+        if (result)
+        {
+            userEmail = UserEmail.Text;
+            Response.Cookies["userName"].Value = userEmail;
+            Response.Cookies["userName"].Expires = DateTime.Now.AddDays(1);
+
+            FormsAuthentication.RedirectFromLoginPage(userEmail, Persist.Checked);
+            Response.Redirect("~/index.aspx");
+
+            Response.Cookies["userName"].Value = userEmail;
+            Response.Cookies["userName"].Expires = DateTime.Now.AddDays(1);
+        }
+        else
+        {
+            lblMsg.Text = "Invalid credentials. Please try again.";
+        }
     }
-    else
-    {
-        lblMsg.Text = "Invalid credentials. Please try again.";
-    }
-}
 </script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
 <html>
 <head id="Head1" runat="server">
-    <title>Forms Authentication - Login</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap.css.map" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/Style.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <title>CAH - Online</title>
 </head>
 <body>
     <form id="form1" runat="server">
-        <h3>Login Page</h3>
-        <table>
-            <tr>
-                <td>E-mail address:</td>
-                <td>
-                    <asp:TextBox ID="UserEmail" runat="server" /></td>
-                <td>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1"
-                        ControlToValidate="UserEmail"
-                        Display="Dynamic"
-                        ErrorMessage="Cannot be empty."
-                        runat="server" />
-                </td>
-            </tr>
-            <tr>
-                <td>Password:</td>
-                <td>
-                    <asp:TextBox ID="UserPass" TextMode="Password"
-                        runat="server" />
-                </td>
-                <td>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2"
-                        ControlToValidate="UserPass"
-                        ErrorMessage="Cannot be empty."
-                        runat="server" />
-                </td>
-            </tr>
-            <tr>
-                <td>Remember me?</td>
-                <td>
-                    <asp:CheckBox ID="Persist" runat="server" /></td>
-            </tr>
-        </table>
-        <asp:Button ID="btnLogin" OnClick="btnLogin_Click" Text="Login"
-            runat="server" />
-        <p>
-            <asp:Label ID="lblMsg" ForeColor="Red" runat="server" />
-        </p>
+        <div class="container">
+            <div class="flat-form">
+                <ul class="tabs">
+                    <li class="active">Login</li>
+                    <li><a href="register.aspx">Register</a></li>
+                    <li>Reset password</li>
+                </ul>
+                <div class="form-action show">
+                    <h1>CAH - Online</h1>
+                    <p>Il famoso gioco di carte Cards Against Humanity in versione Online.</p>
+                    <div>
+                        <ul>
+                            <li>E-mail address:
+                                <asp:TextBox ID="UserEmail" placeholder="Email" runat="server" />
+                                <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator1" ControlToValidate="UserEmail" Display="Dynamic" ErrorMessage="Cannot be empty." runat="server" />
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>Password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <asp:TextBox ID="UserPass" TextMode="Password" placeholder="Password" runat="server" />
+                                <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator2" ControlToValidate="UserPass" ErrorMessage="Cannot be empty." runat="server" />
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>Remember me?
+                                <asp:CheckBox ID="Persist" runat="server" />
+                            </li>
+                        </ul>
+                    </div>
+                    <asp:Button ID="btnLogin" class="button" OnClick="btnLogin_Click" Text="Login" runat="server" />
+                    <p>
+                        <asp:Label ID="lblMsg" ForeColor="Red" runat="server" />
+                    </p>
+                </div>
+            </div>
+        </div>
     </form>
 </body>
 </html>

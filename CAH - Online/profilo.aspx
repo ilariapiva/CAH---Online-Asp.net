@@ -8,19 +8,12 @@
 
 <script runat="server">
 
+    String email;
+    
     protected void Page_Load(object sender, EventArgs e)
     {
-        //FunctionUtilitysDB.ApriConnessioneDB();
+        FunctionUtilitysDB.ApriConnessioneDB();
 
-        String email;
-        SqlConnection cn;
-        SqlCommand cmd;
-
-        
-        string strcn = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-        cn = new SqlConnection(strcn);
-        cn.Open();
-        
         lblEmail.Text = Request.Cookies["userEmail"].Value;
 
         if (Request.Cookies["userEmail"] != null)
@@ -28,21 +21,19 @@
             lblEmail.Text = Server.HtmlEncode(Request.Cookies["userEmail"].Value);
         }
         email = lblEmail.Text;
+        
+        String strsqlUser = "SELECT username FROM tblAccount WHERE email = '" + email + "' ";
+        List<string> resultUser = FunctionUtilitysDB.LeggiUsernameDB(strsqlUser);
 
+        lblUser.Text = resultUser[0];
+        
         String strsql = "SELECT tblAccount.username, tblPartita.giocate, tblPartita.perse, tblPartita.vinte FROM tblAccount, tblPartita WHERE tblAccount.idAccount = tblPartita.idAccount AND tblAccount.email = '" + email + "' ";
 
-        cmd = new SqlCommand(strsql, cn);
-        var dr = cmd.ExecuteReader();
-        while (dr.Read())
-        {
-            lblUsername.Text += dr["username"];
-            lblPartiteGiocate.Text += dr["giocate"];
-            lblPartitePerse.Text += dr["perse"];
-            lblPartiteVinte.Text += dr["vinte"];
-        }
-        dr.Close();
-        cn.Dispose();
-        cmd.Dispose();
+        List<string> result = FunctionUtilitysDB.LeggiValoriProfiloDB(strsql);
+        lblUsername.Text = result[0];
+        lblPartiteGiocate.Text = result[1];
+        lblPartitePerse.Text = result[2];
+        lblPartiteVinte.Text = result[3];
     }
 </script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -86,7 +77,9 @@
                                 <a href="regole.aspx" class="nav-text">Regole</a>
                             </li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle nav-text nav-active" data-toggle="dropdown">Nome utente <b class="caret"></b></a>
+                                <a href="#" class="dropdown-toggle nav-text nav-active" data-toggle="dropdown">
+                                    <asp:Label class="control-label label-form" ID="lblUser" runat="server"></asp:Label>
+                                &nbsp;<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a href="profilo.aspx" class="nav-text nav-active">Profilo</a>

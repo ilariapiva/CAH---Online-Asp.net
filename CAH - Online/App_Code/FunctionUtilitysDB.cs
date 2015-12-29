@@ -11,7 +11,6 @@ namespace CAHOnline
     {
         static SqlConnection cn;
         static SqlCommand cmd;
-        static String strsql;
 
         public static bool Verifica(String strsql)
         {
@@ -32,21 +31,56 @@ namespace CAHOnline
             cmd.ExecuteNonQuery();
         }
 
-        /*public static string LeggiDB(String strsql, String username, String partiteGiocate, String partiteVinte, String partitePerse)
+        public static List<string> LeggiValoriProfiloDB(String strsql)
         {
+            String username = null;
+            String partiteGiocate = null;
+            String partiteVinte = null;
+            String partitePerse = null;
+
+            List<string> valori = new List<string>();
+
             cmd = new SqlCommand(strsql, cn);
             var dr = cmd.ExecuteReader();
+
             while(dr.Read())
             {
                 username += dr["username"];
+                valori.Add(username);
                 partiteGiocate += dr["giocate"];
+                valori.Add(partiteGiocate);
                 partiteVinte += dr["perse"];
+                valori.Add(partiteVinte);
                 partitePerse += dr["vinte"];
+                valori.Add(partitePerse);
             }
+
             dr.Close();
             cn.Dispose();
             cmd.Dispose();
-        }*/
+            
+            return valori;
+        }
+
+        public static List<string> LeggiUsernameDB(String strsql)
+        {
+            String username = null;
+            
+            List<string> valori = new List<string>();
+
+            cmd = new SqlCommand(strsql, cn);
+            var dr = cmd.ExecuteReader();
+
+            while (dr.Read())
+            {
+                username += dr["username"];
+                valori.Add(username);
+            }
+
+            dr.Close();
+
+            return valori;
+        }
 
         public static void ApriConnessioneDB()
         {

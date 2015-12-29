@@ -7,6 +7,22 @@
 
 <script runat="server">
 
+    String email;
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        FunctionUtilitysDB.ApriConnessioneDB();
+        email = Request.Cookies["userEmail"].Value;
+
+        if (Request.Cookies["userEmail"] != null)
+        {
+            email = Server.HtmlEncode(Request.Cookies["userEmail"].Value);
+        }
+
+        String strsql = "SELECT username FROM tblAccount WHERE email = '" + email + "' ";
+        List<string> resultUser = FunctionUtilitysDB.LeggiUsernameDB(strsql);
+
+        lblUser.Text = resultUser[0];
+    }
 </script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
@@ -44,13 +60,15 @@
                     <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav navbar-right">
                             <li>
-                                <a href="index.html" class="nav-text nav-active">Home</a>
+                                <a href="index.html" class="nav-text">Home</a>
                             </li>
                             <li>
                                 <a href="regole.html" class="nav-text">Regole</a>
                             </li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle nav-text" data-toggle="dropdown">Nome utente <b class="caret"></b></a>
+                                <a href="#" class="dropdown-toggle nav-text" data-toggle="dropdown">
+                                    <asp:Label class="control-label label-form" ID="lblUser" runat="server"></asp:Label>
+                                &nbsp;<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a href="profilo.html" class="nav-text">Profilo</a>

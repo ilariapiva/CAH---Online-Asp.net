@@ -5,28 +5,34 @@
 
 <script runat="server">
 
+    String email;
+    
     protected void Page_Load(object sender, EventArgs e)
     {
         FunctionUtilitysDB.ApriConnessioneDB();
         lblEmail.Text = Request.Cookies["userEmail"].Value;
-    }
 
-    void btnSalva_Click(object sender, EventArgs e)
-    {
-        lblUser.Text = "";
-
-        String email;
-        var pwd = UserPass.Text;
-        var user = UserName.Text;
-
-        String strsqlUser = "SELECT username FROM tblAccount WHERE username = '" + user + "'";
-        var result = FunctionUtilitysDB.Verifica(strsqlUser);
-        
         if (Request.Cookies["userEmail"] != null)
         {
             lblEmail.Text = Server.HtmlEncode(Request.Cookies["userEmail"].Value);
         }
         email = lblEmail.Text;
+
+        String strsql = "SELECT username FROM tblAccount WHERE email = '" + email + "' ";
+        List<string> resultUser = FunctionUtilitysDB.LeggiUsernameDB(strsql);
+
+        lblUserName.Text = resultUser[0];
+    }
+
+    void btnSalva_Click(object sender, EventArgs e)
+    {
+        lblUser.Text = "";
+       
+        var pwd = UserPass.Text;
+        var user = UserName.Text;
+
+        String strsqlUser = "SELECT username FROM tblAccount WHERE username = '" + user + "'";
+        var result = FunctionUtilitysDB.Verifica(strsqlUser);
         
         if (result)
         {
@@ -47,6 +53,7 @@
 </script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
 <html>
 <head id="Head1" runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -83,7 +90,9 @@
                             <a href="regole.aspx" class="nav-text">Regole</a>
                         </li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle nav-text nav-active" data-toggle="dropdown">Nome utente <b class="caret"></b></a>
+                            <a href="#" class="dropdown-toggle nav-text nav-active" data-toggle="dropdown">
+                                    <asp:Label class="control-label label-form" ID="lblUserName" runat="server"></asp:Label>
+                                &nbsp;<b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li>
                                     <a href="profilo.aspx" class="nav-text">Profilo</a>

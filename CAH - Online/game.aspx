@@ -1,5 +1,8 @@
 ﻿<%@ Page Language="C#" %>
 
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="CAHOnline" %>
+
 <!DOCTYPE html>
 
 <script runat="server">
@@ -19,6 +22,7 @@
     <link href="css/bootstrap.css.map" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="css/Style.css" />
+    <link rel="stylesheet" type="text/css" href="css/game.css" />
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
     <title>CAH - Online</title>
 </head>
@@ -37,7 +41,7 @@
                         <a href="index.html">
                             <img src="img/logo2.png" alt="CAH - Online"/></a>
                     </div>
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav navbar-right">
                             <li>
                                 <a href="index.html" class="nav-text nav-active">Home</a>
@@ -73,7 +77,7 @@
                         </div>
                     </div>
                     <div class="col-md-9">
-                        <div class="row" id="row-white-card-containers">
+                        <div class="row">
                             <div class="col-card-fixed">
                                 <div class="card-container">
                                     <div class="white-card">

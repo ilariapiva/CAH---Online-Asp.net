@@ -6,15 +6,15 @@
 <script runat="server">
 
     String strsql;
-    String userEmail;
-
+    
     protected void Page_Load(object sender, EventArgs e)
     {
-        FunctionUtilitysDB.Connessione();
+        FunctionUtilitysDB.ApriConnessioneDB();
     }
 
     void btnLogin_Click(object sender, EventArgs e)
     {
+        String userEmail;
         var email = UserEmail.Text;
         var pwd = UserPass.Text;
 
@@ -24,14 +24,12 @@
         if (result)
         {
             userEmail = UserEmail.Text;
-            Response.Cookies["userName"].Value = userEmail;
-            Response.Cookies["userName"].Expires = DateTime.Now.AddDays(1);
+            
+            Response.Cookies["userEmail"].Value = userEmail;
+            Response.Cookies["userEmail"].Expires = DateTime.Now.AddDays(1);
 
             FormsAuthentication.RedirectFromLoginPage(userEmail, Persist.Checked);
             Response.Redirect("~/index.aspx");
-
-            Response.Cookies["userName"].Value = userEmail;
-            Response.Cookies["userName"].Expires = DateTime.Now.AddDays(1);
         }
         else
         {
@@ -70,7 +68,7 @@
                         <ul>
                             <li>E-mail address:
                                 <asp:TextBox ID="UserEmail" placeholder="Email" runat="server" />
-                                <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator1" ControlToValidate="UserEmail" Display="Dynamic" ErrorMessage="Cannot be empty." runat="server" />
+                                <asp:RegularExpressionValidator class="info-error" ID="revEmail" runat="server" ErrorMessage="Sintassi email non valida" ValidationExpression=".*@.*\..*" ControlToValidate="UserEmail"/>
                             </li>
                         </ul>
                         <ul>

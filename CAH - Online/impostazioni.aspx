@@ -5,23 +5,29 @@
 
 <script runat="server">
 
-    String strsql1, strsql2;
-
     protected void Page_Load(object sender, EventArgs e)
     {
-        FunctionUtilitysDB.Connessione();
+        FunctionUtilitysDB.ApriConnessioneDB();
+        lblEmail.Text = Request.Cookies["userEmail"].Value;
     }
 
     void btnSalva_Click(object sender, EventArgs e)
     {
         lblUser.Text = "";
 
+        String email;
         var pwd = UserPass.Text;
         var user = UserName.Text;
 
-        strsql1 = "SELECT username FROM tblAccount WHERE username = '" + user + "'";
-        var result = FunctionUtilitysDB.Verifica(strsql1);
-
+        String strsqlUser = "SELECT username FROM tblAccount WHERE username = '" + user + "'";
+        var result = FunctionUtilitysDB.Verifica(strsqlUser);
+        
+        if (Request.Cookies["userEmail"] != null)
+        {
+            lblEmail.Text = Server.HtmlEncode(Request.Cookies["userEmail"].Value);
+        }
+        email = lblEmail.Text;
+        
         if (result)
         {
             lblUser.Text = "Questo username è già utilizzato.";
@@ -29,10 +35,12 @@
 
         if (result == false)
         {
-            strsql1 = "UPDATE tblAccount SET username = '" + user + "'";
-            FunctionUtilitysDB.Scrivi(strsql1);
-            strsql2 = "UPDATE tblAccount SET pwd = HASHBYTES('SHA1', '" + pwd + "')";
-            FunctionUtilitysDB.Scrivi(strsql2);
+            strsqlUser = "UPDATE tblAccount SET username = '" + user + "' WHERE email = '" + email + "' ";
+            FunctionUtilitysDB.ScriviDB(strsqlUser);
+
+            String strsqlPwd = "UPDATE tblAccount SET pwd = HASHBYTES('SHA1', '" + pwd + "') WHERE email = '" + email + "' ";
+            FunctionUtilitysDB.ScriviDB(strsqlPwd);
+            
             Response.Redirect("~/index.aspx");
         }
     }
@@ -66,7 +74,7 @@
                     <a href="index.aspx">
                         <img src="img/logo2.png" alt="CAH - Online"></a>
                 </div>
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
                             <a href="index.aspx" class="nav-text">Home</a>
@@ -105,9 +113,7 @@
                     <div>
                         <ul>
                             <li>E-mail address:
-                                <asp:TextBox ID="UserEmail" placeholder="Email" runat="server" />
-                                <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator4" ControlToValidate="UserEmail" Display="Dynamic" ErrorMessage="Cannot be empty." runat="server" />
-                                <asp:Label ID="lblEmail" runat="server" class="info-error"></asp:Label>
+                                <asp:Label ID="lblEmail" class="label-form" runat="server"></asp:Label>
                             </li>
                         </ul>
                         <ul>

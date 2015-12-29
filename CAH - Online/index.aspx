@@ -1,5 +1,8 @@
 ﻿<%@ Page Language="C#" %>
 
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="CAHOnline" %>
+
 <!DOCTYPE html>
 
 <script runat="server">
@@ -35,7 +38,7 @@
                         <a href="indexaspx">
                             <img src="img/logo2.png" alt="CAH - Online" /></a>
                     </div>
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav navbar-right">
                             <li>
                                 <a href="index.aspx" class="nav-text nav-active">Home</a>
@@ -86,7 +89,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="row">
-                        <button id="btn-start-game" class="btn btn-start-play text-btn-play" type="submit" name="action">
+                        <button class="btn btn-start-play text-btn-play" type="submit" name="action">
                             Start a new game<br />
                             <i class="material-icons right icon-btn-play">play_arrow</i>
                         </button>

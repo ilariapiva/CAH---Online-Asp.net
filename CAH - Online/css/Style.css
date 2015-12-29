@@ -385,7 +385,7 @@ ul.tabs li.active{
   background: #ffffff ;
   margin: 25px auto;
   width: 50%;
-  height: 300px;
+  height: 350px !important;
   position: relative;
   font-family: 'Comic Sans MS'!important;
   border-radius: 2px;

@@ -1,14 +1,13 @@
 ﻿<%@ Page Language="C#" %>
+
 <%@ Import Namespace="System.Data" %>
 <%@ Import Namespace="CAHOnline" %>
 
 <script runat="server">
 
-String strsql;
-
 protected void Page_Load(object sender, EventArgs e)
 {
-    FunctionUtilitysDB.Connessione();
+    FunctionUtilitysDB.ApriConnessioneDB();
 }
 
 protected void btnRegister_Click(object sender, EventArgs e)
@@ -20,26 +19,26 @@ protected void btnRegister_Click(object sender, EventArgs e)
     var pwd = UserPass.Text;
     var user = UserName.Text;
 
-    strsql = "SELECT email FROM tblAccount WHERE email = '" + email + "'";
-    var result1 = FunctionUtilitysDB.Verifica(strsql);
+    String strsqlEmail = "SELECT email FROM tblAccount WHERE email = '" + email + "'";
+    var resultEmail = FunctionUtilitysDB.Verifica(strsqlEmail);
 
-    if (result1)
+    if (resultEmail)
     {
         lblEmail.Text = "Questo indirizzo email è già utilizzato.";
     }
 
-    strsql = "SELECT username FROM tblAccount WHERE username = '" + user + "'";
-    var result2 = FunctionUtilitysDB.Verifica(strsql);
+    String strsqlUser = "SELECT username FROM tblAccount WHERE username = '" + user + "'";
+    var resultUser = FunctionUtilitysDB.Verifica(strsqlUser);
 
-    if (result2)
+    if (resultUser)
     {
         lblUser.Text = "Questo username è già utilizzato.";
     }
 
-    if ((result1 == false) && (result2 == false))
+    if ((resultEmail == false) && (resultUser == false))
     {
-        strsql = "INSERT INTO tblAccount(email, username, pwd) VALUES ('" + email + "', '" + user + "', HASHBYTES('SHA1', '" + pwd + "'))";
-        FunctionUtilitysDB.Scrivi(strsql);
+        String strsql = "INSERT INTO tblAccount(email, username, pwd) VALUES ('" + email + "', '" + user + "', HASHBYTES('SHA1', '" + pwd + "'))";
+        FunctionUtilitysDB.ScriviDB(strsql);
         Response.Redirect("~/login.aspx");
     }
 }
@@ -75,7 +74,7 @@ protected void btnRegister_Click(object sender, EventArgs e)
                         <ul>
                             <li>E-mail address:
                                 <asp:TextBox ID="UserEmail" placeholder="Email" runat="server" />
-                                <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator4" ControlToValidate="UserEmail" Display="Dynamic" ErrorMessage="Cannot be empty." runat="server" />
+                                <asp:RegularExpressionValidator class="info-error" ID="revEmail" runat="server" ErrorMessage="Sintassi email non valida" ValidationExpression=".*@.*\..*" ControlToValidate="UserEmail"/>
                                 <asp:Label ID="lblEmail" runat="server" class="info-error"></asp:Label>
                             </li>
                         </ul>

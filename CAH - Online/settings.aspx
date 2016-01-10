@@ -6,11 +6,12 @@
 <script runat="server">
     
     String email;
-    
+
+    //Memorizzo tramite i cookies l'email e tramite l'email faccio un controllo nel db e ricavo lo username
     protected void Page_Load(object sender, EventArgs e)
     {
         FunctionsDB.OpenConnectionDB();
-        
+
         lblEmail.Text = Request.Cookies["userEmail"].Value;
 
         if (Request.Cookies["userEmail"] != null)
@@ -24,7 +25,7 @@
 
         lblUserName.Text = resultUser[0];
     }
-
+     
     void btnSalva_Click(object sender, EventArgs e)
     {
         lblUser.Text = "";
@@ -32,6 +33,7 @@
         var pwd = UserPass.Text;
         var user = UserName.Text;
 
+        //Controllo che il username scelto non sia già utilizzato da altri utenti
         String strsqlUser = "SELECT username FROM tblAccount WHERE username = '" + user + "'";
         var result = FunctionsDB.CheckDB(strsqlUser);
         
@@ -40,6 +42,7 @@
             lblUser.Text = "Questo username è già utilizzato.";
         }
 
+        //Se il nome utente non è già stato utilizzato eseguo la query che modifica lo username e la password
         if (result == false)
         {
             strsqlUser = "UPDATE tblAccount SET username = '" + user + "' WHERE email = '" + email + "' ";

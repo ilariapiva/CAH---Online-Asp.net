@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
-
 namespace CAHOnline
 {
     public static class FunctionsDB
@@ -12,6 +11,7 @@ namespace CAHOnline
         static SqlConnection cn;
         static SqlCommand cmd;
 
+        //Questa funzione apre la connessione con il db
         public static void OpenConnectionDB()
         {
             string strcn = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
@@ -19,6 +19,7 @@ namespace CAHOnline
             cn.Open();
         }
 
+        //Questa funzione verifica nelle tabelle che in valori che devono essere inseriti non siano già presenti
         public static bool CheckDB(String strsql)
         {
             cmd = new SqlCommand(strsql, cn);
@@ -31,12 +32,14 @@ namespace CAHOnline
             return ok;
         }
 
+        //Questa funzione serve per eseguire le query  
         public static void WriteDB(String strsql)
         {
             cmd = new SqlCommand(strsql, cn);
             cmd.ExecuteNonQuery();
         }
 
+        //Questa funzione serve per leggere i valori della tabella profilo presente nel db e li inserisce in una lista
         public static List<string> ReadValuesProfileDB(String strsql)
         {
             String username = null;
@@ -71,6 +74,7 @@ namespace CAHOnline
             return value;
         }
 
+        //Questa funzione legge lo username del profilo loggato e lo inserisce in una lista
         public static List<string> ReadUsernameDB(String strsql)
         {
             String Username = null;
@@ -91,5 +95,18 @@ namespace CAHOnline
 
             return value;
         }
+
+        /*public static void Cookies(String lblEmail)
+        {
+            lblEmail = Request.Cookies["userEmail"].Value;
+
+            if (Request.Cookies["userEmail"] != null)
+            {
+                lblEmail = Server.HtmlEncode(Request.Cookies["userEmail"].Value);
+            }
+            String email = lblEmail;
+
+            String strsql = "SELECT username FROM tblAccount WHERE email = '" + email + "' ";
+        }*/
     }
 }

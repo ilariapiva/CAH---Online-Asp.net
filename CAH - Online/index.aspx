@@ -6,6 +6,8 @@
 <script runat="server">
 
     String email;
+
+    //Memorizzo tramite i cookies l'email e tramite l'email faccio un controllo nel db e ricavo lo username
     
     protected void Page_Load(object sender, EventArgs e)
     {

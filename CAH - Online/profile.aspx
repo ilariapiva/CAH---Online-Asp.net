@@ -7,10 +7,12 @@
 
     String email;
     
+    
     protected void Page_Load(object sender, EventArgs e)
     {
         FunctionsDB.OpenConnectionDB();
 
+        //Memorizzo tramite i cookies l'email e tramite l'email faccio un controllo nel db e ricavo lo username
         lblEmail.Text = Request.Cookies["userEmail"].Value;
 
         if (Request.Cookies["userEmail"] != null)
@@ -24,6 +26,7 @@
 
         lblUser.Text = resultUser[0];
 
+        //Leggo dalla tabella profilo lo username, partite vinte, partite perse e partite giocate
         String strsql = "SELECT tblAccount.username, tblProfile.matchesPlay, tblProfile.matchesWon, tblProfile.matchesMissed FROM tblAccount, tblProfile WHERE tblAccount.idAccount = tblProfile.idAccount AND tblAccount.email = '" + email + "' ";
 
         List<string> result = FunctionsDB.ReadValuesProfileDB(strsql);

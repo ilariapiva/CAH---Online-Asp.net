@@ -20,12 +20,14 @@
     void btnLogin_Click(object sender, EventArgs e)
     {
         String userEmail;
+        
         var email = txtEmail.Text;
         var pwd = txtPassword.Text;
 
         strsql = "SELECT email FROM tblAccount WHERE email = '" + email + "' and pwd = HASHBYTES('SHA1', '" + pwd + "')";
         var result = FunctionsDB.CheckDB(strsql);
 
+        //Memorizzo tramite i cookies l'email e accedo alla pagina principale
         if (result)
         {
             userEmail = txtEmail.Text;

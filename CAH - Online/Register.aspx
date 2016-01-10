@@ -19,6 +19,8 @@ protected void btnRegister_Click(object sender, EventArgs e)
     var pwd = txtPassword.Text; 
     var user = txtUsername.Text; 
 
+    //Controllo che l'email inserita non sia già utilizzata da altri utenti 
+    
     String strsqlEmail = "SELECT email FROM tblAccount WHERE email = '" + email + "'";
     var resultEmail = FunctionsDB.CheckDB(strsqlEmail);
 
@@ -27,6 +29,8 @@ protected void btnRegister_Click(object sender, EventArgs e)
         lblEmail.Text = "Questo indirizzo email è già utilizzato.";
     }
 
+    //Controllo che lo username inserito non sia già utilizzata da altri utenti 
+    
     String strsqlUser = "SELECT username FROM tblAccount WHERE username = '" + user + "'";
     var resultUser = FunctionsDB.CheckDB(strsqlUser);
 
@@ -35,6 +39,8 @@ protected void btnRegister_Click(object sender, EventArgs e)
         lblUser.Text = "Questo username è già utilizzato.";
     }
 
+    //Inserisco il nuovo account nella tabella account
+    
     if ((resultEmail == false) && (resultUser == false))
     {
         String strsql = "INSERT INTO tblAccount(email, username, pwd) VALUES ('" + email + "', '" + user + "', HASHBYTES('SHA1', '" + pwd + "'))";

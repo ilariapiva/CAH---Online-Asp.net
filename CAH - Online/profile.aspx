@@ -1,10 +1,7 @@
 ﻿<%@ Page Language="C#" %>
 
 <%@ Import Namespace="System.Data" %>
-<%@ Import Namespace="System.Data.SqlClient" %>
 <%@ Import Namespace="CAHOnline" %>
-
-<!DOCTYPE html>
 
 <script runat="server">
 
@@ -12,7 +9,7 @@
     
     protected void Page_Load(object sender, EventArgs e)
     {
-        FunctionUtilitysDB.ApriConnessioneDB();
+        FunctionsDB.OpenConnectionDB();
 
         lblEmail.Text = Request.Cookies["userEmail"].Value;
 
@@ -23,17 +20,17 @@
         email = lblEmail.Text;
         
         String strsqlUser = "SELECT username FROM tblAccount WHERE email = '" + email + "' ";
-        List<string> resultUser = FunctionUtilitysDB.LeggiUsernameDB(strsqlUser);
+        List<string> resultUser = FunctionsDB.ReadUsernameDB(strsqlUser);
 
         lblUser.Text = resultUser[0];
-        
-        String strsql = "SELECT tblAccount.username, tblPartita.giocate, tblPartita.perse, tblPartita.vinte FROM tblAccount, tblPartita WHERE tblAccount.idAccount = tblPartita.idAccount AND tblAccount.email = '" + email + "' ";
 
-        List<string> result = FunctionUtilitysDB.LeggiValoriProfiloDB(strsql);
-        lblUsername.Text = result[0];
-        lblPartiteGiocate.Text = result[1];
-        lblPartitePerse.Text = result[2];
-        lblPartiteVinte.Text = result[3];
+        String strsql = "SELECT tblAccount.username, tblProfile.matchesPlay, tblProfile.matchesWon, tblProfile.matchesMissed FROM tblAccount, tblProfile WHERE tblAccount.idAccount = tblProfile.idAccount AND tblAccount.email = '" + email + "' ";
+
+        List<string> result = FunctionsDB.ReadValuesProfileDB(strsql);
+        lblMatchesPlayed.Text = result[0];
+        lblMatchesWon.Text = result[1];
+        lblMatchesMissed.Text = result[2];
+        lblUsername.Text = result[3];
     }
 </script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -74,7 +71,7 @@
                                 <a href="index.aspx" class="nav-text">Home</a>
                             </li>
                             <li>
-                                <a href="regole.aspx" class="nav-text">Regole</a>
+                                <a href="rules.aspx" class="nav-text">Rules</a>
                             </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle nav-text nav-active" data-toggle="dropdown">
@@ -82,10 +79,10 @@
                                 &nbsp;<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="profilo.aspx" class="nav-text nav-active">Profilo</a>
+                                        <a href="profile.aspx" class="nav-text nav-active">Profile</a>
                                     </li>
                                     <li>
-                                        <a href="impostazioni.aspx" class="nav-text nav-border">Impostazioni</a>
+                                        <a href="settings.aspx" class="nav-text nav-border">Settings</a>
                                     </li>
                                     <li>
                                         <a href="login.aspx" class="nav-text">Logout</a>
@@ -100,7 +97,7 @@
         <div class="container">
             <div class="flat-form-profile">
                 <div class="form-action-profile">
-                    <h1 class="h1">Profilo</h1>
+                    <h1 class="h1">Profile</h1>
                     <p class="p5">
                         Qui puoi vedere i tuoi risultati.
                     </p>
@@ -114,16 +111,16 @@
                                 <asp:Label class="control-label label-form" ID="lblUsername" runat="server"></asp:Label>
                                 &nbsp;
                             </li>
-                            <li class="form-control-static p4">Partite giocate:
-                                <asp:Label class="control-label label-form" ID="lblPartiteGiocate" runat="server"></asp:Label>
+                            <li class="form-control-static p4">Matches played:
+                                <asp:Label class="control-label label-form" ID="lblMatchesPlayed" runat="server"></asp:Label>
                                 &nbsp;
                             </li>
-                            <li class="form-control-static p4">Partite vinte:
-                                <asp:Label class="control-label label-form" ID="lblPartiteVinte" runat="server"></asp:Label>
+                            <li class="form-control-static p4">Matches won:
+                                <asp:Label class="control-label label-form" ID="lblMatchesWon" runat="server"></asp:Label>
                                 &nbsp;
                             </li>
-                            <li class="form-control-static p4">Partite perse:
-                                <asp:Label class="control-label label-form" ID="lblPartitePerse" runat="server"></asp:Label>
+                            <li class="form-control-static p4">Matches missed:
+                                <asp:Label class="control-label label-form" ID="lblMatchesMissed" runat="server"></asp:Label>
                                 &nbsp;
                             </li>
                         </ul>
@@ -133,7 +130,7 @@
         </div>
         <footer class="footer">
             <div class="black-text p-footer">
-                <p class="left-footer">Copyright &copy; Ilaria Piva</p>
+                <p class="left-footer">Copyright &copy; Ilaria Pivaa</p>
                 <p class="right-footer">CAH - Online 2015/2016</p>
             </div>
         </footer>

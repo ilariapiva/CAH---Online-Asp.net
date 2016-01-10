@@ -7,7 +7,7 @@
 
 protected void Page_Load(object sender, EventArgs e)
 {
-    FunctionUtilitysDB.ApriConnessioneDB();
+    FunctionsDB.OpenConnectionDB();
 }
 
 protected void btnRegister_Click(object sender, EventArgs e)
@@ -15,12 +15,12 @@ protected void btnRegister_Click(object sender, EventArgs e)
     lblEmail.Text = "";
     lblUser.Text = "";
 
-    var email = UserEmail.Text;
-    var pwd = UserPass.Text;
-    var user = UserName.Text;
+    var email = txtEmail.Text;
+    var pwd = txtPassword.Text; 
+    var user = txtUsername.Text; 
 
     String strsqlEmail = "SELECT email FROM tblAccount WHERE email = '" + email + "'";
-    var resultEmail = FunctionUtilitysDB.Verifica(strsqlEmail);
+    var resultEmail = FunctionsDB.CheckDB(strsqlEmail);
 
     if (resultEmail)
     {
@@ -28,7 +28,7 @@ protected void btnRegister_Click(object sender, EventArgs e)
     }
 
     String strsqlUser = "SELECT username FROM tblAccount WHERE username = '" + user + "'";
-    var resultUser = FunctionUtilitysDB.Verifica(strsqlUser);
+    var resultUser = FunctionsDB.CheckDB(strsqlUser);
 
     if (resultUser)
     {
@@ -38,7 +38,7 @@ protected void btnRegister_Click(object sender, EventArgs e)
     if ((resultEmail == false) && (resultUser == false))
     {
         String strsql = "INSERT INTO tblAccount(email, username, pwd) VALUES ('" + email + "', '" + user + "', HASHBYTES('SHA1', '" + pwd + "'))";
-        FunctionUtilitysDB.ScriviDB(strsql);
+        FunctionsDB.CheckDB(strsql);
         Response.Redirect("~/login.aspx");
     }
 }
@@ -64,9 +64,9 @@ protected void btnRegister_Click(object sender, EventArgs e)
         <div class="container">
             <div class="flat-form">
                 <ul class="tabs">
-                    <li><a href="login.aspx">Login</a></li>
-                    <li class="active">Register</li>
-                    <li>Reset password</li>
+                    <li class="active"><asp:HyperLink ID="hlRegister" runat="server" NavigateUrl="~/register.aspx">Register</asp:HyperLink></li>
+                    <li><asp:HyperLink ID="hlLogin" runat="server" NavigateUrl="~/login.aspx">Login</asp:HyperLink></li>
+                    <li><asp:HyperLink ID="hlResetPassword" runat="server">Reset password</asp:HyperLink></li>
                 </ul>
                 <div class="form-action show">
                     <h1>Register</h1>
@@ -74,22 +74,22 @@ protected void btnRegister_Click(object sender, EventArgs e)
                     <div>
                         <ul>
                             <li>E-mail address:
-                                <asp:TextBox ID="UserEmail" placeholder="Email" runat="server" />
-                                <asp:RegularExpressionValidator class="info-error" ID="revEmail" runat="server" ErrorMessage="Sintassi email non valida" ValidationExpression=".*@.*\..*" ControlToValidate="UserEmail"/>
+                                <asp:TextBox ID="txtEmail" placeholder="Email" runat="server" />
+                                <asp:RegularExpressionValidator class="info-error" ID="revEmail" runat="server" ErrorMessage="Sintassi email non valida" ValidationExpression=".*@.*\..*" ControlToValidate="txtEmail"/>
                                 <asp:Label ID="lblEmail" runat="server" class="info-error"></asp:Label>
                             </li>
                         </ul>
                         <ul>
                             <li>Username&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <asp:TextBox ID="UserName" placeholder="Username" runat="server" />
-                                <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator3" ControlToValidate="UserName" Display="Dynamic" ErrorMessage="Cannot be empty." runat="server" />
+                                <asp:TextBox ID="txtUsername" placeholder="Username" runat="server"/>
+                                <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator3" ControlToValidate="txtUsername" Display="Dynamic" ErrorMessage="Cannot be empty." runat="server" />
                                 <asp:Label ID="lblUser" runat="server" class="info-error"></asp:Label>
                             </li>
                         </ul>
                         <ul>
                             <li>Password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <asp:TextBox ID="UserPass" TextMode="Password" placeholder="Password" runat="server" />
-                                <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator5" ControlToValidate="UserPass" ErrorMessage="Cannot be empty." runat="server" />
+                                <asp:TextBox ID="txtPassword" TextMode="Password" placeholder="Password" runat="server" />
+                                <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator5" ControlToValidate="txtPassword" ErrorMessage="Cannot be empty." runat="server" />
                             </li>
                         </ul>
                     </div>

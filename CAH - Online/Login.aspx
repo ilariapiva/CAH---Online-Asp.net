@@ -3,32 +3,37 @@
 <%@ Import Namespace="System.Data" %>
 <%@ Import Namespace="CAHOnline" %>
 
+<%@ Import Namespace="System.Data.SqlClient" %>
+
 <script runat="server">
 
     String strsql;
+
+    SqlConnection cn;
+    SqlCommand cmd;
     
     protected void Page_Load(object sender, EventArgs e)
     {
-        FunctionUtilitysDB.ApriConnessioneDB();
+        FunctionsDB.OpenConnectionDB();
     }
 
     void btnLogin_Click(object sender, EventArgs e)
     {
         String userEmail;
-        var email = UserEmail.Text;
-        var pwd = UserPass.Text;
+        var email = txtEmail.Text;
+        var pwd = txtPassword.Text;
 
         strsql = "SELECT email FROM tblAccount WHERE email = '" + email + "' and pwd = HASHBYTES('SHA1', '" + pwd + "')";
-        var result = FunctionUtilitysDB.Verifica(strsql);
+        var result = FunctionsDB.CheckDB(strsql);
 
         if (result)
         {
-            userEmail = UserEmail.Text;
+            userEmail = txtEmail.Text;
             
             Response.Cookies["userEmail"].Value = userEmail;
             Response.Cookies["userEmail"].Expires = DateTime.Now.AddDays(1);
 
-            FormsAuthentication.RedirectFromLoginPage(userEmail, Persist.Checked);
+            FormsAuthentication.RedirectFromLoginPage(userEmail, CheckBoxRemember.Checked);
             Response.Redirect("~/index.aspx");
         }
         else
@@ -58,9 +63,9 @@
         <div class="container">
             <div class="flat-form">
                 <ul class="tabs">
-                    <li class="active">Login</li>
-                    <li><a href="register.aspx">Register</a></li>
-                    <li>Reset password</li>
+                    <li class="active"><asp:HyperLink ID="hlLogin" runat="server" NavigateUrl="~/login.aspx">Login</asp:HyperLink></li>
+                    <li><asp:HyperLink ID="hlRegister" runat="server" NavigateUrl="register.aspx">Register</asp:HyperLink></li>
+                    <li><asp:HyperLink ID="hlResetPassword" runat="server">Reset password</asp:HyperLink></li>
                 </ul>
                 <div class="form-action show">
                     <h1>CAH - Online</h1>
@@ -68,25 +73,28 @@
                     <div>
                         <ul>
                             <li>E-mail address:
-                                <asp:TextBox ID="UserEmail" placeholder="Email" runat="server" />
-                                <asp:RegularExpressionValidator class="info-error" ID="revEmail" runat="server" ErrorMessage="Sintassi email non valida" ValidationExpression=".*@.*\..*" ControlToValidate="UserEmail"/>
+                                <asp:TextBox ID="txtEmail" placeholder="Email" runat="server" />
+                                <asp:RegularExpressionValidator class="info-error" ID="revEmail" runat="server" ErrorMessage="Sintassi email non valida" ValidationExpression=".*@.*\..*" ControlToValidate="txtEmail"/>
                             </li>
                         </ul>
                         <ul>
                             <li>Password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <asp:TextBox ID="UserPass" TextMode="Password" placeholder="Password" runat="server" />
-                                <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator2" ControlToValidate="UserPass" ErrorMessage="Cannot be empty." runat="server" />
+                                <asp:TextBox ID="txtPassword" TextMode="Password" placeholder="Password" runat="server" />
+                                <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator2" ControlToValidate="txtPassword" ErrorMessage="Cannot be empty." runat="server" />
                             </li>
                         </ul>
                         <ul>
                             <li>Remember me?
-                                <asp:CheckBox ID="Persist" runat="server" />
+                                <asp:CheckBox ID="CheckBoxRemember" runat="server" />
                             </li>
                         </ul>
                     </div>
                     <asp:Button ID="btnLogin" class="button" OnClick="btnLogin_Click" Text="Login" runat="server" />
                     <p>
                         <asp:Label ID="lblMsg" ForeColor="Red" runat="server" />
+                    </p>
+                    <p>
+                        <asp:Label ID="lblConnessione" runat="server"></asp:Label>
                     </p>
                 </div>
             </div>

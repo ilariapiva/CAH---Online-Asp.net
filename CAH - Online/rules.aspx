@@ -3,15 +3,13 @@
 <%@ Import Namespace="System.Data" %>
 <%@ Import Namespace="CAHOnline" %>
 
-<!DOCTYPE html>
-
 <script runat="server">
     
     String email;
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        FunctionUtilitysDB.ApriConnessioneDB();
+        FunctionsDB.OpenConnectionDB();
         email = Request.Cookies["userEmail"].Value;
 
         if (Request.Cookies["userEmail"] != null)
@@ -20,7 +18,7 @@
         }
 
         String strsql = "SELECT username FROM tblAccount WHERE email = '" + email + "' ";
-        List<string> resultUser = FunctionUtilitysDB.LeggiUsernameDB(strsql);
+        List<string> resultUser = FunctionsDB.ReadUsernameDB(strsql);
 
         lblUser.Text = resultUser[0];
     }
@@ -62,7 +60,7 @@
                                 <a href="index.aspx" class="nav-text">Home</a>
                             </li>
                             <li>
-                                <a href="regole.aspx" class="nav-text nav-active">Regole</a>
+                                <a href="rules.aspx" class="nav-text nav-active">Rules</a>
                             </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle nav-text" data-toggle="dropdown">
@@ -70,10 +68,10 @@
                                     &nbsp;<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="profilo.aspx" class="nav-text">Profilo</a>
+                                        <a href="profile.aspx" class="nav-text">Profile</a>
                                     </li>
                                     <li>
-                                        <a href="impostazioni.aspx" class="nav-text nav-border">Impostazioni</a>
+                                        <a href="settings.aspx" class="nav-text nav-border">Settings</a>
                                     </li>
                                     <li>
                                         <a href="login.aspx" class="nav-text">Logout</a>

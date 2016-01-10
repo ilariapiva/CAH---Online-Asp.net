@@ -4,12 +4,13 @@
 <%@ Import Namespace="CAHOnline" %>
 
 <script runat="server">
-
+    
     String email;
     
     protected void Page_Load(object sender, EventArgs e)
     {
-        FunctionUtilitysDB.ApriConnessioneDB();
+        FunctionsDB.OpenConnectionDB();
+        
         lblEmail.Text = Request.Cookies["userEmail"].Value;
 
         if (Request.Cookies["userEmail"] != null)
@@ -19,7 +20,7 @@
         email = lblEmail.Text;
 
         String strsql = "SELECT username FROM tblAccount WHERE email = '" + email + "' ";
-        List<string> resultUser = FunctionUtilitysDB.LeggiUsernameDB(strsql);
+        List<string> resultUser = FunctionsDB.ReadUsernameDB(strsql);
 
         lblUserName.Text = resultUser[0];
     }
@@ -32,7 +33,7 @@
         var user = UserName.Text;
 
         String strsqlUser = "SELECT username FROM tblAccount WHERE username = '" + user + "'";
-        var result = FunctionUtilitysDB.Verifica(strsqlUser);
+        var result = FunctionsDB.CheckDB(strsqlUser);
         
         if (result)
         {
@@ -42,10 +43,10 @@
         if (result == false)
         {
             strsqlUser = "UPDATE tblAccount SET username = '" + user + "' WHERE email = '" + email + "' ";
-            FunctionUtilitysDB.ScriviDB(strsqlUser);
+            FunctionsDB.WriteDB(strsqlUser);
 
             String strsqlPwd = "UPDATE tblAccount SET pwd = HASHBYTES('SHA1', '" + pwd + "') WHERE email = '" + email + "' ";
-            FunctionUtilitysDB.ScriviDB(strsqlPwd);
+            FunctionsDB.WriteDB(strsqlPwd);
             
             Response.Redirect("~/index.aspx");
         }
@@ -87,7 +88,7 @@
                             <a href="index.aspx" class="nav-text">Home</a>
                         </li>
                         <li>
-                            <a href="regole.aspx" class="nav-text">Regole</a>
+                            <a href="rules.aspx" class="nav-text">Rules</a>
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle nav-text nav-active" data-toggle="dropdown">
@@ -95,10 +96,10 @@
                                 &nbsp;<b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="profilo.aspx" class="nav-text">Profilo</a>
+                                    <a href="profile.aspx" class="nav-text">Profile</a>
                                 </li>
                                 <li>
-                                    <a href="impostazioni.aspx" class="nav-text nav-border nav-active">Impostazioni</a>
+                                    <a href="settings.aspx" class="nav-text nav-border nav-active">Settings</a>
                                 </li>
                                 <li>
                                     <a href="login.aspx" class="nav-text">Logout</a>
@@ -112,7 +113,7 @@
         <div class="container">
             <div class="flat-form-setting">
                 <div class="form-action-setting">
-                    <h1 class="h1">Impostazioni</h1>
+                    <h1 class="h1">Settings</h1>
                     <p class="p5">
                         Qui puoi modificare il tuo username e la password.
                         </p>

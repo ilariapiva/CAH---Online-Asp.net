@@ -70,8 +70,8 @@ protected void btnRegister_Click(object sender, EventArgs e)
         <div class="container">
             <div class="flat-form">
                 <ul class="tabs">
-                    <li class="active"><asp:HyperLink ID="hlRegister" runat="server" NavigateUrl="~/register.aspx">Register</asp:HyperLink></li>
                     <li><asp:HyperLink ID="hlLogin" runat="server" NavigateUrl="~/login.aspx">Login</asp:HyperLink></li>
+                    <li><asp:HyperLink ID="hlRegister" runat="server" NavigateUrl="~/register.aspx" CssClass="active">Register</asp:HyperLink></li>
                     <li><asp:HyperLink ID="hlResetPassword" runat="server">Reset password</asp:HyperLink></li>
                 </ul>
                 <div class="form-action show">

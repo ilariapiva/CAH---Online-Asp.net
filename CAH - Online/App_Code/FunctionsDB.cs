@@ -96,17 +96,9 @@ namespace CAHOnline
             return value;
         }
 
-        /*public static void Cookies(String lblEmail)
+        public static void RadomCardWhite(String lbl)
         {
-            lblEmail = Request.Cookies["userEmail"].Value;
 
-            if (Request.Cookies["userEmail"] != null)
-            {
-                lblEmail = Server.HtmlEncode(Request.Cookies["userEmail"].Value);
-            }
-            String email = lblEmail;
-
-            String strsql = "SELECT username FROM tblAccount WHERE email = '" + email + "' ";
-        }*/
+        }
     }
 }

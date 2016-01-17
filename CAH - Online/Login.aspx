@@ -8,9 +8,6 @@
 <script runat="server">
 
     String strsql;
-
-    SqlConnection cn;
-    SqlCommand cmd;
     
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -35,6 +32,8 @@
             Response.Cookies["userEmail"].Value = userEmail;
             Response.Cookies["userEmail"].Expires = DateTime.Now.AddDays(1);
 
+            Session["userEmail"] = userEmail;
+            
             FormsAuthentication.RedirectFromLoginPage(userEmail, CheckBoxRemember.Checked);
             Response.Redirect("~/index.aspx");
         }
@@ -65,8 +64,8 @@
         <div class="container">
             <div class="flat-form">
                 <ul class="tabs">
-                    <li class="active"><asp:HyperLink ID="hlLogin" runat="server" NavigateUrl="~/login.aspx">Login</asp:HyperLink></li>
-                    <li><asp:HyperLink ID="hlRegister" runat="server" NavigateUrl="register.aspx">Register</asp:HyperLink></li>
+                    <li><asp:HyperLink ID="hlLogin" runat="server" NavigateUrl="~/login.aspx" CssClass="active">Login</asp:HyperLink></li>
+                    <li><asp:HyperLink ID="hlRegister" runat="server" NavigateUrl="~/register.aspx">Register</asp:HyperLink></li>
                     <li><asp:HyperLink ID="hlResetPassword" runat="server">Reset password</asp:HyperLink></li>
                 </ul>
                 <div class="form-action show">

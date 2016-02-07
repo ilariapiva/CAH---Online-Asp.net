@@ -42,7 +42,6 @@ namespace CAHOnline
         //Questa funzione serve per leggere i valori della tabella profilo presente nel db e li inserisce in una lista
         public static List<string> ReadValuesProfileDB(String strsql)
         {
-            String username = null;
             String matchesPlayed = null;
             String matchesWon = null;
             String matchesMissed = null;
@@ -62,10 +61,6 @@ namespace CAHOnline
 
                 matchesMissed += dr["matchesMissed"];
                 value.Add(matchesMissed);
-
-                username += dr["username"];
-                value.Add(username);
-
             }
 
             dr.Close();
@@ -96,9 +91,44 @@ namespace CAHOnline
             return value;
         }
 
-        public static void RadomCardWhite(String lbl)
+        public static List<Cards> RadomCardWhite(String strsql)
         {
+            List<Cards> value = new List<Cards>();
 
+            cmd = new SqlCommand(strsql, cn);
+            var dr = cmd.ExecuteReader();
+
+            while (dr.Read())
+            {
+                Cards cards = new Cards();
+                cards.Text = dr["text"].ToString();
+                value.Add(cards);
+            }
+
+            dr.Close();
+            cmd.Dispose();
+
+            return value;
+
+        }
+        public static Cards RadomCardBlack(String strsql)
+        {
+            Cards value = new Cards();
+
+            cmd = new SqlCommand(strsql, cn);
+            var dr = cmd.ExecuteReader();
+
+            while (dr.Read())
+            {
+                Cards card = new Cards();
+                card.Text = dr["text"].ToString();
+                value = card;
+            }
+            
+            dr.Close();
+            cmd.Dispose();
+
+            return value;
         }
     }
 }

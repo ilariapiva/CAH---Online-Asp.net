@@ -1,4 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" %>
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="CAHOnline" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 

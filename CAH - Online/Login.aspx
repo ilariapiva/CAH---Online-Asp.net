@@ -3,8 +3,6 @@
 <%@ Import Namespace="System.Data" %>
 <%@ Import Namespace="CAHOnline" %>
 
-<%@ Import Namespace="System.Data.SqlClient" %>
-
 <script runat="server">
 
     String strsql;

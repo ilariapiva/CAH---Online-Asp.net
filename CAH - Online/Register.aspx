@@ -66,7 +66,7 @@ protected void btnRegister_Click(object sender, EventArgs e)
     <title>CAH - Online</title>
 </head>
 <body>
-    <form id="form2" runat="server">
+<form id="form2" runat="server">
         <div class="container">
             <div class="flat-form">
                 <ul class="tabs">

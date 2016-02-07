@@ -7,15 +7,20 @@
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //Leggo dalla tabella profilo lo username, partite vinte, partite perse e partite giocate
-            String strsql = @"SELECT tblAccount.username, tblProfile.matchesPlay, tblProfile.matchesWon, tblProfile.matchesMissed 
-                            FROM tblAccount, tblProfile WHERE tblAccount.idAccount = tblProfile.idAccount AND tblAccount.email = '" + Session["userEmail"] +"' ";
+            String strsql1 = "SELECT username FROM tblAccount WHERE email = '" + Session["userEmail"] + "' ";
+            List<string> resultUser = FunctionsDB.ReadUsernameDB(strsql1);
 
-            List<string> result = FunctionsDB.ReadValuesProfileDB(strsql);
+            lblUsername.Text = resultUser[0];
+            
+            //Leggo dalla tabella profilo lo username, partite vinte, partite perse e partite giocate
+            String strsql2 = @"SELECT matchesPlay, matchesWon, matchesMissed 
+                            FROM tblAccount WHERE idAccount = idAccount ";
+
+            List<string> result = FunctionsDB.ReadValuesProfileDB(strsql2);
             lblMatchesPlayed.Text = result[0];
             lblMatchesWon.Text = result[1];
             lblMatchesMissed.Text = result[2];
-            lblUsername.Text = result[3];
+
             lblEmail.Text = Session["userEmail"].ToString();
         }
     </script>

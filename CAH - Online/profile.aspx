@@ -7,7 +7,7 @@
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //Leggo dalla tabella profilo lo username, partite vinte, partite perse e partite giocate
+            //Leggo dalla tabella account lo username, partite vinte, partite perse e partite giocate
             String strsql = @"SELECT username, matchesPlayed, matchesWon, matchesMissed 
                             FROM tblAccount WHERE email = '" + Session["userEmail"] + "' ";
 

@@ -1,4 +1,5 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" %>
+﻿
+<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" %>
 
 <%@ Import Namespace="System.Data" %>
 <%@ Import Namespace="CAHOnline" %>
@@ -16,11 +17,12 @@
             lblUser.Text = "";
 
             var pwd = UserPass.Text;
-            var user = UserName.Text;
+            Account user = new Account();
+            user.Username = UserName.Text;
 
             //Controllo che il username scelto non sia già utilizzato da altri utenti
-            String strsqlUser = "SELECT username FROM tblAccount WHERE username = '" + user + "'";
-            var result = FunctionsDB.CheckDB(strsqlUser);
+            String strsqlUser = "SELECT username FROM tblAccount WHERE username = '" + user.Username + "'";
+            bool result = FunctionsDB.CheckDB(strsqlUser);
 
             if (result)
             {
@@ -30,7 +32,7 @@
             //Se il nome utente non è già stato utilizzato eseguo la query che modifica lo username e la password
             if (result == false)
             {
-                strsqlUser = "UPDATE tblAccount SET username = '" + user + "' WHERE email = '" + Session["userEmail"] + "' ";
+                strsqlUser = "UPDATE tblAccount SET username = '" + user.Username + "' WHERE email = '" + Session["userEmail"] + "' ";
                 FunctionsDB.WriteDB(strsqlUser);
 
                 String strsqlPwd = "UPDATE tblAccount SET pwd = HASHBYTES('SHA1', '" + pwd + "') WHERE email = '" + Session["userEmail"] + "' ";

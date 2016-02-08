@@ -4,8 +4,6 @@
 <%@ Import Namespace="CAHOnline" %>
 
 <script runat="server">
-
-    String strsql;
     
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -14,25 +12,26 @@
 
     void btnLogin_Click(object sender, EventArgs e)
     {
-        String userEmail;
-        
-        var email = txtEmail.Text;
+        Account userEmail = new Account();
+
+        Account email = new Account();
+        email.Email = txtEmail.Text;
         var pwd = txtPassword.Text;
 
-        strsql = "SELECT email FROM tblAccount WHERE email = '" + email + "' and pwd = HASHBYTES('SHA1', '" + pwd + "')";
-        var result = FunctionsDB.CheckDB(strsql);
+        String strsql = "SELECT email FROM tblAccount WHERE email = '" + email.Email + "' and pwd = HASHBYTES('SHA1', '" + pwd + "')";
+        bool result = FunctionsDB.CheckDB(strsql);
 
         //Memorizzo tramite i cookies l'email e accedo alla pagina principale
         if (result)
         {
-            userEmail = txtEmail.Text;
+            userEmail.Email = txtEmail.Text;
             
-            Response.Cookies["userEmail"].Value = userEmail;
+            Response.Cookies["userEmail"].Value = userEmail.Email;
             Response.Cookies["userEmail"].Expires = DateTime.Now.AddDays(1);
 
-            Session["userEmail"] = userEmail;
+            Session["userEmail"] = userEmail.Email;
             
-            FormsAuthentication.RedirectFromLoginPage(userEmail, CheckBoxRemember.Checked);
+            FormsAuthentication.RedirectFromLoginPage(userEmail.Email, CheckBoxRemember.Checked);
             Response.Redirect("~/index.aspx");
         }
         else

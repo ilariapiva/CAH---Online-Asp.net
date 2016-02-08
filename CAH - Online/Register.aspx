@@ -15,14 +15,16 @@ protected void btnRegister_Click(object sender, EventArgs e)
     lblEmail.Text = "";
     lblUser.Text = "";
 
-    var email = txtEmail.Text;
-    var pwd = txtPassword.Text; 
-    var user = txtUsername.Text; 
+    Account email = new Account();
+    email.Email = txtEmail.Text;
+    var pwd = txtPassword.Text;
+    Account user = new Account();
+    user.Username = txtUsername.Text; 
 
     //Controllo che l'email inserita non sia già utilizzata da altri utenti 
     
-    String strsqlEmail = "SELECT email FROM tblAccount WHERE email = '" + email + "'";
-    var resultEmail = FunctionsDB.CheckDB(strsqlEmail);
+    String strsqlEmail = "SELECT email FROM tblAccount WHERE email = '" + email.Email + "'";
+    bool resultEmail = FunctionsDB.CheckDB(strsqlEmail);
 
     if (resultEmail)
     {
@@ -31,8 +33,8 @@ protected void btnRegister_Click(object sender, EventArgs e)
 
     //Controllo che lo username inserito non sia già utilizzata da altri utenti 
     
-    String strsqlUser = "SELECT username FROM tblAccount WHERE username = '" + user + "'";
-    var resultUser = FunctionsDB.CheckDB(strsqlUser);
+    String strsqlUser = "SELECT username FROM tblAccount WHERE username = '" + user.Username + "'";
+    bool resultUser = FunctionsDB.CheckDB(strsqlUser);
 
     if (resultUser)
     {
@@ -43,9 +45,9 @@ protected void btnRegister_Click(object sender, EventArgs e)
     
     if ((resultEmail == false) && (resultUser == false))
     {
-        String strsql = @"INSERT INTO tblAccount(email, username, pwd) 
-                        VALUES ('" + email + "', '" + user + "', HASHBYTES('SHA1', '" + pwd + "'))";
-        FunctionsDB.CheckDB(strsql);
+        String strsql = @"INSERT INTO tblAccount(email, username, pwd, matchesPlayed, matchesWon, matchesMissed) 
+                        VALUES ('" + email.Email + "', '" + user.Username + "', HASHBYTES('SHA1', '" + pwd + "'), '" + 0 + "', '" + 0 + "', '" + 0 + "')";
+        FunctionsDB.WriteDB(strsql);
         Response.Redirect("~/login.aspx");
     }
 }

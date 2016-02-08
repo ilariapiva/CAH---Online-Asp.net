@@ -6,12 +6,21 @@
     
     protected void Page_Load(object sender, EventArgs e)
     {
+        //definisco tempo per il conteggio alla rovesca. Il tempo stabilito è di 1 min e 40 sec
+        if (!Page.IsPostBack)
+        {
+            Session["time"] = 100;
+        }
+            
+        
+        //scrivo nella carta nera una frase random presa dalla tabella carte nere
         String BlackCard = "SELECT TOP 1 * FROM tblBlackCard ORDER BY NEWID()";
         
         Cards blackCard = FunctionsDB.RadomCardBlack(BlackCard);
-
-        lblBlack.Text = blackCard.Text;
         
+        lblBlack.Text = blackCard.Text;
+
+        //scrivo nelle carte bianche una frase random prese dalla tabella carte bianche
         String WhiteCards = "SELECT TOP 11 * FROM tblWhiteCard ORDER BY NEWID()";
 
         List<Cards> cards = FunctionsDB.RadomCardWhite(WhiteCards);
@@ -29,15 +38,54 @@
         lblWhite11.Text = cards[10].Text;
         
     }
+
+    //serve per il conteggio alla rovescia
+    
+    int totalSeconds = 0;
+    int seconds = 0;
+    int minutes = 0;
+    string time = "";
+    
+    protected void Timer1_Tick(object sender, EventArgs e)
+    {
+        Session["time"] = Convert.ToInt16(Session["time"]) - 1;
+        if (Convert.ToInt16(Session["time"]) <= 0)
+        {
+
+            lblTimer.Text = "TimeOut!";
+            //insert_result();
+            //Response.Redirect("Show_result.aspx");
+        }
+
+        else
+        {
+            totalSeconds = Convert.ToInt16(Session["time"]);
+            seconds = totalSeconds % 60;
+            minutes = totalSeconds / 60;
+            time = minutes + ":" + seconds;
+            lblTimer.Text = time;
+        }
+    }
 </script>
-
-
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <link rel="stylesheet" type="text/css" href="css/game.css" />
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div class="container game-container">
+        <p>&nbsp;</p>
+        <div>
+            <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+            <asp:Timer ID="Timer" runat="server" Interval ="1000" OnTick="Timer1_Tick"></asp:Timer>
+        </div>
+        <asp:UpdatePanel ID="Pannello" runat="server" UpdateMode ="Conditional">
+            <ContentTemplate>
+                <asp:Label ID="lblTimer" runat="server"></asp:Label>
+            </ContentTemplate>    
+            <Triggers>
+                <asp:AsyncPostBackTrigger ControlID="Timer" EventName="Tick" />
+            </Triggers>
+        </asp:UpdatePanel>
         <div class="row">
             <div class="col-md-3">
                 <div class="card-black-container">

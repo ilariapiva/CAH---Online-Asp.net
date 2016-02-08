@@ -33,7 +33,7 @@
             <div class="row">
                 <button class="btn btn-start-play text-btn-play" type="submit" name="action">
                     Start a new game<br />
-                    <img src="img/play.png" alt="play_arrow"/>
+                    <asp:ImageButton ID="ImageButton1" runat="server" CssClass="icon-btn-play" DescriptionUrl="play" Height="47px" ImageUrl="~/img/play.png" Width="51px" />
                 </button>
             </div>
         </div>

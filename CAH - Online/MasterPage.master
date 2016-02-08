@@ -19,9 +19,9 @@
         }
 
         String strsql = "SELECT username FROM tblAccount WHERE email = '" + Session["userEmail"] +"' ";
-        List<string> resultUser = FunctionsDB.ReadUsernameDB(strsql);
+        List<Account> resultUser = FunctionsDB.ReadUsernameDB(strsql);
 
-        lblUser.Text = resultUser[0];
+        lblUser.Text = resultUser[0].Username;
     }
 </script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>

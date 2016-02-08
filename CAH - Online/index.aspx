@@ -3,7 +3,6 @@
 <%@ Import Namespace="CAHOnline" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
-
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
@@ -34,7 +33,7 @@
             <div class="row">
                 <button class="btn btn-start-play text-btn-play" type="submit" name="action">
                     Start a new game<br />
-                    <i class="material-icons right icon-btn-play">play_arrow</i>
+                    <img src="img/play.png" alt="play_arrow"/>
                 </button>
             </div>
         </div>

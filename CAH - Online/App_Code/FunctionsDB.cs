@@ -40,27 +40,30 @@ namespace CAHOnline
         }
 
         //Questa funzione serve per leggere i valori della tabella profilo presente nel db e li inserisce in una lista
-        public static List<string> ReadValuesProfileDB(String strsql)
+        public static List<Account> ReadValuesProfileDB(String strsql)
         {
-            String matchesPlayed = null;
-            String matchesWon = null;
-            String matchesMissed = null;
-
-            List<string> value = new List<string>();
+            List<Account> value = new List<Account>();
 
             cmd = new SqlCommand(strsql, cn);
             var dr = cmd.ExecuteReader();
 
             while(dr.Read())
             {
-                matchesPlayed += dr["matchesPlay"];
+                Account matchesPlayed = new Account(); 
+                matchesPlayed.MatchesPlayed += Convert.ToInt32(dr["matchesPlayed"]);
                 value.Add(matchesPlayed);
 
-                matchesWon += dr["matchesWon"];
+                Account matchesWon = new Account(); 
+                matchesWon.MatchesWon += Convert.ToInt32(dr["matchesWon"]);
                 value.Add(matchesWon);
 
-                matchesMissed += dr["matchesMissed"];
+                Account matchesMissed = new Account();
+                matchesMissed.MatchesMissed += Convert.ToInt32(dr["matchesMissed"]);
                 value.Add(matchesMissed);
+
+                Account username = new Account(); 
+                username.Username += dr["username"].ToString();
+                value.Add(username);
             }
 
             dr.Close();
@@ -70,19 +73,18 @@ namespace CAHOnline
         }
 
         //Questa funzione legge lo username del profilo loggato e lo inserisce in una lista
-        public static List<string> ReadUsernameDB(String strsql)
+        public static List<Account> ReadUsernameDB(String strsql)
         {
-            String Username = null;
-            
-            List<string> value = new List<string>();
+            List<Account> value = new List<Account>();
 
             cmd = new SqlCommand(strsql, cn);
             var dr = cmd.ExecuteReader();
 
             while (dr.Read())
             {
-                Username += dr["username"];
-                value.Add(Username);
+                Account username = new Account(); 
+                username.Username += dr["username"].ToString();
+                value.Add(username);
             }
 
             dr.Close();

@@ -8,12 +8,24 @@ namespace CAHOnline
     public class Cards
     {
         private String _text;
-        private int _id;
+        private int _idCard;
+
+        public Cards()
+        {
+            _text = "";
+            _idCard = 0;
+        }
 
         public String Text
         {
             get { return _text; }
             set { _text = value; }
+        }
+
+        public int idCards
+        {
+            get { return _idCard; }
+            set { _idCard = value; }
         }
     }
 }

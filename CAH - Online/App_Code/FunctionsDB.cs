@@ -93,6 +93,28 @@ namespace CAHOnline
             return value;
         }
 
+        //Questa funzione legge tutti gli ID delle carte inserite nel DB e le inserisce in una lista
+        public static List<Cards> Cards(String strsql)
+        {
+            List<Cards> value = new List<Cards>();
+
+            cmd = new SqlCommand(strsql, cn);
+            var dr = cmd.ExecuteReader();
+
+            while (dr.Read())
+            {
+                Cards cards = new Cards();
+                cards.Text = dr["text"].ToString();
+                value.Add(cards);
+            }
+
+            dr.Close();
+            cmd.Dispose();
+
+            return value;
+        }
+
+       /* //Questa funzione legge le righe dalla tabella White Card in modo random e le inserisce in una lista
         public static List<Cards> RadomCardWhite(String strsql)
         {
             List<Cards> value = new List<Cards>();
@@ -113,6 +135,8 @@ namespace CAHOnline
             return value;
 
         }
+
+        //Questa funzione legge le righe dalla tabella Black Card in modo random e le inserisce in una lista
         public static Cards RadomCardBlack(String strsql)
         {
             Cards value = new Cards();
@@ -131,6 +155,6 @@ namespace CAHOnline
             cmd.Dispose();
 
             return value;
-        }
+        }*/
     }
 }

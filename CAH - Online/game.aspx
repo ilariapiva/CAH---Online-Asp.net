@@ -11,31 +11,50 @@
         {
             Session["time"] = 100;
         }
-            
+
+        //prendo tutte le carte dalla tabella BlackCard e le inserisco in una lista
+        Random rndBlackCard = new Random();
         
-        //scrivo nella carta nera una frase random presa dalla tabella carte nere
+        String BlackCard = "SELECT * FROM tblBlackCard";
+        List<Cards> cardBlack = FunctionsDB.Cards(BlackCard);
+        
+        List<Cards> RandomCardBlack = new List<Cards>();
+        RandomCardBlack = (cardBlack.OrderBy(x => rndBlackCard.Next()).Take(1)).ToList();
+        
+        lblBlack.Text = RandomCardBlack[0].Text;
+
+
+        //prendo tutte le carte dalla tabella WhiteCard e le inserisco in una lista
+        Random rndWhiteCards = new Random();
+        
+        String WhiteCards = "SELECT * FROM tblWhiteCard";
+        List<Cards> cardsWhite = FunctionsDB.Cards(WhiteCards);
+        
+        List<Cards> RandomCardsWhite = new List<Cards>();
+        RandomCardsWhite = (cardsWhite.OrderBy(x => rndWhiteCards.Next()).Take(11)).ToList();
+
+        lblWhite1.Text = RandomCardsWhite[0].Text;
+        lblWhite2.Text = RandomCardsWhite[1].Text;
+        lblWhite3.Text = RandomCardsWhite[2].Text;
+        lblWhite4.Text = RandomCardsWhite[3].Text;
+        lblWhite5.Text = RandomCardsWhite[4].Text;
+        lblWhite6.Text = RandomCardsWhite[5].Text;
+        lblWhite7.Text = RandomCardsWhite[6].Text;
+        lblWhite8.Text = RandomCardsWhite[7].Text;
+        lblWhite9.Text = RandomCardsWhite[8].Text;
+        lblWhite10.Text = RandomCardsWhite[9].Text;
+        lblWhite11.Text = RandomCardsWhite[10].Text;      
+        
+        /*//scrivo nella carta nera una frase random presa dalla tabella carte nere
         String BlackCard = "SELECT TOP 1 * FROM tblBlackCard ORDER BY NEWID()";
         
         Cards blackCard = FunctionsDB.RadomCardBlack(BlackCard);
-        
-        lblBlack.Text = blackCard.Text;
 
         //scrivo nelle carte bianche una frase random prese dalla tabella carte bianche
         String WhiteCards = "SELECT TOP 11 * FROM tblWhiteCard ORDER BY NEWID()";
 
         List<Cards> cards = FunctionsDB.RadomCardWhite(WhiteCards);
-        
-        lblWhite1.Text = cards[0].Text;
-        lblWhite2.Text = cards[1].Text;
-        lblWhite3.Text = cards[2].Text;
-        lblWhite4.Text = cards[3].Text;
-        lblWhite5.Text = cards[4].Text;
-        lblWhite6.Text = cards[5].Text;
-        lblWhite7.Text = cards[6].Text;
-        lblWhite8.Text = cards[7].Text;
-        lblWhite9.Text = cards[8].Text;
-        lblWhite10.Text = cards[9].Text;
-        lblWhite11.Text = cards[10].Text;
+        */
         
     }
 

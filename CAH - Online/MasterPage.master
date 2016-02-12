@@ -7,8 +7,9 @@
 
 <script runat="server">
 
-    //Memorizzo tramite i cookies l'email e tramite l'email faccio un controllo nel db e ricavo lo username
+    public Account resultUser;
 
+    //Memorizzo tramite i cookies l'email e tramite l'email faccio un controllo nel db e ricavo lo username
     protected void Page_Init(object sender, EventArgs e)
     {
         FunctionsDB.OpenConnectionDB();
@@ -19,9 +20,9 @@
         }
 
         String strsql = "SELECT username FROM tblAccount WHERE email = '" + Session["userEmail"] +"' ";
-        List<Account> resultUser = FunctionsDB.ReadUsernameDB(strsql);
+        resultUser = FunctionsDB.ReadUsernameDB(strsql);
 
-        lblUser.Text = resultUser[0].Username;
+        lblUser.Text = resultUser.Username;
     }
 </script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>

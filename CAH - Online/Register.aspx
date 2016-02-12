@@ -46,7 +46,7 @@ protected void btnRegister_Click(object sender, EventArgs e)
     if ((resultEmail == false) && (resultUser == false))
     {
         String strsql = @"INSERT INTO tblAccount(email, username, pwd, matchesPlayed, matchesWon, matchesMissed) 
-                        VALUES ('" + email.Email + "', '" + user.Username + "', HASHBYTES('SHA1', '" + pwd + "'), '" + 0 + "', '" + 0 + "', '" + 0 + "')";
+                        VALUES ('" + email.Email + "', '" + user.Username + "', HASHBYTES('SHA1', '" + pwd + "'), '0', '0', '0')";
         FunctionsDB.WriteDB(strsql);
         Response.Redirect("~/login.aspx");
     }

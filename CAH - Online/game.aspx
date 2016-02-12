@@ -1,17 +1,35 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" %>
-
+<%@ MasterType  virtualPath="~/MasterPage.master"%>
 <%@ Import Namespace="CAHOnline" %>
 
 <script runat="server">
     
+    int indexRoom;
+    Room room;
+    Cards blackCard;
+    
     protected void Page_Load(object sender, EventArgs e)
     {
+        //recupero l'id della room
+        indexRoom = FunctionsDB.GetRoom(Master.resultUser);
+        
+        //assegno l'idRoom
+        room = Game.UserEntered(indexRoom);
+        
+        if(room.IsMaster(Master.resultUser))
+        {
+            blackCard = room.GetCardBlack();
+            lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
+            lblBlack.Text = blackCard.Text;
+        }
+        
         //definisco tempo per il conteggio alla rovesca. Il tempo stabilito è di 1 min e 40 sec
         if (!Page.IsPostBack)
         {
             Session["time"] = 100;
         }
 
+        /*
         //prendo tutte le carte dalla tabella BlackCard e le inserisco in una lista
         Random rndBlackCard = new Random();
         
@@ -43,7 +61,7 @@
         lblWhite8.Text = RandomCardsWhite[7].Text;
         lblWhite9.Text = RandomCardsWhite[8].Text;
         lblWhite10.Text = RandomCardsWhite[9].Text;
-        lblWhite11.Text = RandomCardsWhite[10].Text;      
+        lblWhite11.Text = RandomCardsWhite[10].Text;     */ 
         
         /*//scrivo nella carta nera una frase random presa dalla tabella carte nere
         String BlackCard = "SELECT TOP 1 * FROM tblBlackCard ORDER BY NEWID()";

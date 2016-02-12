@@ -73,20 +73,18 @@ namespace CAHOnline
         }
 
         //Questa funzione legge lo username del profilo loggato e lo inserisce in una lista
-        public static List<Account> ReadUsernameDB(String strsql)
+        public static Account ReadUsernameDB(String strsql)
         {
-            List<Account> value = new List<Account>();
+            Account value = new Account();
 
             cmd = new SqlCommand(strsql, cn);
             var dr = cmd.ExecuteReader();
 
-            while (dr.Read())
-            {
-                Account username = new Account(); 
-                username.Username += dr["username"].ToString();
-                value.Add(username);
-            }
-
+            dr.Read();              
+            Account username = new Account(); 
+            username.Username += dr["username"].ToString();
+            value = username;
+            
             dr.Close();
             cmd.Dispose();
 
@@ -112,6 +110,29 @@ namespace CAHOnline
             cmd.Dispose();
 
             return value;
+        }
+
+        //Scrivo nella tabella Game
+        public static void WriteGame(Account user, int idRoom)
+        {
+            String strsql = "INSERT INTO tblGame(points, idAccount, room) VALUES ('0', '" + user.idAccount + "', '" + idRoom + "'";
+            cmd = new SqlCommand(strsql, cn);
+            cmd.ExecuteNonQuery();
+        }
+
+        //Recupero l'id della room in base all'idAccount dalla tabella Game
+        public static int GetRoom(Account user)
+        {
+            String strsql = "SELECT room FROM tblGame WHERE idAccount = '" + user.idAccount + "'";
+            
+            cmd = new SqlCommand(strsql, cn);
+            cmd.ExecuteNonQuery();
+            var dr = cmd.ExecuteReader();
+            dr.Read();
+            int idRoom = Convert.ToInt32(dr["room"]);
+            dr.Close();
+            cmd.Dispose();
+            return idRoom;
         }
 
        /* //Questa funzione legge le righe dalla tabella White Card in modo random e le inserisce in una lista

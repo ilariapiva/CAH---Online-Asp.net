@@ -4,21 +4,20 @@
 <%@ Import Namespace="CAHOnline" %>
 
  <script runat="server">
-
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            //Leggo dalla tabella account lo username, partite vinte, partite perse e partite giocate
-            String strsql = @"SELECT username, matchesPlayed, matchesWon, matchesMissed 
-                            FROM tblAccount WHERE email = '" + Session["userEmail"] + "' ";
-
-            List<Account> result = FunctionsDB.ReadValuesProfileDB(strsql);
-            lblMatchesPlayed.Text = Convert.ToString(result[0].MatchesPlayed);
-            lblMatchesWon.Text = Convert.ToString(result[1].MatchesWon);
-            lblMatchesMissed.Text = Convert.ToString(result[2].MatchesMissed);
-            lblUsername.Text = result[3].Username;
-            lblEmail.Text = Session["userEmail"].ToString();
-        }
-    </script>
+ 
+     List<Account> result;
+     
+     protected void Page_Load(object sender, EventArgs e)
+     {
+         //Leggo dalla tabella account lo username, partite vinte, partite perse e partite giocate
+         result = FunctionsDB.ReadValuesProfileDB();
+         lblMatchesPlayed.Text = Convert.ToString(result[0].MatchesPlayed);
+         lblMatchesWon.Text = Convert.ToString(result[1].MatchesWon);
+         lblMatchesMissed.Text = Convert.ToString(result[2].MatchesMissed);
+         lblUsername.Text = result[3].Username;
+         lblEmail.Text = Session["userEmail"].ToString();
+     }
+</script>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 

@@ -13,14 +13,10 @@
     protected void Page_Init(object sender, EventArgs e)
     {
         FunctionsDB.OpenConnectionDB();
-        
-        if (Request.Cookies["userEmail"] != null)
-        {
-            Session["userEmail"] = Server.HtmlEncode(Request.Cookies["userEmail"].Value);
-        }
 
-        String strsql = "SELECT username FROM tblAccount WHERE email = '" + Session["userEmail"] +"' ";
-        resultUser = FunctionsDB.ReadUsernameDB(strsql);
+        FunctionsDB.CookiesRequest();
+        
+        resultUser = FunctionsDB.ReadUsernameDB();
 
         lblUser.Text = resultUser.Username;
     }

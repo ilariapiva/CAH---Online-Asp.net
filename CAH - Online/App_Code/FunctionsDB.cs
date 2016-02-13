@@ -19,9 +19,28 @@ namespace CAHOnline
             cn.Open();
         }
 
-        //Questa funzione verifica nelle tabelle che in valori che devono essere inseriti non siano già presenti
-        public static bool CheckDB(String strsql)
+        //Questa funzione risponde l'email memorizzata nei cookies
+        public static void CookiesRequest()
         {
+            if (HttpContext.Current.Request.Cookies["userEmail"] != null)
+            {
+                HttpContext.Current.Session["userEmail"] = HttpContext.Current.Server.HtmlEncode(HttpContext.Current.Request.Cookies["userEmail"].Value);
+            } 
+        }
+
+        //Questa funzione salva l'email nei cookies
+        public static void CookiesResponse(Account userEmail)
+        {
+            HttpContext.Current.Response.Cookies["userEmail"].Value = userEmail.Email;
+            HttpContext.Current.Response.Cookies["userEmail"].Expires = DateTime.Now.AddDays(1);
+
+            HttpContext.Current.Session["userEmail"] = userEmail.Email;
+        }
+
+        //Questa funzione controlla che l'email e la pwd siano inseriti nel DB
+        public static bool Login(Account email, String pwd)
+        {
+            String strsql = "SELECT email FROM tblAccount WHERE email = '" + email.Email + "' and pwd = HASHBYTES('SHA1', '" + pwd + "')";
             cmd = new SqlCommand(strsql, cn);
             cmd.ExecuteNonQuery();
             var dr = cmd.ExecuteReader();
@@ -32,16 +51,64 @@ namespace CAHOnline
             return ok;
         }
 
-        //Questa funzione serve per eseguire le query  
-        public static void WriteDB(String strsql)
+        //Questa funzione controlla che l'email non sia già stata inserita nel DB
+        public static bool CeckEmail(Account email)
         {
+            String strsql = "SELECT email FROM tblAccount WHERE email = '" + email.Email + "'";
             cmd = new SqlCommand(strsql, cn);
+            cmd.ExecuteNonQuery();
+            var dr = cmd.ExecuteReader();
+            dr.Read();
+            bool ok = dr.HasRows;
+            dr.Close();
+            cmd.Dispose();
+            return ok;
+        }
+
+        //Questa funzione controlla che lo username non sia già stato inserito nel DB
+        public static bool CeckUsername(Account user)
+        {
+            String strsql = "SELECT username FROM tblAccount WHERE username = '" + user.Username + "'";
+            cmd = new SqlCommand(strsql, cn);
+            cmd.ExecuteNonQuery();
+            var dr = cmd.ExecuteReader();
+            dr.Read();
+            bool ok = dr.HasRows;
+            dr.Close();
+            cmd.Dispose();
+            return ok;         
+        }
+
+        //Questa funzione registra il nuovo utente e lo inserisce nella tabella Account
+        public static void RegisterUser(Account email, Account user, String pwd)
+        {
+            String strsql = @"INSERT INTO tblAccount(email, username, pwd, matchesPlayed, matchesWon, matchesMissed) 
+                              VALUES ('" + email.Email + "', '" + user.Username + "', HASHBYTES('SHA1', '" + pwd + "'), '0', '0', '0')";
+            cmd = new SqlCommand(strsql, cn);
+            cmd.ExecuteNonQuery(); 
+        }
+
+        //Questa funzione modifica lo username e la e la password di un utente
+        public static void ChangeUsername(Account user)
+        {
+            String strsqlUser = "UPDATE tblAccount SET username = '" + user.Username + "' WHERE email = '" + HttpContext.Current.Session["userEmail"] + "' ";
+            cmd = new SqlCommand(strsqlUser, cn);
+            cmd.ExecuteNonQuery();
+        }
+
+        //Questa funzione permette di cambiare una pwd in base alla email che è loggata
+        public static void ChangePwd(String pwd)
+        {
+            String strsqlPwd = "UPDATE tblAccount SET pwd = HASHBYTES('SHA1', '" + pwd + "') WHERE email = '" + HttpContext.Current.Session["userEmail"] + "' ";
+            cmd = new SqlCommand(strsqlPwd, cn);
             cmd.ExecuteNonQuery();
         }
 
         //Questa funzione serve per leggere i valori della tabella profilo presente nel db e li inserisce in una lista
-        public static List<Account> ReadValuesProfileDB(String strsql)
+        public static List<Account> ReadValuesProfileDB()
         {
+            String strsql = @"SELECT username, matchesPlayed, matchesWon, matchesMissed FROM tblAccount WHERE email = '" + HttpContext.Current.Session["userEmail"] + "' ";
+
             List<Account> value = new List<Account>();
 
             cmd = new SqlCommand(strsql, cn);
@@ -73,8 +140,10 @@ namespace CAHOnline
         }
 
         //Questa funzione legge lo username del profilo loggato e lo inserisce in una lista
-        public static Account ReadUsernameDB(String strsql)
+        public static Account ReadUsernameDB()
         {
+            String strsql = "SELECT username FROM tblAccount WHERE email = '" + HttpContext.Current.Session["userEmail"] + "' ";
+
             Account value = new Account();
 
             cmd = new SqlCommand(strsql, cn);

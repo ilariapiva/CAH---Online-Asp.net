@@ -5,52 +5,43 @@
 
 <script runat="server">
 
-protected void Page_Load(object sender, EventArgs e)
-{
-    FunctionsDB.OpenConnectionDB();
-}
-
-protected void btnRegister_Click(object sender, EventArgs e)
-{
-    lblEmail.Text = "";
-    lblUser.Text = "";
-
-    Account email = new Account();
-    email.Email = txtEmail.Text;
-    var pwd = txtPassword.Text;
-    Account user = new Account();
-    user.Username = txtUsername.Text; 
-
-    //Controllo che l'email inserita non sia già utilizzata da altri utenti 
-    
-    String strsqlEmail = "SELECT email FROM tblAccount WHERE email = '" + email.Email + "'";
-    bool resultEmail = FunctionsDB.CheckDB(strsqlEmail);
-
-    if (resultEmail)
+    Account email, user;
+    String pwd;
+   
+    protected void Page_Load(object sender, EventArgs e)
     {
-        lblEmail.Text = "Questo indirizzo email è già utilizzato.";
+        FunctionsDB.OpenConnectionDB();
     }
 
-    //Controllo che lo username inserito non sia già utilizzata da altri utenti 
-    
-    String strsqlUser = "SELECT username FROM tblAccount WHERE username = '" + user.Username + "'";
-    bool resultUser = FunctionsDB.CheckDB(strsqlUser);
-
-    if (resultUser)
+    protected void btnRegister_Click(object sender, EventArgs e)
     {
-        lblUser.Text = "Questo username è già utilizzato.";
-    }
+        lblEmail.Text = "";
+        lblUser.Text = "";
 
-    //Inserisco il nuovo account nella tabella account
-    
-    if ((resultEmail == false) && (resultUser == false))
-    {
-        String strsql = @"INSERT INTO tblAccount(email, username, pwd, matchesPlayed, matchesWon, matchesMissed) 
-                        VALUES ('" + email.Email + "', '" + user.Username + "', HASHBYTES('SHA1', '" + pwd + "'), '0', '0', '0')";
-        FunctionsDB.WriteDB(strsql);
-        Response.Redirect("~/login.aspx");
+        email = new Account();
+        user = new Account();
+        pwd = "";
+        
+        email.Email = txtEmail.Text;
+        pwd = txtPassword.Text;
+        user.Username = txtUsername.Text;
+
+        if (FunctionsDB.CeckEmail(email))//Controllo che l'email inserita non sia già utilizzata da altri utenti 
+        {
+            lblEmail.Text = "Questo indirizzo email è già utilizzato.";
+        }
+       
+        if (FunctionsDB.CeckUsername(user))//Controllo che lo username inserito non sia già utilizzata da altri utenti 
+        {
+            lblUser.Text = "Questo username è già utilizzato.";
+        }
+
+        if ((FunctionsDB.CeckEmail(email) == false) && (FunctionsDB.CeckUsername(user) == false))//Inserisco il nuovo account nella tabella account
+        {
+            FunctionsDB.RegisterUser(email, user, pwd);
+            Response.Redirect("~/login.aspx");
+        }
     }
-}
 </script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>

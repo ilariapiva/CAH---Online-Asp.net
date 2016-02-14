@@ -16,7 +16,7 @@
 
         FunctionsDB.CookiesRequest();
         
-        resultUser = FunctionsDB.ReadUsernameDB();
+        resultUser = FunctionsDB.ReadValuesProfileDB();
 
         lblUser.Text = resultUser.Username;
     }

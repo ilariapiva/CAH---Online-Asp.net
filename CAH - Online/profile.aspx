@@ -5,16 +5,16 @@
 
  <script runat="server">
  
-     List<Account> result;
+     Account result;
      
      protected void Page_Load(object sender, EventArgs e)
      {
          //Leggo dalla tabella account lo username, partite vinte, partite perse e partite giocate
          result = FunctionsDB.ReadValuesProfileDB();
-         lblMatchesPlayed.Text = Convert.ToString(result[0].MatchesPlayed);
-         lblMatchesWon.Text = Convert.ToString(result[1].MatchesWon);
-         lblMatchesMissed.Text = Convert.ToString(result[2].MatchesMissed);
-         lblUsername.Text = result[3].Username;
+         lblMatchesPlayed.Text = Convert.ToString(result.MatchesPlayed);
+         lblMatchesWon.Text = Convert.ToString(result.MatchesWon);
+         lblMatchesMissed.Text = Convert.ToString(result.MatchesMissed);
+         lblUsername.Text = result.Username;
          lblEmail.Text = Session["userEmail"].ToString();
      }
 </script>

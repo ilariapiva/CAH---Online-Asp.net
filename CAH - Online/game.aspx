@@ -7,28 +7,74 @@
     int indexRoom;
     Room room;
     Cards blackCard;
-    
+    List<Cards> whiteCards = new List<Cards>();
+    bool stateChanged;
+
     protected void Page_Load(object sender, EventArgs e)
     {
-        //recupero l'id della room
-        indexRoom = FunctionsDB.GetRoom(Master.resultUser);
-        
-        //assegno l'idRoom
-        room = Game.UserEntered(indexRoom);
-        
-        if(room.IsMaster(Master.resultUser))
-        {
-            blackCard = room.GetCardBlack();
-            lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
-            lblBlack.Text = blackCard.Text;
-        }
-        
-        //definisco tempo per il conteggio alla rovesca. Il tempo stabilito è di 1 min e 40 sec
         if (!Page.IsPostBack)
         {
-            Session["time"] = 100;
+            stateChanged = true;
+            Session["time"] = 100; //definisco tempo per il conteggio alla rovesca. Il tempo stabilito è di 1 min e 40 sec
         }
+        
+        if(stateChanged)
+        {
+            //recupero l'id della room
+            indexRoom = FunctionsDB.GetRoom(Master.resultUser);
 
+            //assegno l'idRoom
+            room = Game.UserEntered(indexRoom);
+
+            if (room.IsMaster(Master.resultUser))
+            {
+                blackCard = room.GetCardBlack();
+                lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
+                lblBlack.Text = blackCard.Text;
+            }
+
+            if (!room.IsMaster(Master.resultUser))
+            {
+                blackCard = room.GetCardBlack();
+                lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
+                lblBlack.Text = blackCard.Text;
+                
+                whiteCards = room.GetNewCardsWhite();
+
+                lblWhite1.Attributes.Add("value", whiteCards[0].idCards.ToString());
+                lblWhite1.Text = whiteCards[0].Text;
+
+                lblWhite2.Attributes.Add("value", whiteCards[1].idCards.ToString());
+                lblWhite2.Text = whiteCards[1].Text;
+
+                lblWhite3.Attributes.Add("value", whiteCards[2].idCards.ToString());
+                lblWhite3.Text = whiteCards[2].Text;
+
+                lblWhite4.Attributes.Add("value", whiteCards[3].idCards.ToString());
+                lblWhite4.Text = whiteCards[3].Text;
+
+                lblWhite5.Attributes.Add("value", whiteCards[4].idCards.ToString());
+                lblWhite5.Text = whiteCards[4].Text;
+
+                lblWhite6.Attributes.Add("value", whiteCards[5].idCards.ToString());
+                lblWhite6.Text = whiteCards[5].Text;
+
+                lblWhite7.Attributes.Add("value", whiteCards[6].idCards.ToString());
+                lblWhite7.Text = whiteCards[6].Text;
+
+                lblWhite8.Attributes.Add("value", whiteCards[7].idCards.ToString());
+                lblWhite8.Text = whiteCards[7].Text;
+
+                lblWhite9.Attributes.Add("value", whiteCards[8].idCards.ToString());
+                lblWhite9.Text = whiteCards[8].Text;
+
+                lblWhite10.Attributes.Add("value", whiteCards[9].idCards.ToString());
+                lblWhite10.Text = whiteCards[9].Text;
+            }
+
+            stateChanged = false;
+        }
+        
         /*
         //prendo tutte le carte dalla tabella BlackCard e le inserisco in una lista
         Random rndBlackCard = new Random();
@@ -142,6 +188,8 @@
                                 <p>Matteo</p>
                             </div>-->
                         </div>
+                    </div>
+                     <div class="col-card-fixed">
                         <div class="card-container">
                             <div class="white-card">
                                 <asp:Label ID="lblWhite2" runat="server"></asp:Label>
@@ -209,14 +257,6 @@
                         <div class="card-container">
                             <div class="white-card">
                                 <asp:Label ID="lblWhite10" runat="server"></asp:Label>
-                            </div>
-                            <div class="username-card"></div>
-                        </div>
-                    </div>
-                     <div class="col-card-fixed">
-                        <div class="card-container">
-                            <div class="white-card">
-                                <asp:Label ID="lblWhite11" runat="server"></asp:Label>
                             </div>
                             <div class="username-card"></div>
                         </div>

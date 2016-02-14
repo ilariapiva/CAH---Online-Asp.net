@@ -105,33 +105,27 @@ namespace CAHOnline
         }
 
         //Questa funzione serve per leggere i valori della tabella profilo presente nel db e li inserisce in una lista
-        public static List<Account> ReadValuesProfileDB()
+        public static Account ReadValuesProfileDB()
         {
-            String strsql = @"SELECT username, matchesPlayed, matchesWon, matchesMissed FROM tblAccount WHERE email = '" + HttpContext.Current.Session["userEmail"] + "' ";
+            String strsql = @"SELECT idAccount, email, username, matchesPlayed, matchesWon, matchesMissed FROM tblAccount WHERE email = '" + HttpContext.Current.Session["userEmail"] + "' ";
 
-            List<Account> value = new List<Account>();
+            Account value = new Account();
 
             cmd = new SqlCommand(strsql, cn);
             var dr = cmd.ExecuteReader();
+            dr.Read();
+            
+            value.MatchesPlayed = Convert.ToInt32(dr["matchesPlayed"]);
 
-            while(dr.Read())
-            {
-                Account matchesPlayed = new Account(); 
-                matchesPlayed.MatchesPlayed += Convert.ToInt32(dr["matchesPlayed"]);
-                value.Add(matchesPlayed);
+            value.MatchesWon = Convert.ToInt32(dr["matchesWon"]);
 
-                Account matchesWon = new Account(); 
-                matchesWon.MatchesWon += Convert.ToInt32(dr["matchesWon"]);
-                value.Add(matchesWon);
+            value.MatchesMissed = Convert.ToInt32(dr["matchesMissed"]);
 
-                Account matchesMissed = new Account();
-                matchesMissed.MatchesMissed += Convert.ToInt32(dr["matchesMissed"]);
-                value.Add(matchesMissed);
+            value.Username = dr["username"].ToString();
 
-                Account username = new Account(); 
-                username.Username += dr["username"].ToString();
-                value.Add(username);
-            }
+            value.idAccount = Convert.ToInt32(dr["idAccount"]);
+
+            value.Email = dr["email"].ToString();
 
             dr.Close();
             cmd.Dispose();
@@ -139,7 +133,7 @@ namespace CAHOnline
             return value;
         }
 
-        //Questa funzione legge lo username del profilo loggato e lo inserisce in una lista
+       /* //Questa funzione legge lo username del profilo loggato e lo inserisce in una lista
         public static Account ReadUsernameDB()
         {
             String strsql = "SELECT username FROM tblAccount WHERE email = '" + HttpContext.Current.Session["userEmail"] + "' ";
@@ -158,7 +152,7 @@ namespace CAHOnline
             cmd.Dispose();
 
             return value;
-        }
+        }*/
 
         //Questa funzione legge tutti gli ID delle carte inserite nel DB e le inserisce in una lista
         public static List<Cards> Cards(String strsql)
@@ -171,6 +165,7 @@ namespace CAHOnline
             while (dr.Read())
             {
                 Cards cards = new Cards();
+                cards.idCards = Convert.ToInt32(dr["idCard"]);
                 cards.Text = dr["text"].ToString();
                 value.Add(cards);
             }
@@ -184,7 +179,7 @@ namespace CAHOnline
         //Scrivo nella tabella Game
         public static void WriteGame(Account user, int idRoom)
         {
-            String strsql = "INSERT INTO tblGame(points, idAccount, room) VALUES ('0', '" + user.idAccount + "', '" + idRoom + "'";
+            String strsql = "INSERT INTO tblGame(points, idAccount, room) VALUES ('0', '" + user.idAccount + "', '" + idRoom + "')";
             cmd = new SqlCommand(strsql, cn);
             cmd.ExecuteNonQuery();
         }

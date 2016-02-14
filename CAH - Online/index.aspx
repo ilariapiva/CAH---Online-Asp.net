@@ -8,9 +8,9 @@
     protected void ImageButton1_Click(object sender, ImageClickEventArgs e)
     {
         Game.NewGame(Master.resultUser);
+        Response.Redirect("~/game.aspx");
     }
 </script>
-
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
@@ -43,7 +43,7 @@
             <div class="row">
                 <button class="btn btn-start-play text-btn-play" type="submit" name="action">
                     Start a new game<br />
-                    <asp:ImageButton ID="ImageButton1" runat="server" CssClass="icon-btn-play" DescriptionUrl="play" Height="47px" ImageUrl="~/img/play.png" Width="51px" OnClick="ImageButton1_Click" />
+                    <asp:ImageButton ID="ImageButton1" runat="server" DescriptionUrl="play" Height="47px" ImageUrl="~/img/play.png" Width="51px" OnClick="ImageButton1_Click" />
                 </button>
             </div>
         </div>

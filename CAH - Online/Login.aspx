@@ -7,7 +7,7 @@
 
     Account userEmail, email;
     String pwd;
-    
+
     protected void Page_Load(object sender, EventArgs e)
     {
         FunctionsDB.OpenConnectionDB();

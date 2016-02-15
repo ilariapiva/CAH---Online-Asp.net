@@ -269,7 +269,6 @@ ul.tabs li.active{
 }
 
 .btn-start-play{
-  height: auto !important;
   background-color: #01579b !important;
   margin-top: 345px !important;
   margin-bottom: auto !important;

@@ -5,7 +5,7 @@
 
 <script runat="server">
 
-    protected void ImageButton1_Click(object sender, ImageClickEventArgs e)
+    protected void SelectButton_Click(object sender, EventArgs e)
     {
         Game.NewGame(Master.resultUser);
         Response.Redirect("~/game.aspx");
@@ -41,10 +41,7 @@
         </div>
         <div class="col-md-6">
             <div class="row">
-                <button class="btn btn-start-play text-btn-play" type="submit" name="action">
-                    Start a new game<br />
-                    <asp:ImageButton ID="ImageButton1" runat="server" DescriptionUrl="play" Height="47px" ImageUrl="~/img/play.png" Width="51px" OnClick="ImageButton1_Click" />
-                </button>
+                <asp:LinkButton ID="SelectButton" runat="server" CssClass="btn btn-start-play text-btn-play" OnClick="SelectButton_Click"><i class="icon-ok icon-white"><img src="img/play.png" alt="play"/></i>&nbsp;Start a new game</asp:LinkButton>
             </div>
         </div>
     </div>

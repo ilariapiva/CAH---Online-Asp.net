@@ -41,7 +41,7 @@
         </div>
         <div class="col-md-6">
             <div class="row">
-                <asp:LinkButton ID="SelectButton" runat="server" CssClass="btn btn-start-play text-btn-play" OnClick="SelectButton_Click"><i class="icon-ok icon-white"><img src="img/play.png" alt="play"/></i>&nbsp;Start a new game</asp:LinkButton>
+                <asp:LinkButton ID="SelectButton" runat="server" CssClass="btn btn-start-play text-btn-play" OnClick="SelectButton_Click"><i class="icon-ok icon-white"><img class="img-play" src="img/play.png" alt="play"/></i>&nbsp;Start a new game</asp:LinkButton>
             </div>
         </div>
     </div>

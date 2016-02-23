@@ -280,6 +280,11 @@ ul.tabs li.active{
   color: #FFFFFF !important;
 }
 
+.img-play
+{
+    height: 50px !important;
+    width: 50px !important;
+}
 .link{
   color: #f4ff81;
 }

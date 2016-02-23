@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" %>
-<%@ MasterType  virtualPath="~/MasterPage.master"%>
+
+<%@ MasterType VirtualPath="~/MasterPage.master" %>
 <%@ Import Namespace="CAHOnline" %>
 
 <script runat="server">
@@ -17,28 +18,61 @@
             stateChanged = true;
             Session["time"] = 100; //definisco tempo per il conteggio alla rovesca. Il tempo stabilito è di 1 min e 40 sec
         }
-        
-        if(stateChanged)
+
+        if (stateChanged)
         {
+            lblUser1.Visible = false;
+            lblUser2.Visible = false;
+            lblUser3.Visible = false;
+            lblUser4.Visible = false;
+            lblUser5.Visible = false;
+            lblUser6.Visible = false;
+            lblUser7.Visible = false;
+            lblUser8.Visible = false;
+            lblUser9.Visible = false;
+            lblUser10.Visible = false;
+            
             //recupero l'id della room
             indexRoom = FunctionsDB.GetRoom(Master.resultUser);
 
             //assegno l'idRoom
             room = Game.UserEntered(indexRoom);
 
+            lblWhite1.Visible = false;
+            lblWhite2.Visible = false;
+            lblWhite3.Visible = false;
+            lblWhite4.Visible = false;
+            lblWhite5.Visible = false;
+            lblWhite6.Visible = false;
+            lblWhite7.Visible = false;
+            lblWhite8.Visible = false;
+            lblWhite9.Visible = false;
+            lblWhite10.Visible = false;   
+            
             if (room.IsMaster(Master.resultUser))
             {
                 blackCard = room.GetCardBlack();
                 lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
-                lblBlack.Text = blackCard.Text;
+                lblBlack.Text = blackCard.Text;            
             }
 
             if (!room.IsMaster(Master.resultUser))
             {
+                lblWhite1.Visible = true;
+                lblWhite2.Visible = true;
+                lblWhite3.Visible = true;
+                lblWhite4.Visible = true;
+                lblWhite5.Visible = true;
+                lblWhite6.Visible = true;
+                lblWhite7.Visible = true;
+                lblWhite8.Visible = true;
+                lblWhite9.Visible = true;
+                lblWhite10.Visible = true;   
+                
                 blackCard = room.GetCardBlack();
                 lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
                 lblBlack.Text = blackCard.Text;
-                
+
                 whiteCards = room.GetNewCardsWhite();
 
                 lblWhite1.Attributes.Add("value", whiteCards[0].idCards.ToString());
@@ -74,7 +108,7 @@
 
             stateChanged = false;
         }
-        
+
         /*
         //prendo tutte le carte dalla tabella BlackCard e le inserisco in una lista
         Random rndBlackCard = new Random();
@@ -107,8 +141,8 @@
         lblWhite8.Text = RandomCardsWhite[7].Text;
         lblWhite9.Text = RandomCardsWhite[8].Text;
         lblWhite10.Text = RandomCardsWhite[9].Text;
-        lblWhite11.Text = RandomCardsWhite[10].Text;     */ 
-        
+        lblWhite11.Text = RandomCardsWhite[10].Text;     */
+
         /*//scrivo nella carta nera una frase random presa dalla tabella carte nere
         String BlackCard = "SELECT TOP 1 * FROM tblBlackCard ORDER BY NEWID()";
         
@@ -119,16 +153,16 @@
 
         List<Cards> cards = FunctionsDB.RadomCardWhite(WhiteCards);
         */
-        
+
     }
 
     //serve per il conteggio alla rovescia
-    
+
     int totalSeconds = 0;
     int seconds = 0;
     int minutes = 0;
     string time = "";
-    
+
     protected void Timer1_Tick(object sender, EventArgs e)
     {
         Session["time"] = Convert.ToInt16(Session["time"]) - 1;
@@ -156,15 +190,14 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div class="container game-container">
-        <p>&nbsp;</p>
         <div>
             <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
-            <asp:Timer ID="Timer" runat="server" Interval ="1000" OnTick="Timer1_Tick"></asp:Timer>
+            <asp:Timer ID="Timer" runat="server" Interval="1000" OnTick="Timer1_Tick"></asp:Timer>
         </div>
-        <asp:UpdatePanel ID="Pannello" runat="server" UpdateMode ="Conditional">
+        <asp:UpdatePanel ID="Pannello" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
                 <asp:Label ID="lblTimer" runat="server"></asp:Label>
-            </ContentTemplate>    
+            </ContentTemplate>
             <Triggers>
                 <asp:AsyncPostBackTrigger ControlID="Timer" EventName="Tick" />
             </Triggers>
@@ -173,7 +206,7 @@
             <div class="col-md-3">
                 <div class="card-black-container">
                     <div class="black-card">
-                         <asp:Label ID="lblBlack" runat="server"></asp:Label>
+                        <asp:Label ID="lblBlack" runat="server"></asp:Label>
                     </div>
                 </div>
             </div>
@@ -182,83 +215,111 @@
                     <div class="col-card-fixed">
                         <div class="card-container">
                             <div class="white-card">
-                                <asp:Label ID="lblWhite1" runat="server"></asp:Label>
+                                <asp:HyperLink ID="lblWhite1" runat="server" CssClass="text-white"></asp:HyperLink>
                             </div>
-                            <!--<div class="username-card">
-                                <p>Matteo</p>
-                            </div>-->
-                        </div>
-                    </div>
-                     <div class="col-card-fixed">
-                        <div class="card-container">
-                            <div class="white-card">
-                                <asp:Label ID="lblWhite2" runat="server"></asp:Label>
+                            <div class="username-card">
+                                <asp:Label ID="lblUser1" runat="server" Text="Label"></asp:Label> 
+                                <asp:CheckBox ID="CheckBox1" runat="server" />
                             </div>
-                            <div class="username-card"></div>
                         </div>
                     </div>
                     <div class="col-card-fixed">
                         <div class="card-container">
                             <div class="white-card">
-                                <asp:Label ID="lblWhite3" runat="server"></asp:Label>
+                                <asp:HyperLink ID="lblWhite2" runat="server" CssClass="text-white"></asp:HyperLink>  
                             </div>
-                            <div class="username-card"></div>
+                            <div class="username-card">
+                                <asp:Label ID="lblUser2" runat="server" Text="Label"></asp:Label>
+                                <asp:CheckBox ID="CheckBox2" runat="server" />
+                            </div>
                         </div>
                     </div>
                     <div class="col-card-fixed">
                         <div class="card-container">
                             <div class="white-card">
-                                <asp:Label ID="lblWhite4" runat="server"></asp:Label>
+                                <asp:HyperLink ID="lblWhite3" runat="server" CssClass="text-white"></asp:HyperLink>
                             </div>
-                            <div class="username-card"></div>
+                            <div class="username-card">
+                                <asp:Label ID="lblUser3" runat="server" Text="Label"></asp:Label>
+                                <asp:CheckBox ID="CheckBox3" runat="server" />
+                            </div>
                         </div>
                     </div>
                     <div class="col-card-fixed">
                         <div class="card-container">
                             <div class="white-card">
-                                <asp:Label ID="lblWhite5" runat="server"></asp:Label>
+                                <asp:HyperLink ID="lblWhite4" runat="server" CssClass="text-white"></asp:HyperLink>
                             </div>
-                            <div class="username-card"></div>
+                            <div class="username-card">
+                                <asp:Label ID="lblUser4" runat="server" Text="Label"></asp:Label>
+                                <asp:CheckBox ID="CheckBox4" runat="server" />
+                            </div>
                         </div>
                     </div>
                     <div class="col-card-fixed">
                         <div class="card-container">
                             <div class="white-card">
-                                <asp:Label ID="lblWhite6" runat="server"></asp:Label>
+                                <asp:HyperLink ID="lblWhite5" runat="server" CssClass="text-white"></asp:HyperLink>
                             </div>
-                            <div class="username-card"></div>
+                            <div class="username-card">
+                                <asp:Label ID="lblUser5" runat="server" Text="Label"></asp:Label>
+                                <asp:CheckBox ID="CheckBox5" runat="server" />
+                            </div>
                         </div>
                     </div>
                     <div class="col-card-fixed">
                         <div class="card-container">
                             <div class="white-card">
-                                <asp:Label ID="lblWhite7" runat="server"></asp:Label>
+                                <asp:HyperLink ID="lblWhite6" runat="server" CssClass="text-white"></asp:HyperLink>
                             </div>
-                            <div class="username-card"></div>
+                            <div class="username-card">
+                                <asp:Label ID="lblUser6" runat="server" Text="Label"></asp:Label>
+                                <asp:CheckBox ID="CheckBox6" runat="server" />
+                            </div>
                         </div>
                     </div>
                     <div class="col-card-fixed">
                         <div class="card-container">
                             <div class="white-card">
-                                <asp:Label ID="lblWhite8" runat="server"></asp:Label>
+                                <asp:HyperLink ID="lblWhite7" runat="server" CssClass="text-white"></asp:HyperLink>
                             </div>
-                            <div class="username-card"></div>
+                            <div class="username-card">
+                                <asp:Label ID="lblUser7" runat="server" Text="Label"></asp:Label>
+                                <asp:CheckBox ID="CheckBox7" runat="server" />
+                            </div>
                         </div>
                     </div>
                     <div class="col-card-fixed">
                         <div class="card-container">
                             <div class="white-card">
-                                <asp:Label ID="lblWhite9" runat="server"></asp:Label>
+                                <asp:HyperLink ID="lblWhite8" runat="server" CssClass="text-white"></asp:HyperLink>
                             </div>
-                            <div class="username-card"></div>
+                            <div class="username-card">
+                                <asp:Label ID="lblUser8" runat="server" Text="Label"></asp:Label>
+                                <asp:CheckBox ID="CheckBox8" runat="server" />
+                            </div>
                         </div>
                     </div>
                     <div class="col-card-fixed">
                         <div class="card-container">
                             <div class="white-card">
-                                <asp:Label ID="lblWhite10" runat="server"></asp:Label>
+                                <asp:HyperLink ID="lblWhite9" runat="server" CssClass="text-white"></asp:HyperLink>  
                             </div>
-                            <div class="username-card"></div>
+                            <div class="username-card">
+                                <asp:Label ID="lblUser9" runat="server" Text="Label"></asp:Label>
+                                <asp:CheckBox ID="CheckBox9" runat="server" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-card-fixed">
+                        <div class="card-container">
+                            <div class="white-card">
+                                <asp:HyperLink ID="lblWhite10" runat="server" CssClass="text-white"></asp:HyperLink>
+                            </div>
+                            <div class="username-card">
+                                <asp:Label ID="lblUser10" runat="server" Text="Label"></asp:Label>
+                                 <asp:CheckBox ID="CheckBox10" runat="server" />
+                            </div>
                         </div>
                     </div>
                 </div>

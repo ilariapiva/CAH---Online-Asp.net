@@ -16,7 +16,7 @@
         if (!Page.IsPostBack)
         {
             stateChanged = true;
-            Session["time"] = 100; //definisco tempo per il conteggio alla rovesca. Il tempo stabilito è di 1 min e 40 sec
+            Session["time"] = 100; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
         }
 
         if (stateChanged)
@@ -42,8 +42,20 @@
             {
                 blackCard = room.GetCardBlack();
                 lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
-                lblBlack.Text = blackCard.Text;      
-                 
+                lblBlack.Text = blackCard.Text;   
+                
+                CheckBox1.Visible = false;
+                CheckBox2.Visible = false;
+                CheckBox3.Visible = false;
+                CheckBox4.Visible = false;
+                CheckBox5.Visible = false;
+                CheckBox6.Visible = false;
+                CheckBox7.Visible = false;
+                CheckBox8.Visible = false;
+                CheckBox9.Visible = false;
+                CheckBox10.Visible = false;
+
+                btnConfirm.Visible = false;
             }
 
             if (!room.IsMaster(Master.resultUser))
@@ -87,52 +99,6 @@
 
             stateChanged = false;
         }
-
-        /*
-        //prendo tutte le carte dalla tabella BlackCard e le inserisco in una lista
-        Random rndBlackCard = new Random();
-        
-        String BlackCard = "SELECT * FROM tblBlackCard";
-        List<Cards> cardBlack = FunctionsDB.Cards(BlackCard);
-        
-        List<Cards> RandomCardBlack = new List<Cards>();
-        RandomCardBlack = (cardBlack.OrderBy(x => rndBlackCard.Next()).Take(1)).ToList();
-        
-        lblBlack.Text = RandomCardBlack[0].Text;
-
-
-        //prendo tutte le carte dalla tabella WhiteCard e le inserisco in una lista
-        Random rndWhiteCards = new Random();
-        
-        String WhiteCards = "SELECT * FROM tblWhiteCard";
-        List<Cards> cardsWhite = FunctionsDB.Cards(WhiteCards);
-        
-        List<Cards> RandomCardsWhite = new List<Cards>();
-        RandomCardsWhite = (cardsWhite.OrderBy(x => rndWhiteCards.Next()).Take(11)).ToList();
-
-        lblWhite1.Text = RandomCardsWhite[0].Text;
-        lblWhite2.Text = RandomCardsWhite[1].Text;
-        lblWhite3.Text = RandomCardsWhite[2].Text;
-        lblWhite4.Text = RandomCardsWhite[3].Text;
-        lblWhite5.Text = RandomCardsWhite[4].Text;
-        lblWhite6.Text = RandomCardsWhite[5].Text;
-        lblWhite7.Text = RandomCardsWhite[6].Text;
-        lblWhite8.Text = RandomCardsWhite[7].Text;
-        lblWhite9.Text = RandomCardsWhite[8].Text;
-        lblWhite10.Text = RandomCardsWhite[9].Text;
-        lblWhite11.Text = RandomCardsWhite[10].Text;     */
-
-        /*//scrivo nella carta nera una frase random presa dalla tabella carte nere
-        String BlackCard = "SELECT TOP 1 * FROM tblBlackCard ORDER BY NEWID()";
-        
-        Cards blackCard = FunctionsDB.RadomCardBlack(BlackCard);
-
-        //scrivo nelle carte bianche una frase random prese dalla tabella carte bianche
-        String WhiteCards = "SELECT TOP 11 * FROM tblWhiteCard ORDER BY NEWID()";
-
-        List<Cards> cards = FunctionsDB.RadomCardWhite(WhiteCards);
-        */
-
     }
 
     //serve per il conteggio alla rovescia
@@ -162,6 +128,83 @@
             lblTimer.Text = time;
         }
     }
+
+    protected void btnConfirm_Click(object sender, EventArgs e)
+    {
+        List<Cards> CardsSelect = new List<Cards>();
+        Account User = Master.resultUser;
+        if(CheckBox1.Checked)
+        {
+            Cards c = new Cards();
+            c.Text = lblWhite1.Text;
+            c.idCards = Convert.ToInt32(lblWhite1.Attributes["value"]);
+            CardsSelect.Add(c);
+        }
+        if (CheckBox2.Checked)
+        {
+            Cards c = new Cards();
+            c.Text = lblWhite2.Text;
+            c.idCards = Convert.ToInt32(lblWhite2.Attributes["value"]);
+            CardsSelect.Add(c);
+        }
+        if (CheckBox3.Checked)
+        {
+            Cards c = new Cards();
+            c.Text = lblWhite3.Text;
+            c.idCards = Convert.ToInt32(lblWhite3.Attributes["value"]);
+            CardsSelect.Add(c);
+        }
+        if (CheckBox4.Checked)
+        {
+            Cards c = new Cards();
+            c.Text = lblWhite4.Text;
+            c.idCards = Convert.ToInt32(lblWhite4.Attributes["value"]);
+            CardsSelect.Add(c);
+        }
+        if (CheckBox5.Checked)
+        {
+            Cards c = new Cards();
+            c.Text = lblWhite5.Text;
+            c.idCards = Convert.ToInt32(lblWhite5.Attributes["value"]);
+            CardsSelect.Add(c);
+        }
+        if (CheckBox6.Checked)
+        {
+            Cards c = new Cards();
+            c.Text = lblWhite6.Text;
+            c.idCards = Convert.ToInt32(lblWhite6.Attributes["value"]);
+            CardsSelect.Add(c);
+        }
+        if (CheckBox7.Checked)
+        {
+            Cards c = new Cards();
+            c.Text = lblWhite7.Text;
+            c.idCards = Convert.ToInt32(lblWhite7.Attributes["value"]);
+            CardsSelect.Add(c);
+        }
+        if (CheckBox8.Checked)
+        {
+            Cards c = new Cards();
+            c.Text = lblWhite8.Text;
+            c.idCards = Convert.ToInt32(lblWhite8.Attributes["value"]);
+            CardsSelect.Add(c);
+        }
+        if (CheckBox9.Checked)
+        {
+            Cards c = new Cards();
+            c.Text = lblWhite9.Text;
+            c.idCards = Convert.ToInt32(lblWhite9.Attributes["value"]);
+            CardsSelect.Add(c);
+        }
+        if (CheckBox10.Checked)
+        {
+            Cards c = new Cards();
+            c.Text = lblWhite10.Text;
+            c.idCards = Convert.ToInt32(lblWhite10.Attributes["value"]);
+            CardsSelect.Add(c);
+        }
+    }
+    
 </script>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <link rel="stylesheet" type="text/css" href="css/game.css" />
@@ -301,6 +344,7 @@
                             </div>
                         </div>
                     </div>
+                    <asp:Button ID="btnConfirm" runat="server" Text="Conferma" OnClick="btnConfirm_Click" />
                 </div>
             </div>
         </div>

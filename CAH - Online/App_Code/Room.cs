@@ -8,8 +8,8 @@ namespace CAHOnline
     public class Room
     {
         List<Account> listUsers = new List<Account>();
-        List<Cards> RandomCardBlack, RandomCardsWhite;
-        int indexCardBlack, indexCardWhite, indexMaster;
+        List<Cards> RandomCardBlack, RandomCardsWhite, CardsWhiteSelect;
+        int indexCardBlack, indexCardWhite, indexMaster, numberCardWhite;
 
         public Room()
         {
@@ -24,6 +24,7 @@ namespace CAHOnline
             List<Cards> cardBlack = FunctionsDB.Cards(BlackCard);
 
             RandomCardBlack = (cardBlack.OrderBy(x => rndBlackCard.Next())).ToList();
+            numberCardWhite = CheckStringBlackCard();
 
             //prendo tutte le carte dalla tabella WhiteCard e le inserisco in una lista
             Random rndWhiteCards = new Random();
@@ -65,7 +66,7 @@ namespace CAHOnline
         //Questa verifica se l'utente è il master
         public bool IsMaster(Account user)
         {
-            if(listUsers.IndexOf(user) == indexMaster)
+            if(listUsers[indexMaster].idAccount == user.idAccount)
             {
                 return true;
             }
@@ -105,5 +106,20 @@ namespace CAHOnline
             card = RandomCardBlack[indexCardBlack];
             return card;
         }
+
+        public int CheckStringBlackCard()
+        {
+            String str = GetCardBlack().Text;
+            String[] toFind = str.Split('_');
+            return toFind.Length - 1;
+        }
+
+        /*public bool CheckSelectCards()
+        {
+            foreach (Account user in listUsers)
+            {
+              
+            }
+        }*/
     }
 }

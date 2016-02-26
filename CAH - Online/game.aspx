@@ -38,37 +38,16 @@
             //assegno l'idRoom
             room = Game.UserEntered(indexRoom);
 
-            lblWhite1.Visible = false;
-            lblWhite2.Visible = false;
-            lblWhite3.Visible = false;
-            lblWhite4.Visible = false;
-            lblWhite5.Visible = false;
-            lblWhite6.Visible = false;
-            lblWhite7.Visible = false;
-            lblWhite8.Visible = false;
-            lblWhite9.Visible = false;
-            lblWhite10.Visible = false;   
-            
             if (room.IsMaster(Master.resultUser))
             {
                 blackCard = room.GetCardBlack();
                 lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
-                lblBlack.Text = blackCard.Text;            
+                lblBlack.Text = blackCard.Text;      
+                 
             }
 
             if (!room.IsMaster(Master.resultUser))
-            {
-                lblWhite1.Visible = true;
-                lblWhite2.Visible = true;
-                lblWhite3.Visible = true;
-                lblWhite4.Visible = true;
-                lblWhite5.Visible = true;
-                lblWhite6.Visible = true;
-                lblWhite7.Visible = true;
-                lblWhite8.Visible = true;
-                lblWhite9.Visible = true;
-                lblWhite10.Visible = true;   
-                
+            { 
                 blackCard = room.GetCardBlack();
                 lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
                 lblBlack.Text = blackCard.Text;

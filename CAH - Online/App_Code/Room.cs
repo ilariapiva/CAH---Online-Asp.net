@@ -107,6 +107,7 @@ namespace CAHOnline
             return card;
         }
 
+        //Questa funzione restituisce il numero di spazi presenti nella blackCard selezionata
         public int CheckStringBlackCard()
         {
             String str = GetCardBlack().Text;
@@ -114,12 +115,27 @@ namespace CAHOnline
             return toFind.Length - 1;
         }
 
-        /*public bool CheckSelectCards()
+        /*Questa funzione controlla che il numero di carte selezionate corrispondana 
+        al numero di spazi che ci sono nella blackCard*/
+        public bool CheckSelectCards(List<Cards> listCards)
         {
+            listCards = new List<Cards>();
+            List<int> usersAndCards = new List<int>();
+            bool ok = false;
+
             foreach (Account user in listUsers)
             {
-              
+              if(!IsMaster(user))
+              {
+                  if(CheckStringBlackCard() == listCards.Count)
+                  {
+                      return ok = true;
+                  }
+              }
             }
-        }*/
+            return ok;
+        }
+
+
     }
 }

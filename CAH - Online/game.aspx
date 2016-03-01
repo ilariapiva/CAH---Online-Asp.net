@@ -37,7 +37,8 @@
 
             //assegno l'idRoom
             room = Game.UserEntered(indexRoom);
-
+            
+            //se l'utente è il master visualizzo solo la carta master 
             if (room.IsMaster(Master.resultUser))
             {
                 blackCard = room.GetCardBlack();
@@ -58,6 +59,7 @@
                 btnConfirm.Visible = false;
             }
 
+            //se l'utente nella stanza non è il master allora visualizzo la carta nera e le carte bianche
             if (!room.IsMaster(Master.resultUser))
             { 
                 blackCard = room.GetCardBlack();
@@ -129,10 +131,14 @@
         }
     }
 
+    
     protected void btnConfirm_Click(object sender, EventArgs e)
     {
         List<Cards> CardsSelect = new List<Cards>();
         Account User = Master.resultUser;
+        
+        /*Controllo se ogni checkBox è stata selezionata, e se è stata selezionata 
+          allora inserisco l'id della carta in una lista*/
         if(CheckBox1.Checked)
         {
             Cards c = new Cards();

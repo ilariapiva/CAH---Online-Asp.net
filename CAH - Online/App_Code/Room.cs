@@ -117,25 +117,42 @@ namespace CAHOnline
 
         /*Questa funzione controlla che il numero di carte selezionate corrispondana 
         al numero di spazi che ci sono nella blackCard*/
-        public bool CheckSelectCards(List<Cards> listCards)
+        public bool CheckSelectCards(List<Cards> listCards, Account user)
         {
             listCards = new List<Cards>();
-            List<int> usersAndCards = new List<int>();
+            user = new Account();
             bool ok = false;
 
-            foreach (Account user in listUsers)
+            /*foreach (Account user in listUsers)
             {
               if(!IsMaster(user))
-              {
+              {*/
                   if(CheckStringBlackCard() == listCards.Count)
                   {
                       return ok = true;
                   }
-              }
-            }
+              /*}
+           }*/
             return ok;
         }
 
+        //Salvo in una lista le carte dell'utente
+        public void UsersAndCards(List<Cards> listCardsWhite)
+        {
+            listCardsWhite = new List<Cards>();
+            List<Account> usersAndCards = new List<Account>();
 
+            foreach (Account user in listUsers)
+            {
+                if (!IsMaster(user))
+                {
+                    if(CheckSelectCards(listCardsWhite, user) == true)
+                    {
+                        //alla lista usersAndCards aggiungo l'id dell'account e alla lista aggiungo la la lista delle carte
+                    }
+                }
+            }
+           
+        }
     }
 }

@@ -39,9 +39,9 @@
             room = Game.UserEntered(indexRoom);
             
             //se l'utente è il master visualizzo solo la carta master 
-            if (room.IsMaster(Master.resultUser))
+            if (Room.IsMaster(Master.resultUser))
             {
-                blackCard = room.GetCardBlack();
+                blackCard = Room.GetCardBlack();
                 lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
                 lblBlack.Text = blackCard.Text;   
                 
@@ -60,13 +60,13 @@
             }
 
             //se l'utente nella stanza non è il master allora visualizzo la carta nera e le carte bianche
-            if (!room.IsMaster(Master.resultUser))
+            if (!Room.IsMaster(Master.resultUser))
             { 
-                blackCard = room.GetCardBlack();
+                blackCard = Room.GetCardBlack();
                 lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
                 lblBlack.Text = blackCard.Text;
 
-                whiteCards = room.GetNewCardsWhite();
+                whiteCards = Room.GetNewCardsWhite();
 
                 lblWhite1.Attributes.Add("value", whiteCards[0].idCards.ToString());
                 lblWhite1.Text = whiteCards[0].Text;
@@ -209,6 +209,8 @@
             c.idCards = Convert.ToInt32(lblWhite10.Attributes["value"]);
             CardsSelect.Add(c);
         }
+        
+        Room.UsersAndCards(CardsSelect);
     }
     
 </script>

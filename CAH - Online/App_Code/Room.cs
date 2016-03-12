@@ -7,9 +7,10 @@ namespace CAHOnline
 {
     public class Room
     {
-        List<Account> listUsers = new List<Account>();
-        List<Cards> RandomCardBlack, RandomCardsWhite, CardsWhiteSelect;
-        int indexCardBlack, indexCardWhite, indexMaster, numberCardWhite;
+        static List<Account> listUsers = new List<Account>();
+        static List<Cards> RandomCardBlack, RandomCardsWhite, CardsWhiteSelect;
+        static int indexCardBlack, indexCardWhite, numberCardWhite, indexMaster;
+         
 
         public Room()
         {
@@ -31,15 +32,15 @@ namespace CAHOnline
 
             String WhiteCards = "SELECT idCard, text FROM tblWhiteCard";
             List<Cards> cardsWhite = FunctionsDB.Cards(WhiteCards);
-            
+
             RandomCardsWhite = (cardsWhite.OrderBy(x => rndWhiteCards.Next())).ToList();
-        
+
         }
 
         //Controllo che nella lista listUsers non ci siano già 5 giocatori
-        public bool AddUser(Account user)
+        public static bool AddUser(Account user)
         {
-            if(listUsers.Count <= 5)
+            if (listUsers.Count <= 5)
             {
                 listUsers.Add(user);
                 return true;
@@ -51,9 +52,9 @@ namespace CAHOnline
         }
 
         //Controllo che la lista degli utenti non sia piena
-        public bool IsFull()
+        public static bool IsFull()
         {
-            if(listUsers.Count < 5)
+            if (listUsers.Count < 5)
             {
                 return false;
             }
@@ -64,9 +65,9 @@ namespace CAHOnline
         }
 
         //Questa verifica se l'utente è il master
-        public bool IsMaster(Account user)
+        public static bool IsMaster(Account user)
         {
-            if(listUsers[indexMaster].idAccount == user.idAccount)
+            if (listUsers[indexMaster].idAccount == user.idAccount)
             {
                 return true;
             }
@@ -77,11 +78,11 @@ namespace CAHOnline
         }
 
         //Questa funzione restituisce le carte bianche dell'utente
-        public List<Cards> GetNewCardsWhite()
+        public static List<Cards> GetNewCardsWhite()
         {
             List<Cards> cards = new List<Cards>();
 
-            for(int i = 0; i<10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 cards.Add(RandomCardsWhite[indexCardWhite + i]);
             }
@@ -91,7 +92,7 @@ namespace CAHOnline
         }
 
         //Questa funzione restituisce una nuova carta bianca
-        public Cards GetNewCardWhite()
+        public static Cards GetNewCardWhite()
         {
             Cards card = new Cards();
             card = RandomCardsWhite[indexCardWhite];
@@ -100,7 +101,7 @@ namespace CAHOnline
         }
 
         //Questa funzione restituisce la carta nera del turno a tutti i giocatori
-        public Cards GetCardBlack()
+        public static Cards GetCardBlack()
         {
             Cards card = new Cards();
             card = RandomCardBlack[indexCardBlack];
@@ -108,7 +109,7 @@ namespace CAHOnline
         }
 
         //Questa funzione restituisce il numero di spazi presenti nella blackCard selezionata
-        public int CheckStringBlackCard()
+        public static int CheckStringBlackCard()
         {
             String str = GetCardBlack().Text;
             String[] toFind = str.Split('_');
@@ -117,42 +118,37 @@ namespace CAHOnline
 
         /*Questa funzione controlla che il numero di carte selezionate corrispondana 
         al numero di spazi che ci sono nella blackCard*/
-        public bool CheckSelectCards(List<Cards> listCards, Account user)
+        public static bool CheckSelectCards(List<Cards> listCards)
         {
-            listCards = new List<Cards>();
-            user = new Account();
-            bool ok = false;
-
-            /*foreach (Account user in listUsers)
+            if (CheckStringBlackCard() == listCards.Count)
             {
-              if(!IsMaster(user))
-              {*/
-                  if(CheckStringBlackCard() == listCards.Count)
-                  {
-                      return ok = true;
-                  }
-              /*}
-           }*/
-            return ok;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         //Salvo in una lista le carte dell'utente
-        public void UsersAndCards(List<Cards> listCardsWhite)
+        public static void UsersAndCards(List<Cards> listCardsWhite)
         {
-            listCardsWhite = new List<Cards>();
-            List<Account> usersAndCards = new List<Account>();
-
             foreach (Account user in listUsers)
             {
                 if (!IsMaster(user))
                 {
-                    if(CheckSelectCards(listCardsWhite, user) == true)
+                    if (CheckSelectCards(listCardsWhite) == true)
                     {
-                        //alla lista usersAndCards aggiungo l'id dell'account e alla lista aggiungo la la lista delle carte
+                        if (listCardsWhite.Count != 0)
+                        {
+                            listCardsWhite.ForEach(delegate(Cards cardSelect)
+                            {
+                                FunctionsDB.WriteCardsSelect(user, cardSelect);
+                            });
+                        }
                     }
                 }
             }
-           
         }
     }
 }

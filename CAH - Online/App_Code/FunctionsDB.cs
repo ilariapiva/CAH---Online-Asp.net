@@ -47,7 +47,6 @@ namespace CAHOnline
             dr.Read();
             bool ok = dr.HasRows;
             dr.Close();
-            cmd.Dispose();
             return ok;
         }
 
@@ -61,7 +60,6 @@ namespace CAHOnline
             dr.Read();
             bool ok = dr.HasRows;
             dr.Close();
-            cmd.Dispose();
             return ok;
         }
 
@@ -75,7 +73,6 @@ namespace CAHOnline
             dr.Read();
             bool ok = dr.HasRows;
             dr.Close();
-            cmd.Dispose();
             return ok;         
         }
 
@@ -128,7 +125,6 @@ namespace CAHOnline
             value.Email = dr["email"].ToString();
 
             dr.Close();
-            cmd.Dispose();
             
             return value;
         }
@@ -149,7 +145,6 @@ namespace CAHOnline
             value = username;
             
             dr.Close();
-            cmd.Dispose();
 
             return value;
         }*/
@@ -171,7 +166,6 @@ namespace CAHOnline
             }
 
             dr.Close();
-            cmd.Dispose();
 
             return value;
         }
@@ -188,15 +182,20 @@ namespace CAHOnline
         public static int GetRoom(Account user)
         {
             String strsql = "SELECT room FROM tblGame WHERE idAccount = '" + user.idAccount + "'";
-            
             cmd = new SqlCommand(strsql, cn);
             cmd.ExecuteNonQuery();
             var dr = cmd.ExecuteReader();
             dr.Read();
             int idRoom = Convert.ToInt32(dr["room"]);
             dr.Close();
-            cmd.Dispose();
             return idRoom;
+        }
+
+        public static void WriteCardsSelect(Account user, Cards card)
+        {
+            String strsql = "INSERT INTO tblCardsSelect(idAccount, idCardWhite) VALUES ('" + user.idAccount + "', '" + card.idCards + "')";
+            cmd = new SqlCommand(strsql, cn);
+            cmd.ExecuteNonQuery();
         }
 
        /* //Questa funzione legge le righe dalla tabella White Card in modo random e le inserisce in una lista
@@ -215,7 +214,6 @@ namespace CAHOnline
             }
 
             dr.Close();
-            cmd.Dispose();
 
             return value;
 
@@ -237,7 +235,6 @@ namespace CAHOnline
             }
             
             dr.Close();
-            cmd.Dispose();
 
             return value;
         }*/

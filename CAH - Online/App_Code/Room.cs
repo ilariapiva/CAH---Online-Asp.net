@@ -11,7 +11,6 @@ namespace CAHOnline
         static List<Cards> RandomCardBlack, RandomCardsWhite, CardsWhiteSelect;
         static int indexCardBlack, indexCardWhite, numberCardWhite, indexMaster;
          
-
         public Room()
         {
             indexCardBlack = 0;
@@ -131,7 +130,7 @@ namespace CAHOnline
         }
 
         //Salvo in una lista le carte dell'utente
-        public static void UsersAndCards(List<Cards> listCardsWhite)
+        public static void UsersAndCards(List<Cards> listCardsWhite, int idRoom)
         {
             foreach (Account user in listUsers)
             {
@@ -143,12 +142,17 @@ namespace CAHOnline
                         {
                             listCardsWhite.ForEach(delegate(Cards cardSelect)
                             {
-                                FunctionsDB.WriteCardsSelect(user, cardSelect);
+                                FunctionsDB.WriteCardsSelect(user, cardSelect, idRoom);
                             });
                         }
                     }
                 }
             }
+        }
+
+        public static void febisvb()
+        {
+
         }
     }
 }

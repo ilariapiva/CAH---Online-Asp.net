@@ -13,6 +13,17 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        lblUser1.Visible = false;
+        lblUser2.Visible = false;
+        lblUser3.Visible = false;
+        lblUser4.Visible = false;
+        lblUser5.Visible = false;
+        lblUser6.Visible = false;
+        lblUser7.Visible = false;
+        lblUser8.Visible = false;
+        lblUser9.Visible = false;
+        lblUser10.Visible = false;
+
         if (!Page.IsPostBack)
         {
             stateChanged = true;
@@ -21,30 +32,15 @@
 
         if (stateChanged)
         {
-            lblUser1.Visible = false;
-            lblUser2.Visible = false;
-            lblUser3.Visible = false;
-            lblUser4.Visible = false;
-            lblUser5.Visible = false;
-            lblUser6.Visible = false;
-            lblUser7.Visible = false;
-            lblUser8.Visible = false;
-            lblUser9.Visible = false;
-            lblUser10.Visible = false;
-            
             //recupero l'id della room
             indexRoom = FunctionsDB.GetRoom(Master.resultUser);
 
             //assegno l'idRoom
             room = Game.UserEntered(indexRoom);
-            
+
             //se l'utente è il master visualizzo solo la carta master 
             if (Room.IsMaster(Master.resultUser))
             {
-                blackCard = Room.GetCardBlack();
-                lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
-                lblBlack.Text = blackCard.Text;   
-                
                 CheckBox1.Visible = false;
                 CheckBox2.Visible = false;
                 CheckBox3.Visible = false;
@@ -56,47 +52,58 @@
                 CheckBox9.Visible = false;
                 CheckBox10.Visible = false;
 
-                btnConfirm.Visible = false;
+                btnConfirmCardSelect.Visible = false;
+
+                blackCard = Room.GetCardBlack();
+                lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
+                lblBlack.Text = blackCard.Text;
+                
+                
             }
 
             //se l'utente nella stanza non è il master allora visualizzo la carta nera e le carte bianche
             if (!Room.IsMaster(Master.resultUser))
-            { 
+            {
+                btnConfirmWinner.Visible = false;
+
                 blackCard = Room.GetCardBlack();
                 lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
                 lblBlack.Text = blackCard.Text;
 
                 whiteCards = Room.GetNewCardsWhite();
 
-                lblWhite1.Attributes.Add("value", whiteCards[0].idCards.ToString());
-                lblWhite1.Text = whiteCards[0].Text;
+                /* lblWhite1.Attributes.Add("value", whiteCards[0].idCards.ToString());
+                 lblWhite1.Text = whiteCards[0].Text;*/
 
-                lblWhite2.Attributes.Add("value", whiteCards[1].idCards.ToString());
-                lblWhite2.Text = whiteCards[1].Text;
+                btnWhite1.Attributes.Add("value", whiteCards[0].idCards.ToString());
+                btnWhite1.Text = whiteCards[0].Text;
 
-                lblWhite3.Attributes.Add("value", whiteCards[2].idCards.ToString());
-                lblWhite3.Text = whiteCards[2].Text;
+                btnWhite2.Attributes.Add("value", whiteCards[1].idCards.ToString());
+                btnWhite2.Text = whiteCards[1].Text;
 
-                lblWhite4.Attributes.Add("value", whiteCards[3].idCards.ToString());
-                lblWhite4.Text = whiteCards[3].Text;
+                btnWhite3.Attributes.Add("value", whiteCards[2].idCards.ToString());
+                btnWhite3.Text = whiteCards[2].Text;
 
-                lblWhite5.Attributes.Add("value", whiteCards[4].idCards.ToString());
-                lblWhite5.Text = whiteCards[4].Text;
+                btnWhite4.Attributes.Add("value", whiteCards[3].idCards.ToString());
+                btnWhite4.Text = whiteCards[3].Text;
 
-                lblWhite6.Attributes.Add("value", whiteCards[5].idCards.ToString());
-                lblWhite6.Text = whiteCards[5].Text;
+                btnWhite5.Attributes.Add("value", whiteCards[4].idCards.ToString());
+                btnWhite5.Text = whiteCards[4].Text;
 
-                lblWhite7.Attributes.Add("value", whiteCards[6].idCards.ToString());
-                lblWhite7.Text = whiteCards[6].Text;
+                btnWhite6.Attributes.Add("value", whiteCards[5].idCards.ToString());
+                btnWhite6.Text = whiteCards[5].Text;
 
-                lblWhite8.Attributes.Add("value", whiteCards[7].idCards.ToString());
-                lblWhite8.Text = whiteCards[7].Text;
+                btnWhite7.Attributes.Add("value", whiteCards[6].idCards.ToString());
+                btnWhite7.Text = whiteCards[6].Text;
 
-                lblWhite9.Attributes.Add("value", whiteCards[8].idCards.ToString());
-                lblWhite9.Text = whiteCards[8].Text;
+                btnWhite8.Attributes.Add("value", whiteCards[7].idCards.ToString());
+                btnWhite8.Text = whiteCards[7].Text;
 
-                lblWhite10.Attributes.Add("value", whiteCards[9].idCards.ToString());
-                lblWhite10.Text = whiteCards[9].Text;
+                btnWhite9.Attributes.Add("value", whiteCards[8].idCards.ToString());
+                btnWhite9.Text = whiteCards[8].Text;
+
+                btnWhite10.Attributes.Add("value", whiteCards[9].idCards.ToString());
+                btnWhite10.Text = whiteCards[9].Text;
             }
 
             stateChanged = false;
@@ -131,88 +138,94 @@
         }
     }
 
-    
-    protected void btnConfirm_Click(object sender, EventArgs e)
+
+    protected void btnConfirmCardSelect_Click(object sender, EventArgs e)
     {
         List<Cards> CardsSelect = new List<Cards>();
         Account User = Master.resultUser;
-        
+
         /*Controllo se ogni checkBox è stata selezionata, e se è stata selezionata 
           allora inserisco l'id della carta in una lista*/
-        if(CheckBox1.Checked)
+        if (CheckBox1.Checked)
         {
             Cards c = new Cards();
-            c.Text = lblWhite1.Text;
-            c.idCards = Convert.ToInt32(lblWhite1.Attributes["value"]);
+            c.Text = btnWhite1.Text;
+            c.idCards = Convert.ToInt32(btnWhite1.Attributes["value"]);
             CardsSelect.Add(c);
         }
         if (CheckBox2.Checked)
         {
             Cards c = new Cards();
-            c.Text = lblWhite2.Text;
-            c.idCards = Convert.ToInt32(lblWhite2.Attributes["value"]);
+            c.Text = btnWhite2.Text;
+            c.idCards = Convert.ToInt32(btnWhite2.Attributes["value"]);
             CardsSelect.Add(c);
         }
         if (CheckBox3.Checked)
         {
             Cards c = new Cards();
-            c.Text = lblWhite3.Text;
-            c.idCards = Convert.ToInt32(lblWhite3.Attributes["value"]);
+            c.Text = btnWhite3.Text;
+            c.idCards = Convert.ToInt32(btnWhite3.Attributes["value"]);
             CardsSelect.Add(c);
         }
         if (CheckBox4.Checked)
         {
             Cards c = new Cards();
-            c.Text = lblWhite4.Text;
-            c.idCards = Convert.ToInt32(lblWhite4.Attributes["value"]);
+            c.Text = btnWhite4.Text;
+            c.idCards = Convert.ToInt32(btnWhite4.Attributes["value"]);
             CardsSelect.Add(c);
         }
         if (CheckBox5.Checked)
         {
             Cards c = new Cards();
-            c.Text = lblWhite5.Text;
-            c.idCards = Convert.ToInt32(lblWhite5.Attributes["value"]);
+            c.Text = btnWhite5.Text;
+            c.idCards = Convert.ToInt32(btnWhite5.Attributes["value"]);
             CardsSelect.Add(c);
         }
         if (CheckBox6.Checked)
         {
             Cards c = new Cards();
-            c.Text = lblWhite6.Text;
-            c.idCards = Convert.ToInt32(lblWhite6.Attributes["value"]);
+            c.Text = btnWhite6.Text;
+            c.idCards = Convert.ToInt32(btnWhite6.Attributes["value"]);
             CardsSelect.Add(c);
         }
         if (CheckBox7.Checked)
         {
             Cards c = new Cards();
-            c.Text = lblWhite7.Text;
-            c.idCards = Convert.ToInt32(lblWhite7.Attributes["value"]);
+            c.Text = btnWhite7.Text;
+            c.idCards = Convert.ToInt32(btnWhite7.Attributes["value"]);
             CardsSelect.Add(c);
         }
         if (CheckBox8.Checked)
         {
             Cards c = new Cards();
-            c.Text = lblWhite8.Text;
-            c.idCards = Convert.ToInt32(lblWhite8.Attributes["value"]);
+            c.Text = btnWhite8.Text;
+            c.idCards = Convert.ToInt32(btnWhite8.Attributes["value"]);
             CardsSelect.Add(c);
         }
         if (CheckBox9.Checked)
         {
             Cards c = new Cards();
-            c.Text = lblWhite9.Text;
-            c.idCards = Convert.ToInt32(lblWhite9.Attributes["value"]);
+            c.Text = btnWhite9.Text;
+            c.idCards = Convert.ToInt32(btnWhite9.Attributes["value"]);
             CardsSelect.Add(c);
         }
         if (CheckBox10.Checked)
         {
             Cards c = new Cards();
-            c.Text = lblWhite10.Text;
-            c.idCards = Convert.ToInt32(lblWhite10.Attributes["value"]);
+            c.Text = btnWhite10.Text;
+            c.idCards = Convert.ToInt32(btnWhite10.Attributes["value"]);
             CardsSelect.Add(c);
         }
-        
-        Room.UsersAndCards(CardsSelect);
+
+        Room.UsersAndCards(CardsSelect, indexRoom);
+
+        btnConfirmCardSelect.Enabled = false;
     }
-    
+
+    protected void btnConfirmWinner_Click(object sender, EventArgs e)
+    {
+
+    }
 </script>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <link rel="stylesheet" type="text/css" href="css/game.css" />
@@ -243,118 +256,87 @@
             <div class="col-md-9">
                 <div class="row">
                     <div class="col-card-fixed">
-                        <div class="card-container">
+                        <asp:Button ID="btnWhite1" CssClass="card-container white-card text-white" runat="server" Text="" />
+                        <!--<div class="card-container">
                             <div class="white-card">
+                               
                                 <asp:HyperLink ID="lblWhite1" runat="server" CssClass="text-white"></asp:HyperLink>
                             </div>
-                            <div class="username-card">
-                                <asp:Label ID="lblUser1" runat="server" Text="Label"></asp:Label> 
-                                <asp:CheckBox ID="CheckBox1" runat="server" />
-                            </div>
+
+                        </div>-->
+                        <div class="username-card">
+                            <asp:Label ID="lblUser1" runat="server" Text="Label"></asp:Label>
+                            <asp:CheckBox ID="CheckBox1" runat="server" />
+                        </div>
+
+                    </div>
+                    <div class="col-card-fixed">
+                        <asp:Button ID="btnWhite2" CssClass="card-container white-card text-white" runat="server" Text="" />
+                        <div class="username-card">
+                            <asp:Label ID="lblUser2" runat="server" Text="Label"></asp:Label>
+                            <asp:CheckBox ID="CheckBox2" runat="server" />
                         </div>
                     </div>
                     <div class="col-card-fixed">
-                        <div class="card-container">
-                            <div class="white-card">
-                                <asp:HyperLink ID="lblWhite2" runat="server" CssClass="text-white"></asp:HyperLink>  
-                            </div>
-                            <div class="username-card">
-                                <asp:Label ID="lblUser2" runat="server" Text="Label"></asp:Label>
-                                <asp:CheckBox ID="CheckBox2" runat="server" />
-                            </div>
+                        <asp:Button ID="btnWhite3" CssClass="card-container white-card text-white" runat="server" Text="" />
+                        <div class="username-card">
+                            <asp:Label ID="lblUser3" runat="server" Text="Label"></asp:Label>
+                            <asp:CheckBox ID="CheckBox3" runat="server" />
                         </div>
                     </div>
                     <div class="col-card-fixed">
-                        <div class="card-container">
-                            <div class="white-card">
-                                <asp:HyperLink ID="lblWhite3" runat="server" CssClass="text-white"></asp:HyperLink>
-                            </div>
-                            <div class="username-card">
-                                <asp:Label ID="lblUser3" runat="server" Text="Label"></asp:Label>
-                                <asp:CheckBox ID="CheckBox3" runat="server" />
-                            </div>
+                        <asp:Button ID="btnWhite4" CssClass="card-container white-card text-white" runat="server" Text="" />
+                        <div class="username-card">
+                            <asp:Label ID="lblUser4" runat="server" Text="Label"></asp:Label>
+                            <asp:CheckBox ID="CheckBox4" runat="server" />
                         </div>
                     </div>
                     <div class="col-card-fixed">
-                        <div class="card-container">
-                            <div class="white-card">
-                                <asp:HyperLink ID="lblWhite4" runat="server" CssClass="text-white"></asp:HyperLink>
-                            </div>
-                            <div class="username-card">
-                                <asp:Label ID="lblUser4" runat="server" Text="Label"></asp:Label>
-                                <asp:CheckBox ID="CheckBox4" runat="server" />
-                            </div>
+                        <asp:Button ID="btnWhite5" CssClass="card-container white-card text-white" runat="server" Text="" />
+                        <div class="username-card">
+                            <asp:Label ID="lblUser5" runat="server" Text="Label"></asp:Label>
+                            <asp:CheckBox ID="CheckBox5" runat="server" />
                         </div>
                     </div>
                     <div class="col-card-fixed">
-                        <div class="card-container">
-                            <div class="white-card">
-                                <asp:HyperLink ID="lblWhite5" runat="server" CssClass="text-white"></asp:HyperLink>
-                            </div>
-                            <div class="username-card">
-                                <asp:Label ID="lblUser5" runat="server" Text="Label"></asp:Label>
-                                <asp:CheckBox ID="CheckBox5" runat="server" />
-                            </div>
+                        <asp:Button ID="btnWhite6" CssClass="card-container white-card text-white" runat="server" Text="" />
+                        <div class="username-card">
+                            <asp:Label ID="lblUser6" runat="server" Text="Label"></asp:Label>
+                            <asp:CheckBox ID="CheckBox6" runat="server" />
                         </div>
                     </div>
                     <div class="col-card-fixed">
-                        <div class="card-container">
-                            <div class="white-card">
-                                <asp:HyperLink ID="lblWhite6" runat="server" CssClass="text-white"></asp:HyperLink>
-                            </div>
-                            <div class="username-card">
-                                <asp:Label ID="lblUser6" runat="server" Text="Label"></asp:Label>
-                                <asp:CheckBox ID="CheckBox6" runat="server" />
-                            </div>
+                        <asp:Button ID="btnWhite7" CssClass="card-container white-card text-white" runat="server" Text="" />
+                        <div class="username-card">
+                            <asp:Label ID="lblUser7" runat="server" Text="Label"></asp:Label>
+                            <asp:CheckBox ID="CheckBox7" runat="server" />
                         </div>
                     </div>
                     <div class="col-card-fixed">
-                        <div class="card-container">
-                            <div class="white-card">
-                                <asp:HyperLink ID="lblWhite7" runat="server" CssClass="text-white"></asp:HyperLink>
-                            </div>
-                            <div class="username-card">
-                                <asp:Label ID="lblUser7" runat="server" Text="Label"></asp:Label>
-                                <asp:CheckBox ID="CheckBox7" runat="server" />
-                            </div>
+                        <asp:Button ID="btnWhite8" CssClass="card-container white-card text-white" runat="server" Text="" />
+                        <div class="username-card">
+                            <asp:Label ID="lblUser8" runat="server" Text="Label"></asp:Label>
+                            <asp:CheckBox ID="CheckBox8" runat="server" />
                         </div>
                     </div>
                     <div class="col-card-fixed">
-                        <div class="card-container">
-                            <div class="white-card">
-                                <asp:HyperLink ID="lblWhite8" runat="server" CssClass="text-white"></asp:HyperLink>
-                            </div>
-                            <div class="username-card">
-                                <asp:Label ID="lblUser8" runat="server" Text="Label"></asp:Label>
-                                <asp:CheckBox ID="CheckBox8" runat="server" />
-                            </div>
+                        <asp:Button ID="btnWhite9" CssClass="card-container white-card text-white" runat="server" Text="" />
+                        <div class="username-card">
+                            <asp:Label ID="lblUser9" runat="server" Text="Label"></asp:Label>
+                            <asp:CheckBox ID="CheckBox9" runat="server" />
                         </div>
                     </div>
                     <div class="col-card-fixed">
-                        <div class="card-container">
-                            <div class="white-card">
-                                <asp:HyperLink ID="lblWhite9" runat="server" CssClass="text-white"></asp:HyperLink>  
-                            </div>
-                            <div class="username-card">
-                                <asp:Label ID="lblUser9" runat="server" Text="Label"></asp:Label>
-                                <asp:CheckBox ID="CheckBox9" runat="server" />
-                            </div>
+                        <asp:Button ID="btnWhite10" CssClass="card-container white-card text-white" runat="server" Text="" />
+                        <div class="username-card">
+                            <asp:Label ID="lblUser10" runat="server" Text="Label"></asp:Label>
+                            <asp:CheckBox ID="CheckBox10" runat="server" />
                         </div>
                     </div>
-                    <div class="col-card-fixed">
-                        <div class="card-container">
-                            <div class="white-card">
-                                <asp:HyperLink ID="lblWhite10" runat="server" CssClass="text-white"></asp:HyperLink>
-                            </div>
-                            <div class="username-card">
-                                <asp:Label ID="lblUser10" runat="server" Text="Label"></asp:Label>
-                                 <asp:CheckBox ID="CheckBox10" runat="server" />
-                            </div>
-                        </div>
-                    </div>
-                    <asp:Button ID="btnConfirm" runat="server" Text="Conferma" OnClick="btnConfirm_Click" />
-                </div>
+                <asp:Button ID="btnConfirmCardSelect" runat="server" Text="Conferma" OnClick="btnConfirmCardSelect_Click" />
+                <asp:Button ID="btnConfirmWinner" runat="server" Text="Conferma" OnClick="btnConfirmWinner_Click" />
             </div>
         </div>
+    </div>
     </div>
 </asp:Content>

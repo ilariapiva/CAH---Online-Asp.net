@@ -279,6 +279,7 @@ namespace CAHOnline
             return value;
         }*/
 
+        //Questa funzione permette di leggere le carte che sono state seleionate da un certo utente
         public static void ReadCardsSelect(Account user, Cards cardsWhite)
         {
             OpenConnectionDB();
@@ -291,6 +292,24 @@ namespace CAHOnline
             user.idAccount += Convert.ToInt32(dr["idAccount"]);
             cardsWhite.idCards += Convert.ToInt32(dr["idCardWhite"]);
             
+            dr.Close();
+            cmd.Dispose();
+        }
+
+        //Questa funzione permette di leggere il numero delle persone di una stanza che hanno selezionato le carte
+        public static void ReadListUserInRoom(Account user, int room)
+        {
+            OpenConnectionDB();
+
+            String strsql = @"SELECT COUNT(*), idAccount, room FROM tblCardsSelect GROUP BY idAccount, room 
+                              HAVING COUNT(*) >= 1 AND idAccount = '" + user.idAccount + "' AND room = '" + room + "' ";
+            SqlCommand cmd = new SqlCommand(strsql, cn);
+            var dr = cmd.ExecuteReader();
+            dr.Read();
+
+            user.idAccount += Convert.ToInt32(dr["idAccount"]);
+            room += Convert.ToInt32(dr["room"]);
+
             dr.Close();
             cmd.Dispose();
         }

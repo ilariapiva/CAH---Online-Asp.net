@@ -297,21 +297,19 @@ namespace CAHOnline
         }
 
         //Questa funzione permette di leggere il numero delle persone di una stanza che hanno selezionato le carte
-        public static void ReadListUserInRoom(Account user, int room)
+        public static bool ReadListUserInRoom(Account user, int room)
         {
             OpenConnectionDB();
 
-            String strsql = @"SELECT COUNT(*), idAccount, room FROM tblCardsSelect GROUP BY idAccount, room 
-                              HAVING COUNT(*) >= 1 AND idAccount = '" + user.idAccount + "' AND room = '" + room + "' ";
+            String strsql = @"SELECT COUNT(*), idAccount FROM tblCardsSelect GROUP BY idAccount 
+                              HAVING COUNT(*) >= 1 AND idAccount = '" + user.idAccount + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn);
             var dr = cmd.ExecuteReader();
             dr.Read();
-
-            user.idAccount += Convert.ToInt32(dr["idAccount"]);
-            room += Convert.ToInt32(dr["room"]);
-
+            bool ok = dr.HasRows;
             dr.Close();
             cmd.Dispose();
+            return ok;    
         }
     }
 }

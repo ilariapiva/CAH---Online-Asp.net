@@ -10,7 +10,7 @@
     Cards blackCard;
     List<Cards> whiteCards = new List<Cards>();
     bool stateChanged;
-
+    
     protected void Page_Load(object sender, EventArgs e)
     {
         lblUser1.Visible = false;
@@ -58,7 +58,19 @@
                 lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
                 lblBlack.Text = blackCard.Text;
                 
-                
+                if(Room.CheckUserCardSelected(indexRoom))
+                {
+                    CheckBox1.Visible = true;
+                    CheckBox2.Visible = true;
+                    CheckBox3.Visible = true;
+                    CheckBox4.Visible = true;
+                    CheckBox5.Visible = true;
+                    CheckBox6.Visible = true;
+                    CheckBox7.Visible = true;
+                    CheckBox8.Visible = true;
+                    CheckBox9.Visible = true;
+                    CheckBox10.Visible = true;
+                }
             }
 
             //se l'utente nella stanza non è il master allora visualizzo la carta nera e le carte bianche
@@ -218,7 +230,7 @@
         }
 
         Room.UsersAndCards(CardsSelect, indexRoom);
-
+        
         btnConfirmCardSelect.Enabled = false;
     }
 

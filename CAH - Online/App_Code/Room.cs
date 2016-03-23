@@ -129,7 +129,7 @@ namespace CAHOnline
             }
         }
 
-        //Salvo in una lista le carte dell'utente
+        //Salvo in nel db le carte dell'utente
         public static void UsersAndCards(List<Cards> listCardsWhite, int idRoom)
         {
             foreach (Account user in listUsers)
@@ -150,9 +150,35 @@ namespace CAHOnline
             }
         }
 
-        public static void febisvb()
+        public static int CheckUserCardSelectedDB(int room)
         {
+            int count = 0;
 
+            foreach (Account user in listUsers)
+            {
+                if (!IsMaster(user))
+                {
+                    if(FunctionsDB.ReadListUserInRoom(user, room))
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
         }
+
+        public static bool CheckUserCardSelected(int room)
+        {
+            if(CheckUserCardSelectedDB(room) == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
     }
 }

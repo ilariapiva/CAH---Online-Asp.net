@@ -301,8 +301,9 @@ namespace CAHOnline
         {
             OpenConnectionDB();
 
-            String strsql = @"SELECT COUNT(*), idAccount FROM tblCardsSelect GROUP BY idAccount 
-                              HAVING COUNT(*) >= 1 AND idAccount = '" + user.idAccount + "'";
+            String strsql = @"SELECT COUNT(*), idAccount FROM tblCardsSelect 
+                            WHERE room  = '" + room + @"' GROUP BY idAccount 
+                            HAVING COUNT(*) >= 1 AND idAccount = '" + user.idAccount + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn);
             var dr = cmd.ExecuteReader();
             dr.Read();

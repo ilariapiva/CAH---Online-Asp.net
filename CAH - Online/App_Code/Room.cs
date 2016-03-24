@@ -150,8 +150,7 @@ namespace CAHOnline
             }
         }
 
-        //Questa funzione permette di cercare nel db se lo user ha selezionato la carta
-        public static bool CheckUserCardSelected(int room)
+        public static int CheckUserCardSelectedDB(int room)
         {
             int count = 0;
 
@@ -166,7 +165,12 @@ namespace CAHOnline
                 }
             }
 
-            if (count == 4)
+            return count;
+        }
+
+        public static bool CheckUserCardSelected(int room)
+        {
+            if(CheckUserCardSelectedDB(room) == 1)
             {
                 return true;
             }
@@ -175,5 +179,6 @@ namespace CAHOnline
                 return false;
             }
         }
+
     }
 }

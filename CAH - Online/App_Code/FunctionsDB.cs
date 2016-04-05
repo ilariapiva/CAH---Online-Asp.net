@@ -9,7 +9,7 @@ namespace CAHOnline
     public static class FunctionsDB
     {
         static SqlConnection cn;
-         
+
 
         //Questa funzione apre la connessione con il db
         public static void OpenConnectionDB()
@@ -21,25 +21,26 @@ namespace CAHOnline
                 cn.Open();
             }
         }
-
+        //Questa funzione controlla che la connessione sia aperta
         public static bool IsOpenConnection()
         {
-            if(cn != null)
+            if (cn != null)
             {
-                if(cn.State == System.Data.ConnectionState.Open)
+                if (cn.State == System.Data.ConnectionState.Open)
                 {
                     return true;
                 }
             }
             return false;
         }
+
         //Questa funzione risponde l'email memorizzata nei cookies
         public static void CookiesRequest()
         {
             if (HttpContext.Current.Request.Cookies["userEmail"] != null)
             {
                 HttpContext.Current.Session["userEmail"] = HttpContext.Current.Server.HtmlEncode(HttpContext.Current.Request.Cookies["userEmail"].Value);
-            } 
+            }
         }
 
         //Questa funzione salva l'email nei cookies
@@ -96,7 +97,7 @@ namespace CAHOnline
             bool ok = dr.HasRows;
             dr.Close();
             cmd.Dispose();
-            return ok;         
+            return ok;
         }
 
         //Questa funzione registra il nuovo utente e lo inserisce nella tabella Account
@@ -133,7 +134,7 @@ namespace CAHOnline
             cmd.Dispose();
         }
 
-        //Questa funzione serve per leggere i valori della tabella profilo presente nel db e li inserisce in una lista
+        //Questa funzione serve per leggere i valori della tabella profilo presente nel db
         public static Account ReadValuesProfileDB()
         {
             OpenConnectionDB();
@@ -143,7 +144,7 @@ namespace CAHOnline
             Account value = new Account();
             SqlCommand cmd = new SqlCommand(strsql, cn);
             var dr = cmd.ExecuteReader();
-            if(dr.HasRows)
+            if (dr.HasRows)
             {
                 dr.Read();
                 value.MatchesPlayed = Convert.ToInt32(dr["matchesPlayed"]);
@@ -228,6 +229,8 @@ namespace CAHOnline
             return idRoom;
         }
 
+        /*Questa funzione permette di scrivere nella tabella CardsSelect lo user, la 
+        stanza in cui si trova e la/e carta/e che ha selezionato*/
         public static void WriteCardsSelect(Account user, Cards card, int idRoom)
         {
             OpenConnectionDB();
@@ -238,53 +241,53 @@ namespace CAHOnline
             cmd.Dispose();
         }
 
-       /* //Questa funzione legge le righe dalla tabella White Card in modo random e le inserisce in una lista
-        public static List<Cards> RadomCardWhite(String strsql)
-        {
-            List<Cards> value = new List<Cards>();
+        /* //Questa funzione legge le righe dalla tabella White Card in modo random e le inserisce in una lista
+         public static List<Cards> RadomCardWhite(String strsql)
+         {
+             List<Cards> value = new List<Cards>();
 
-            cmd = new SqlCommand(strsql, cn);
-            var dr = cmd.ExecuteReader();
+             cmd = new SqlCommand(strsql, cn);
+             var dr = cmd.ExecuteReader();
 
-            while (dr.Read())
-            {
-                Cards cards = new Cards();
-                cards.Text = dr["text"].ToString();
-                value.Add(cards);
-            }
+             while (dr.Read())
+             {
+                 Cards cards = new Cards();
+                 cards.Text = dr["text"].ToString();
+                 value.Add(cards);
+             }
 
-            dr.Close();
+             dr.Close();
 
-            return value;
+             return value;
 
-        }
+         }
 
-        //Questa funzione legge le righe dalla tabella Black Card in modo random e le inserisce in una lista
-        public static Cards RadomCardBlack(String strsql)
-        {
-            Cards value = new Cards();
+         //Questa funzione legge le righe dalla tabella Black Card in modo random e le inserisce in una lista
+         public static Cards RadomCardBlack(String strsql)
+         {
+             Cards value = new Cards();
 
-            cmd = new SqlCommand(strsql, cn);
-            var dr = cmd.ExecuteReader();
+             cmd = new SqlCommand(strsql, cn);
+             var dr = cmd.ExecuteReader();
 
-            while (dr.Read())
-            {
-                Cards card = new Cards();
-                card.Text = dr["text"].ToString();
-                value = card;
-            }
+             while (dr.Read())
+             {
+                 Cards card = new Cards();
+                 card.Text = dr["text"].ToString();
+                 value = card;
+             }
             
-            dr.Close();
+             dr.Close();
 
-            return value;
-        }*/
+             return value;
+         }*/
 
         //Questa funzione permette di leggere le carte che sono state seleionate da un certo utente
-        public static void ReadCardsSelect(Account user, Cards cardsWhite)
+        public static void ReadCardsSelect()
         {
             OpenConnectionDB();
 
-            String strsql = "SELECT idAccount, idCardWhite room FROM tblCardsSelect";
+            /*String strsql = "SELECT idAccount, idCardWhite, room FROM tblCardsSelect";
             SqlCommand cmd = new SqlCommand(strsql, cn);
             var dr = cmd.ExecuteReader();
             dr.Read();
@@ -292,6 +295,24 @@ namespace CAHOnline
             user.idAccount += Convert.ToInt32(dr["idAccount"]);
             cardsWhite.idCards += Convert.ToInt32(dr["idCardWhite"]);
             
+            dr.Close();
+            cmd.Dispose();*/
+			
+			String strsql = "SELECT idAccount, idCardWhite, room, FROM tblCardsSelect";
+			
+            Account user = new Account();
+			Cards card = new Cards();
+			int room = 0;
+			
+            SqlCommand cmd = new SqlCommand(strsql, cn);
+            var dr = cmd.ExecuteReader();
+            if(dr.HasRows)
+            {
+                dr.Read();
+				user.idAccount = Convert.ToInt32(dr["idAccount"]);
+				card.idCards = Convert.ToInt32(dr["idCardWhite"]);
+				room = Convert.ToInt32(dr["room"]);
+            }
             dr.Close();
             cmd.Dispose();
         }
@@ -309,7 +330,7 @@ namespace CAHOnline
             bool ok = dr.HasRows;
             dr.Close();
             cmd.Dispose();
-            return ok;    
+            return ok;
         }
     }
 }

@@ -59,7 +59,12 @@
         if (!Page.IsPostBack)
         {
             stateChanged = true;
-            Session["time"] = 100; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
+            Session["time1"] = 20; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
+            Session["time2"] = 20;
+            /* 100 = 1 min e 40 sec
+             * 90 = 1 min 30 sec
+             * 50 = 50 sec
+             */
         }
 
         if (stateChanged)
@@ -73,6 +78,8 @@
             //se l'utente è il master visualizzo solo la carta master 
             if (Room.IsMaster(Master.resultUser))
             {
+                lblTimer.Visible = false;
+                
                 CheckBox1.Visible = false;
                 CheckBox2.Visible = false;
                 CheckBox3.Visible = false;
@@ -94,6 +101,8 @@
             //se l'utente nella stanza non è il master allora visualizzo la carta nera e le carte bianche
             if (!Room.IsMaster(Master.resultUser))
             {
+                lblTimerMaster.Visible = false;
+                
                 btnConfirmWinner.Visible = false;
 
                 blackCard = Room.GetCardBlack();
@@ -149,14 +158,32 @@
 
     protected void Timer1_Tick(object sender, EventArgs e)
     {
-        Session["time"] = Convert.ToInt16(Session["time"]) - 1;
-        if (Convert.ToInt16(Session["time"]) <= 0)
+        Session["time1"] = Convert.ToInt16(Session["time1"]) - 1;
+        if (Convert.ToInt16(Session["time1"]) <= 0)
         {
-
             lblTimer.Text = "TimeOut!";
 
             if (Room.IsMaster(Master.resultUser))
             {
+                lblTimerMaster.Visible = true;
+
+                Session["time2"] = Convert.ToInt16(Session["time2"]) - 1;
+                if (Convert.ToInt16(Session["time2"]) <= 0)
+                {
+                    lblTimerMaster.Text = "TimeOut!";
+                    //insert_result();
+                    //Response.Redirect("Show_result.aspx");
+                }
+
+                else
+                {
+                    totalSeconds = Convert.ToInt16(Session["time2"]);
+                    seconds = totalSeconds % 60;
+                    minutes = totalSeconds / 60;
+                    time = minutes + ":" + seconds;
+                    lblTimerMaster.Text = time;
+                }
+
                 if (Room.CheckUserCardSelected(indexRoom))
                 {
                     CheckBox1.Visible = true;
@@ -182,13 +209,14 @@
                     lblUser10.Visible = true;
                 }
             }
+
             //insert_result();
             //Response.Redirect("Show_result.aspx");
         }
 
         else
         {
-            totalSeconds = Convert.ToInt16(Session["time"]);
+            totalSeconds = Convert.ToInt16(Session["time1"]);
             seconds = totalSeconds % 60;
             minutes = totalSeconds / 60;
             time = minutes + ":" + seconds;
@@ -307,6 +335,7 @@
         <asp:UpdatePanel ID="Pannello" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
                 <asp:Label ID="lblTimer" runat="server"></asp:Label>
+                <asp:Label ID="lblTimerMaster" runat="server"></asp:Label>
                 <div class="row">
                     <div class="col-md-3">
                         <div class="card-black-container">

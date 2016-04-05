@@ -150,7 +150,9 @@ namespace CAHOnline
             }
         }
 
-        public static int CheckUserCardSelectedDB(int room)
+        /*Questa funziona mi ritorna il numero dei giocatori meno il master presenti nella stanza
+         * e il controllo lo fa interrogando il db*/
+        public static int HowManyUserNotMasterInRoom(int room)
         {
             int count = 0;
 
@@ -168,9 +170,11 @@ namespace CAHOnline
             return count;
         }
 
+        /*Questa funzione permette di controllare se il numero dei giocatori che hanno selezionato le carte 
+         * (lo si ottiene interrogando il db) sia uguale numero dei giocatori della stanza meno il master */
         public static bool CheckUserCardSelected(int room)
         {
-            if(CheckUserCardSelectedDB(room) == 1)
+            if (HowManyUserNotMasterInRoom(room) == 1)
             {
                 return true;
             }

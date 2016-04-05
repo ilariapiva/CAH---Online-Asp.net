@@ -25,36 +25,13 @@
         lblUser10.Visible = false;
         lblUser11.Visible = false;
         lblUser12.Visible = false;
-        lblUser13.Visible = false;
-        lblUser14.Visible = false;
-        lblUser15.Visible = false;
-        lblUser16.Visible = false;
-        lblUser17.Visible = false;
-        lblUser18.Visible = false;
-        lblUser19.Visible = false;
-        lblUser20.Visible = false;
 
         btnWhite11.Visible = false;
         btnWhite12.Visible = false;
-        btnWhite13.Visible = false;
-        btnWhite14.Visible = false;
-        btnWhite15.Visible = false;
-        btnWhite16.Visible = false;
-        btnWhite17.Visible = false;
-        btnWhite18.Visible = false;
-        btnWhite19.Visible = false;
-        btnWhite20.Visible = false;
 
         CheckBox11.Visible = false;
         CheckBox12.Visible = false;
-        CheckBox13.Visible = false;
-        CheckBox14.Visible = false;
-        CheckBox15.Visible = false;
-        CheckBox16.Visible = false;
-        CheckBox17.Visible = false;
-        CheckBox18.Visible = false;
-        CheckBox19.Visible = false;
-        CheckBox20.Visible = false;
+
 
         if (!Page.IsPostBack)
         {
@@ -79,7 +56,7 @@
             if (Room.IsMaster(Master.resultUser))
             {
                 lblTimer.Visible = false;
-                
+
                 CheckBox1.Visible = false;
                 CheckBox2.Visible = false;
                 CheckBox3.Visible = false;
@@ -96,13 +73,36 @@
                 blackCard = Room.GetCardBlack();
                 lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
                 lblBlack.Text = blackCard.Text;
+
+                int spacesBlackCard = Room.CheckStringBlackCard();
+
+                if (spacesBlackCard == 1)
+                {
+                    btnWhite5.Visible = false;
+                    btnWhite6.Visible = false;
+                    btnWhite7.Visible = false;
+                    btnWhite8.Visible = false;
+                    btnWhite9.Visible = false;
+                    btnWhite10.Visible = false;
+                }
+
+                if (spacesBlackCard == 2)
+                {
+                    btnWhite10.Visible = false;
+                }
+
+                if (spacesBlackCard == 3)
+                {
+                    CheckBox11.Visible = true;
+                    CheckBox12.Visible = true;
+                }
             }
 
             //se l'utente nella stanza non è il master allora visualizzo la carta nera e le carte bianche
             if (!Room.IsMaster(Master.resultUser))
             {
                 lblTimerMaster.Visible = false;
-                
+
                 btnConfirmWinner.Visible = false;
 
                 blackCard = Room.GetCardBlack();
@@ -186,27 +186,117 @@
 
                 if (Room.CheckUserCardSelected(indexRoom))
                 {
-                    CheckBox1.Visible = true;
-                    CheckBox2.Visible = true;
-                    CheckBox3.Visible = true;
-                    CheckBox4.Visible = true;
-                    CheckBox5.Visible = true;
-                    CheckBox6.Visible = true;
-                    CheckBox7.Visible = true;
-                    CheckBox8.Visible = true;
-                    CheckBox9.Visible = true;
-                    CheckBox10.Visible = true;
+                    int spacesBlackCard = Room.CheckStringBlackCard();
 
-                    lblUser1.Visible = true;
-                    lblUser2.Visible = true;
-                    lblUser3.Visible = true;
-                    lblUser4.Visible = true;
-                    lblUser5.Visible = true;
-                    lblUser6.Visible = true;
-                    lblUser7.Visible = true;
-                    lblUser8.Visible = true;
-                    lblUser9.Visible = true;
-                    lblUser10.Visible = true;
+                    if (spacesBlackCard == 1)
+                    {
+                        CheckBox1.Visible = true;
+                        CheckBox2.Visible = true;
+                        CheckBox3.Visible = true;
+                        CheckBox4.Visible = true;
+
+                        lblUser1.Visible = true;
+                        lblUser1.Text = "User 1";
+
+                        lblUser2.Visible = true;
+                        lblUser2.Text = "User 2";
+
+                        lblUser3.Visible = true;
+                        lblUser3.Text = "User 3";
+
+                        lblUser4.Visible = true;
+                        lblUser4.Text = "User 4";
+                    }
+
+                    if (spacesBlackCard == 2)
+                    {
+                        CheckBox1.Visible = true;
+                        CheckBox2.Visible = true;
+                        CheckBox3.Visible = true;
+                        CheckBox4.Visible = true;
+                        CheckBox5.Visible = true;
+                        CheckBox6.Visible = true;
+                        CheckBox7.Visible = true;
+                        CheckBox8.Visible = true;
+
+
+                        lblUser1.Visible = true;
+                        lblUser1.Text = "User 1";
+
+                        lblUser2.Visible = true;
+                        lblUser2.Text = "User 1";
+
+                        lblUser3.Visible = true;
+                        lblUser3.Text = "User 2";
+
+                        lblUser4.Visible = true;
+                        lblUser4.Text = "User 2";
+
+                        lblUser5.Visible = true;
+                        lblUser5.Text = "User 3";
+
+                        lblUser6.Visible = true;
+                        lblUser6.Text = "User 3";
+
+                        lblUser7.Visible = true;
+                        lblUser7.Text = "User 4";
+
+                        lblUser8.Visible = true;
+                        lblUser8.Text = "User 4";
+                    }
+
+                    if (spacesBlackCard == 3)
+                    {
+                        CheckBox1.Visible = true;
+                        CheckBox2.Visible = true;
+                        CheckBox3.Visible = true;
+                        CheckBox4.Visible = true;
+                        CheckBox5.Visible = true;
+                        CheckBox6.Visible = true;
+                        CheckBox7.Visible = true;
+                        CheckBox8.Visible = true;
+                        CheckBox9.Visible = true;
+                        CheckBox10.Visible = true;
+                        CheckBox11.Visible = true;
+                        CheckBox12.Visible = true;
+
+
+                        lblUser1.Visible = true;
+                        lblUser1.Text = "User 1";
+
+                        lblUser2.Visible = true;
+                        lblUser2.Text = "User 1";
+
+                        lblUser3.Visible = true;
+                        lblUser3.Text = "User 1";
+
+                        lblUser4.Visible = true;
+                        lblUser4.Text = "User 2";
+
+                        lblUser5.Visible = true;
+                        lblUser5.Text = "User 2";
+
+                        lblUser6.Visible = true;
+                        lblUser6.Text = "User 2";
+
+                        lblUser7.Visible = true;
+                        lblUser7.Text = "User 3";
+
+                        lblUser8.Visible = true;
+                        lblUser8.Text = "User 3";
+
+                        lblUser9.Visible = true;
+                        lblUser9.Text = "User 3";
+
+                        lblUser10.Visible = true;
+                        lblUser10.Text = "User 4";
+
+                        lblUser11.Visible = true;
+                        lblUser11.Text = "User 4";
+
+                        lblUser12.Visible = true;
+                        lblUser12.Text = "User 4";
+                    }
                 }
             }
 
@@ -223,7 +313,6 @@
             lblTimer.Text = time;
         }
     }
-
 
     protected void btnConfirmCardSelect_Click(object sender, EventArgs e)
     {
@@ -439,66 +528,10 @@
                                     <asp:CheckBox ID="CheckBox12" runat="server" />
                                 </div>
                             </div>
-                            <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite13" CssClass="card-container white-card text-white" runat="server" Text="" />
-                                <div class="username-card">
-                                    <asp:Label ID="lblUser13" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox13" runat="server" />
-                                </div>
-                            </div>
-                            <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite14" CssClass="card-container white-card text-white" runat="server" Text="" />
-                                <div class="username-card">
-                                    <asp:Label ID="lblUser14" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox14" runat="server" />
-                                </div>
-                            </div>
-                            <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite15" CssClass="card-container white-card text-white" runat="server" Text="" />
-                                <div class="username-card">
-                                    <asp:Label ID="lblUser15" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox15" runat="server" />
-                                </div>
-                            </div>
-                            <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite16" CssClass="card-container white-card text-white" runat="server" Text="" />
-                                <div class="username-card">
-                                    <asp:Label ID="lblUser16" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox16" runat="server" />
-                                </div>
-                            </div>
-                            <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite17" CssClass="card-container white-card text-white" runat="server" Text="" />
-                                <div class="username-card">
-                                    <asp:Label ID="lblUser17" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox17" runat="server" />
-                                </div>
-                            </div>
-                            <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite18" CssClass="card-container white-card text-white" runat="server" Text="" />
-                                <div class="username-card">
-                                    <asp:Label ID="lblUser18" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox18" runat="server" />
-                                </div>
-                            </div>
-                            <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite19" CssClass="card-container white-card text-white" runat="server" Text="" />
-                                <div class="username-card">
-                                    <asp:Label ID="lblUser19" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox19" runat="server" />
-                                </div>
-                            </div>
-                            <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite20" CssClass="card-container white-card text-white" runat="server" Text="" />
-                                <div class="username-card">
-                                    <asp:Label ID="lblUser20" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox20" runat="server" />
-                                </div>
-                            </div>
                             <asp:Button ID="btnConfirmWinner" runat="server" Text="Conferma" OnClick="btnConfirmWinner_Click" />
                         </div>
                     </div>
-                </div>  
+                </div>
             </ContentTemplate>
             <Triggers>
                 <asp:AsyncPostBackTrigger ControlID="Timer1" EventName="Tick" />

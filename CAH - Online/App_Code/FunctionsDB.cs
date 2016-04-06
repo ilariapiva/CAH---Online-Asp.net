@@ -52,6 +52,18 @@ namespace CAHOnline
             HttpContext.Current.Session["userEmail"] = userEmail.Email;
         }
 
+        public static void DeleteCookies(Account userEmail)
+        {
+            HttpCookie aCookie;
+            int limit = HttpContext.Current.Request.Cookies.Count;
+            for (int i = 0; i < limit; i++)
+            {
+                userEmail.Email = HttpContext.Current.Request.Cookies[i].Name;
+                aCookie = new HttpCookie(userEmail.Email);
+                aCookie.Expires = DateTime.Now.AddDays(-1);
+                HttpContext.Current.Response.Cookies.Add(aCookie);
+            }
+        }
         //Questa funzione controlla che l'email e la pwd siano inseriti nel DB
         public static bool Login(Account email, String pwd)
         {
@@ -159,28 +171,6 @@ namespace CAHOnline
             return value;
         }
 
-        /* //Questa funzione legge lo username del profilo loggato e lo inserisce in una lista
-         public static Account ReadUsernameDB()
-         {
-         * OpenConnectionDB();
-         * 
-             String strsql = "SELECT username FROM tblAccount WHERE email = '" + HttpContext.Current.Session["userEmail"] + "' ";
-
-             Account value = new Account();
-
-             cmd = new SqlCommand(strsql, cn);
-             var dr = cmd.ExecuteReader();
-
-             dr.Read();              
-             Account username = new Account(); 
-             username.Username += dr["username"].ToString();
-             value = username;
-            
-             dr.Close();
-
-             return value;
-         }*/
-
         //Questa funzione legge tutti gli ID delle carte inserite nel DB e le inserisce in una lista
         public static List<Cards> Cards(String strsql)
         {
@@ -241,47 +231,6 @@ namespace CAHOnline
             cmd.Dispose();
         }
 
-        /* //Questa funzione legge le righe dalla tabella White Card in modo random e le inserisce in una lista
-         public static List<Cards> RadomCardWhite(String strsql)
-         {
-             List<Cards> value = new List<Cards>();
-
-             cmd = new SqlCommand(strsql, cn);
-             var dr = cmd.ExecuteReader();
-
-             while (dr.Read())
-             {
-                 Cards cards = new Cards();
-                 cards.Text = dr["text"].ToString();
-                 value.Add(cards);
-             }
-
-             dr.Close();
-
-             return value;
-
-         }
-
-         //Questa funzione legge le righe dalla tabella Black Card in modo random e le inserisce in una lista
-         public static Cards RadomCardBlack(String strsql)
-         {
-             Cards value = new Cards();
-
-             cmd = new SqlCommand(strsql, cn);
-             var dr = cmd.ExecuteReader();
-
-             while (dr.Read())
-             {
-                 Cards card = new Cards();
-                 card.Text = dr["text"].ToString();
-                 value = card;
-             }
-            
-             dr.Close();
-
-             return value;
-         }*/
-
         /*Questa funzione permette di leggere tutti gli id degli utenti (tranne il master)  
           che sono in una stanza e inserirli in una lista*/
         public static List<Account> ReadUsers(int room)
@@ -337,54 +286,6 @@ namespace CAHOnline
             return ListIdCards;
         }
 
-        //Questa funzione permette di leggere il testo della carta in base all'idCards
-        /*public static List<Cards> ReadTextCardWhite(int room)
-        {
-            OpenConnectionDB();
-
-            List<Cards> ListIdCardSelect = FunctionsDB.ReadIdCardsSelect(room);
-            List<Cards> textCards = new List<Cards>();
-
-            foreach (Cards idCardSelect in ListIdCardSelect)
-            {
-                String strsql = "SELECT text FROM tblWhiteCard WHERE idCard = '" + idCardSelect + "'";
-                SqlCommand cmd = new SqlCommand(strsql, cn);
-
-                var dr = cmd.ExecuteReader();
-                if (dr.HasRows)
-                {
-                    Cards cardText = new Cards();
-                    dr.Read();
-                    cardText.Text = dr["text"].ToString();
-                    textCards.Add(cardText);
-
-                }
-                dr.Close();
-                cmd.Dispose();
-            }
-            return textCards;
-        }*/
-
-       /* public static List<Cards> ReadTextCardWhite(Cards card)
-        {
-            OpenConnectionDB();
-
-            String strsql = "SELECT idCards, text FROM tblWhiteCard WHERE idCard = '"+ card.idCards + "'";
-
-            SqlCommand cmd = new SqlCommand(strsql, cn);
-            
-            var dr = cmd.ExecuteReader();
-            if (dr.HasRows)
-            {
-                Cards cardText = new Cards();
-                dr.Read();
-                cards.idCards = Convert.ToInt32(dr["idCard"]);
-                cards.Text = dr["text"].ToString();
-            }
-            dr.Close();
-            cmd.Dispose();
-            return cardText;
-        }*/
         //Questa funzione permette di leggere il numero delle persone di una stanza che hanno selezionato le carte
         public static bool ReadListUserInRoom(Account user, int room)
         {

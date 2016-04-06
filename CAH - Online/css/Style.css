@@ -255,7 +255,6 @@ ul.tabs li.active{
 .p-footer{
   height: 15px;
   margin-top: 15px;
-  margin-bottom: auto;
   margin-left: 20px;
 }
 
@@ -397,4 +396,11 @@ ul.tabs li.active{
   padding-left: 25px;
   position: relative;
   margin: auto;
+}
+
+.btn-nav-bar
+{
+    background: white;
+    border: 0px;
+    text-align: left;
 }

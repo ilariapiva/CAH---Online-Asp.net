@@ -36,8 +36,8 @@
         if (!Page.IsPostBack)
         {
             stateChanged = true;
-            Session["time1"] = 20; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
-            Session["time2"] = 20;
+            Session["time1"] = 40; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
+            Session["time2"] = 40;
             /* 100 = 1 min e 40 sec
              * 90 = 1 min 30 sec
              * 50 = 50 sec
@@ -56,6 +56,8 @@
             if (Room.IsMaster(Master.resultUser))
             {
                 lblTimer.Visible = false;
+
+                btnConfirmWinner.Visible = false;
 
                 CheckBox1.Visible = false;
                 CheckBox2.Visible = false;
@@ -93,8 +95,8 @@
 
                 if (spacesBlackCard == 3)
                 {
-                    CheckBox11.Visible = true;
-                    CheckBox12.Visible = true;
+                    btnWhite11.Visible = true;
+                    btnWhite12.Visible = true;
                 }
             }
 
@@ -166,6 +168,7 @@
             if (Room.IsMaster(Master.resultUser))
             {
                 lblTimerMaster.Visible = true;
+                btnConfirmWinner.Visible = true;
 
                 Session["time2"] = Convert.ToInt16(Session["time2"]) - 1;
                 if (Convert.ToInt16(Session["time2"]) <= 0)
@@ -174,7 +177,6 @@
                     //insert_result();
                     //Response.Redirect("Show_result.aspx");
                 }
-
                 else
                 {
                     totalSeconds = Convert.ToInt16(Session["time2"]);
@@ -186,6 +188,8 @@
 
                 if (Room.CheckUserCardSelected(indexRoom))
                 {
+                    List<Cards> textCardSelect = FunctionsDB.ReadCardsSelect(indexRoom);
+                    
                     int spacesBlackCard = Room.CheckStringBlackCard();
 
                     if (spacesBlackCard == 1)
@@ -206,6 +210,19 @@
 
                         lblUser4.Visible = true;
                         lblUser4.Text = "User 4";
+
+                        btnWhite1.Attributes.Add("value", textCardSelect[0].idCards.ToString());
+                        btnWhite1.Text = textCardSelect[0].Text;
+
+                        btnWhite2.Attributes.Add("value", textCardSelect[1].idCards.ToString());
+                        btnWhite2.Text = textCardSelect[1].Text;
+
+                        /*btnWhite3.Attributes.Add("textCards", textCardSelect[2].idCards.ToString());
+                        btnWhite3.Text = textCardSelect[2].Text;
+
+                        btnWhite4.Attributes.Add("textCards", textCardSelect[3].idCards.ToString());
+                        btnWhite4.Text = textCardSelect[3].Text;*/
+
                     }
 
                     if (spacesBlackCard == 2)
@@ -218,7 +235,6 @@
                         CheckBox6.Visible = true;
                         CheckBox7.Visible = true;
                         CheckBox8.Visible = true;
-
 
                         lblUser1.Visible = true;
                         lblUser1.Text = "User 1";
@@ -243,6 +259,30 @@
 
                         lblUser8.Visible = true;
                         lblUser8.Text = "User 4";
+
+                        btnWhite1.Attributes.Add("textCards", textCardSelect[0].idCards.ToString());
+                        btnWhite1.Text = textCardSelect[0].Text;
+
+                        btnWhite2.Attributes.Add("textCards", textCardSelect[1].idCards.ToString());
+                        btnWhite2.Text = textCardSelect[1].Text;
+
+                        btnWhite3.Attributes.Add("textCards", textCardSelect[2].idCards.ToString());
+                        btnWhite3.Text = textCardSelect[2].Text;
+
+                        btnWhite4.Attributes.Add("textCards", textCardSelect[3].idCards.ToString());
+                        btnWhite4.Text = textCardSelect[3].Text;
+
+                        /*btnWhite5.Attributes.Add("textCards", textCardSelect[4].idCards.ToString());
+                         btnWhite5.Text = textCardSelect[4].Text;
+
+                         btnWhite6.Attributes.Add("textCards", textCardSelect[5].idCards.ToString());
+                         btnWhite6.Text = textCardSelect[5].Text;
+
+                         btnWhite7.Attributes.Add("textCards", textCardSelect[6].idCards.ToString());
+                         btnWhite7.Text = textCardSelect[6].Text;
+
+                         btnWhite8.Attributes.Add("textCards", textCardSelect[7].idCards.ToString());
+                         btnWhite8.Text = textCardSelect[7].Text;*/
                     }
 
                     if (spacesBlackCard == 3)
@@ -259,7 +299,6 @@
                         CheckBox10.Visible = true;
                         CheckBox11.Visible = true;
                         CheckBox12.Visible = true;
-
 
                         lblUser1.Visible = true;
                         lblUser1.Text = "User 1";
@@ -296,6 +335,42 @@
 
                         lblUser12.Visible = true;
                         lblUser12.Text = "User 4";
+
+                        btnWhite1.Attributes.Add("textCards", textCardSelect[0].idCards.ToString());
+                        btnWhite1.Text = textCardSelect[0].Text;
+
+                        btnWhite2.Attributes.Add("textCards", textCardSelect[1].idCards.ToString());
+                        btnWhite2.Text = textCardSelect[1].Text;
+
+                        btnWhite3.Attributes.Add("textCards", textCardSelect[2].idCards.ToString());
+                        btnWhite3.Text = textCardSelect[2].Text;
+
+                        btnWhite4.Attributes.Add("textCards", textCardSelect[3].idCards.ToString());
+                        btnWhite4.Text = textCardSelect[3].Text;
+
+                        btnWhite5.Attributes.Add("textCards", textCardSelect[4].idCards.ToString());
+                        btnWhite5.Text = textCardSelect[4].Text;
+
+                        btnWhite6.Attributes.Add("textCards", textCardSelect[5].idCards.ToString());
+                        btnWhite6.Text = textCardSelect[5].Text;
+
+                        /*btnWhite7.Attributes.Add("textCards", textCardSelect[6].idCards.ToString());
+                         btnWhite7.Text = textCardSelect[6].Text;
+
+                         btnWhite8.Attributes.Add("textCards", textCardSelect[7].idCards.ToString());
+                         btnWhite8.Text = textCardSelect[7].Text;
+
+                         btnWhite9.Attributes.Add("textCards", textCardSelect[8].idCards.ToString());
+                         btnWhite9.Text = textCardSelect[8].Text;
+
+                         btnWhite10.Attributes.Add("textCards", textCardSelect[9].idCards.ToString());
+                         btnWhite10.Text = textCardSelect[9].Text;
+
+                         btnWhite11.Attributes.Add("textCards", textCardSelect[10].idCards.ToString());
+                         btnWhite11.Text = textCardSelect[10].Text;
+
+                         btnWhite12.Attributes.Add("textCards", textCardSelect[11].idCards.ToString());
+                         btnWhite12.Text = textCardSelect[11].Text;*/
                     }
                 }
             }
@@ -317,7 +392,7 @@
     protected void btnConfirmCardSelect_Click(object sender, EventArgs e)
     {
         List<Cards> CardsSelect = new List<Cards>();
-        Account User = Master.resultUser;
+        Account user = Master.resultUser;
 
         /*Controllo se ogni checkBox è stata selezionata, e se è stata selezionata 
           allora inserisco l'id della carta in una lista*/
@@ -401,9 +476,10 @@
             CardsSelect.Add(c);
             btnWhite10.Text = "";
         }
-        Room.UsersAndCards(CardsSelect, indexRoom);
+        
+        Room.UsersAndCards(CardsSelect, indexRoom, user);
 
-        //btnConfirmCardSelect.Enabled = false;
+        btnConfirmCardSelect.Enabled = false;
     }
 
     protected void btnConfirmWinner_Click(object sender, EventArgs e)

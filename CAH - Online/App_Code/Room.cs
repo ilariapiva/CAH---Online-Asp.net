@@ -130,21 +130,19 @@ namespace CAHOnline
         }
 
         //Salvo in nel db le carte dell'utente
-        public static void UsersAndCards(List<Cards> listCardsWhite, int idRoom)
+        public static void UsersAndCards(List<Cards> listCardsWhite, int idRoom, Account user)
         {
-            foreach (Account user in listUsers)
+            //foreach (Account user in listUsers)
+            if (!IsMaster(user))
             {
-                if (!IsMaster(user))
+                if (CheckSelectCards(listCardsWhite) == true)
                 {
-                    if (CheckSelectCards(listCardsWhite) == true)
+                    if (listCardsWhite.Count != 0)
                     {
-                        if (listCardsWhite.Count != 0)
+                        listCardsWhite.ForEach(delegate(Cards cardSelect)
                         {
-                            listCardsWhite.ForEach(delegate(Cards cardSelect)
-                            {
-                                FunctionsDB.WriteCardsSelect(user, cardSelect, idRoom);
-                            });
-                        }
+                            FunctionsDB.WriteCardsSelect(user, cardSelect, idRoom);
+                        });
                     }
                 }
             }
@@ -166,7 +164,6 @@ namespace CAHOnline
                     }
                 }
             }
-
             return count;
         }
 
@@ -174,7 +171,7 @@ namespace CAHOnline
          * (lo si ottiene interrogando il db) sia uguale numero dei giocatori della stanza meno il master */
         public static bool CheckUserCardSelected(int room)
         {
-            if (HowManyUserNotMasterInRoom(room) == 1)
+            if (HowManyUserNotMasterInRoom(room) == 2)
             {
                 return true;
             }
@@ -183,6 +180,5 @@ namespace CAHOnline
                 return false;
             }
         }
-
     }
 }

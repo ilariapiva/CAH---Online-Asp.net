@@ -282,49 +282,109 @@ namespace CAHOnline
              return value;
          }*/
 
-        //Questa funzione permette di leggere le carte che sono state seleionate da un certo utente
-        public static void ReadCardsSelect()
-        {
-            OpenConnectionDB();
-			
-			String strsql = "SELECT idAccount, idCardWhite, room, FROM tblCardsSelect";
-			
-            Account user = new Account();
-			Cards card = new Cards();
-			int room = 0;
-			
-            SqlCommand cmd = new SqlCommand(strsql, cn);
-            var dr = cmd.ExecuteReader();
-            if(dr.HasRows)
-            {
-                dr.Read();
-				user.idAccount = Convert.ToInt32(dr["idAccount"]);
-				card.idCards = Convert.ToInt32(dr["idCardWhite"]);
-				room = Convert.ToInt32(dr["room"]);
-            }
-            dr.Close();
-            cmd.Dispose();
-        }
-
-        //Questa funzione permette di leggere il testo della carta in base all'idCards
-        public static Cards ReadTextCardWhite(Cards card)
+        /*Questa funzione permette di leggere tutti gli id degli utenti (tranne il master)  
+          che sono in una stanza e inserirli in una lista*/
+        public static List<Account> ReadUsers(int room)
         {
             OpenConnectionDB();
 
-            String strsql = "SELECT text FROM tblWhiteCard WHERE idCard = '"+ card.idCards + "'";
+            String strsql = "SELECT idAccount FROM tblCardsSelect WHERE room = '" + room + "'";
+
+            List<Account> ListIdCards = new List<Account>();
 
             SqlCommand cmd = new SqlCommand(strsql, cn);
-            Cards cardText = new Cards();
             var dr = cmd.ExecuteReader();
             if (dr.HasRows)
             {
                 dr.Read();
-                cardText.Text = dr["text"].ToString();
+                Account value = new Account();
+                value.idAccount = Convert.ToInt32(dr["idAccount"]);
+                ListIdCards.Add(value);
+            }
+            dr.Close();
+            cmd.Dispose();
+
+            return ListIdCards;
+        }
+
+        //Questa funzione permette di leggere tutti gli id delle carte selezionate e i testi e inserirli in una lista
+        public static List<Cards> ReadCardsSelect(int room)
+        {
+            OpenConnectionDB();
+            SqlCommand cmd;
+
+            List<Cards> ListIdCards = new List<Cards>();
+
+            String strsql = @"SELECT cs.idCardWhite, wc.text FROM tblCardsSelect as cs INNER JOIN tblWhiteCard as wc 
+                                ON cs.idCardWhite = wc.idCard WHERE room = '" + room + "'";
+            cmd = new SqlCommand(strsql, cn);
+            var dr = cmd.ExecuteReader();
+
+            while (dr.Read())
+            {   
+                if (dr.HasRows)
+                {
+                    //dr.Read();
+                    Cards value = new Cards();
+                    value.idCards = Convert.ToInt32(dr["idCardWhite"]);
+                    value.Text = dr["text"].ToString();
+                    ListIdCards.Add(value);
+                } 
+            }
+            dr.Close();
+            cmd.Dispose();
+
+            return ListIdCards;
+        }
+
+        //Questa funzione permette di leggere il testo della carta in base all'idCards
+        /*public static List<Cards> ReadTextCardWhite(int room)
+        {
+            OpenConnectionDB();
+
+            List<Cards> ListIdCardSelect = FunctionsDB.ReadIdCardsSelect(room);
+            List<Cards> textCards = new List<Cards>();
+
+            foreach (Cards idCardSelect in ListIdCardSelect)
+            {
+                String strsql = "SELECT text FROM tblWhiteCard WHERE idCard = '" + idCardSelect + "'";
+                SqlCommand cmd = new SqlCommand(strsql, cn);
+
+                var dr = cmd.ExecuteReader();
+                if (dr.HasRows)
+                {
+                    Cards cardText = new Cards();
+                    dr.Read();
+                    cardText.Text = dr["text"].ToString();
+                    textCards.Add(cardText);
+
+                }
+                dr.Close();
+                cmd.Dispose();
+            }
+            return textCards;
+        }*/
+
+       /* public static List<Cards> ReadTextCardWhite(Cards card)
+        {
+            OpenConnectionDB();
+
+            String strsql = "SELECT idCards, text FROM tblWhiteCard WHERE idCard = '"+ card.idCards + "'";
+
+            SqlCommand cmd = new SqlCommand(strsql, cn);
+            
+            var dr = cmd.ExecuteReader();
+            if (dr.HasRows)
+            {
+                Cards cardText = new Cards();
+                dr.Read();
+                cards.idCards = Convert.ToInt32(dr["idCard"]);
+                cards.Text = dr["text"].ToString();
             }
             dr.Close();
             cmd.Dispose();
             return cardText;
-        }
+        }*/
         //Questa funzione permette di leggere il numero delle persone di una stanza che hanno selezionato le carte
         public static bool ReadListUserInRoom(Account user, int room)
         {

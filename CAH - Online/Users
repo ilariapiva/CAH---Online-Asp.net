@@ -1,0 +1,154 @@
+
+        List<Account> usernames = FunctionsDB.ReadUsernames(indexRoom);
+
+        if (spacesBlackCard == 1)
+        {
+           /* if (Room.UserNotMaster(indexRoom) == 2)
+            {*/
+                lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
+                lblUser1.Text = usernames[0].Username;
+
+                lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
+                lblUser2.Text = usernames[1].Username;
+
+                /*lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
+                lblUser3.Text = usernames[2].Username;
+
+                lblUser4.Attributes.Add("user", usernames[3].idAccount.ToString());
+                lblUser4.Text = usernames[3].Username;*/
+            /*}
+
+            if (Room.UserNotMaster(indexRoom) == 3)
+            {
+                lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
+                lblUser1.Text = usernames[0].Username;
+
+                lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
+                lblUser2.Text = usernames[1].Username;
+
+                lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
+                lblUser3.Text = usernames[2].Username;
+            }*/
+        }
+
+        if (spacesBlackCard == 2)
+        {
+            /*if (Room.UserNotMaster(indexRoom) == 2)
+            {*/
+
+                lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
+                lblUser1.Text = usernames[0].Username;
+
+                lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
+                lblUser2.Text = usernames[1].Username;
+
+                lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
+                lblUser3.Text = usernames[2].Username;
+
+                lblUser4.Attributes.Add("user", usernames[3].idAccount.ToString());
+                lblUser4.Text = usernames[3].Username;
+
+               /* lblUser5.Attributes.Add("user", usernames[4].idAccount.ToString());
+                lblUser5.Text = usernames[4].Username;
+
+                lblUser6.Attributes.Add("user", usernames[5].idAccount.ToString());
+                lblUser6.Text = usernames[5].Username;
+
+                lblUser7.Attributes.Add("user", usernames[6].idAccount.ToString());
+                lblUser7.Text = usernames[6].Username;
+
+                lblUser8.Attributes.Add("user", usernames[7].idAccount.ToString());
+                lblUser8.Text = usernames[7].Username;*/
+            /*}
+
+            if (Room.UserNotMaster(indexRoom) == 3)
+            {
+                lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
+                lblUser1.Text = usernames[0].Username;
+
+                lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
+                lblUser2.Text = usernames[1].Username;
+
+                lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
+                lblUser3.Text = usernames[2].Username;
+
+                lblUser4.Attributes.Add("user", usernames[3].idAccount.ToString());
+                lblUser4.Text = usernames[3].Username;
+
+                lblUser5.Attributes.Add("user", usernames[4].idAccount.ToString());
+                lblUser5.Text = usernames[4].Username;
+
+                lblUser6.Attributes.Add("user", usernames[5].idAccount.ToString());
+                lblUser6.Text = usernames[5].Username;
+            }*/
+        }
+
+        if (spacesBlackCard == 3)
+        {
+            /*if (Room.UserNotMaster(indexRoom) == 2)
+            {*/
+                lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
+                lblUser1.Text = usernames[0].Username;
+
+                lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
+                lblUser2.Text = usernames[1].Username;
+
+                lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
+                lblUser3.Text = usernames[2].Username;
+
+                lblUser4.Attributes.Add("user", usernames[3].idAccount.ToString());
+                lblUser4.Text = usernames[3].Username;
+
+                lblUser5.Attributes.Add("user", usernames[4].idAccount.ToString());
+                lblUser5.Text = usernames[4].Username;
+
+                lblUser6.Attributes.Add("user", usernames[5].idAccount.ToString());
+                lblUser6.Text = usernames[5].Username;
+
+                lblUser7.Attributes.Add("user", usernames[6].idAccount.ToString());
+                lblUser7.Text = usernames[6].Username;
+
+               /* lblUser8.Attributes.Add("user", usernames[7].idAccount.ToString());
+                lblUser8.Text = usernames[7].Username;
+
+                lblUser9.Attributes.Add("user", usernames[8].idAccount.ToString());
+                lblUser9.Text = usernames[8].Username;
+
+                lblUser10.Attributes.Add("user", usernames[9].idAccount.ToString());
+                lblUser10.Text = usernames[9].Username;
+
+                lblUser11.Attributes.Add("user", usernames[10].idAccount.ToString());
+                lblUser11.Text = usernames[10].Username;
+
+                lblUser12.Attributes.Add("user", usernames[11].idAccount.ToString());
+                lblUser12.Text = usernames[1].Username;*/
+            //}
+            /*if (Room.UserNotMaster(indexRoom) == 3)
+            {
+                lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
+                lblUser1.Text = usernames[0].Username;
+
+                lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
+                lblUser2.Text = usernames[1].Username;
+
+                lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
+                lblUser3.Text = usernames[2].Username;
+
+                lblUser4.Attributes.Add("user", usernames[3].idAccount.ToString());
+                lblUser4.Text = usernames[3].Username;
+
+                lblUser5.Attributes.Add("user", usernames[4].idAccount.ToString());
+                lblUser5.Text = usernames[4].Username;
+
+                lblUser6.Attributes.Add("user", usernames[5].idAccount.ToString());
+                lblUser6.Text = usernames[5].Username;
+
+                lblUser7.Attributes.Add("user", usernames[6].idAccount.ToString());
+                lblUser7.Text = usernames[6].Username;
+
+                lblUser8.Attributes.Add("user", usernames[7].idAccount.ToString());
+                lblUser8.Text = usernames[7].Username;
+
+                lblUser9.Attributes.Add("user", usernames[8].idAccount.ToString());
+                lblUser9.Text = usernames[8].Username;
+            }*/

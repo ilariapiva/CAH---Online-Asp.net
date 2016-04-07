@@ -180,5 +180,19 @@ namespace CAHOnline
                 return false;
             }
         }
+
+        public static int UserNotMaster(int room)
+        {
+            int count = 0;
+
+            foreach (Account user in listUsers)
+            {
+                if (!IsMaster(user))
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
     }
 }

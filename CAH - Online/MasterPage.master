@@ -27,7 +27,7 @@
         Response.Redirect("login.aspx");
     }
     
-    protected void btnProfile_Click(object sender, EventArgs e)
+    /*protected void btnProfile_Click(object sender, EventArgs e)
     {
         Response.Redirect("profile.aspx");
     }
@@ -35,7 +35,7 @@
     protected void btnSettings_Click(object sender, EventArgs e)
     {
         Response.Redirect("settings.aspx");
-    }
+    }*/
 </script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
@@ -83,16 +83,16 @@
                                 &nbsp;<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        &nbsp;&nbsp;&nbsp;<asp:Button ID="btnProfile" runat="server" Text="Profile" CssClass="nav-text btn-nav-bar" OnClick="btnProfile_Click"/>
-                                        <!--<a href="profile.aspx" class="nav-text">Profile</a>-->
+                                        <!--&nbsp;&nbsp;&nbsp;<asp:Button ID="btnProfile" runat="server" Text="Profile" CssClass="nav-text btn-nav-bar"/>-->
+                                        <a href="profile.aspx" class="nav-text">Profile</a>
                                     </li>
                                     <li>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="btnSettings" runat="server" Text="Settings" CssClass="nav-text btn-nav-bar" OnClick="btnSettings_Click" Width="155px"/>
-                                        <p class="nav-border"></p>
-                                        <!--<a href="settings.aspx" class="nav-text nav-border">Settings</a>-->
+                                        <!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="btnSettings" runat="server" Text="Settings" CssClass="nav-text btn-nav-bar" Width="155px"/>
+                                        <p class="nav-border"></p>-->
+                                        <a href="settings.aspx" class="nav-text nav-border">Settings</a>
                                     </li>
                                     <li>
-                                        &nbsp;&nbsp;&nbsp;<asp:Button ID="btnLogout" runat="server" Text="Logout" CssClass="nav-text btn-nav-bar" OnClick="btnLogout_Click"/>
+                                        &nbsp;&nbsp;&nbsp;<asp:Button ID="btnLogout" runat="server" Text="Logout" OnClick="btnLogout_Click" CssClass="btn-nav-bar" />
                                         <!--<a href="login.aspx" class="nav-text">Logout</a>-->
                                     </li>
                                 </ul>

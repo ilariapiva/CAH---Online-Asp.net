@@ -400,7 +400,9 @@ ul.tabs li.active{
 
 .btn-nav-bar
 {
+    color: #000000 !important;
+    line-height: 19px !important;
     background: white;
     border: 0px;
-    text-align: left;
+   // text-align: left;
 }

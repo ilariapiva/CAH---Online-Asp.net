@@ -29,10 +29,6 @@
         btnWhite11.Visible = false;
         btnWhite12.Visible = false;
 
-        CheckBox11.Visible = false;
-        CheckBox12.Visible = false;
-
-
         if (!Page.IsPostBack)
         {
             stateChanged = true;
@@ -90,6 +86,7 @@
 
                 if (spacesBlackCard == 2)
                 {
+                    btnWhite9.Visible = false;
                     btnWhite10.Visible = false;
                 }
 
@@ -188,7 +185,7 @@
 
                 if (Room.CheckUserCardSelected(indexRoom))
                 {
-                    List<Cards> textCardSelect = FunctionsDB.ReadCardsSelect(indexRoom);
+                    List<Cards> textCardSelect = FunctionsDB.ReadTetxtCardsSelect(indexRoom);
                     
                     int spacesBlackCard = Room.CheckStringBlackCard();
 
@@ -231,10 +228,6 @@
                         CheckBox2.Visible = true;
                         CheckBox3.Visible = true;
                         CheckBox4.Visible = true;
-                        CheckBox5.Visible = true;
-                        CheckBox6.Visible = true;
-                        CheckBox7.Visible = true;
-                        CheckBox8.Visible = true;
 
                         lblUser1.Visible = true;
                         lblUser1.Text = "User 1";
@@ -291,15 +284,7 @@
                         CheckBox2.Visible = true;
                         CheckBox3.Visible = true;
                         CheckBox4.Visible = true;
-                        CheckBox5.Visible = true;
-                        CheckBox6.Visible = true;
-                        CheckBox7.Visible = true;
-                        CheckBox8.Visible = true;
-                        CheckBox9.Visible = true;
-                        CheckBox10.Visible = true;
-                        CheckBox11.Visible = true;
-                        CheckBox12.Visible = true;
-
+                        
                         lblUser1.Visible = true;
                         lblUser1.Text = "User 1";
 
@@ -479,12 +464,230 @@
         
         Room.UsersAndCards(CardsSelect, indexRoom, user);
 
-        btnConfirmCardSelect.Enabled = false;
+       // btnConfirmCardSelect.Enabled = false;
     }
 
     protected void btnConfirmWinner_Click(object sender, EventArgs e)
     {
+        Cards CardSelect = new Cards();
 
+        int spacesBlackCard = Room.CheckStringBlackCard();
+
+        if (Room.UserNotMaster(indexRoom) == 2)
+        {
+            if (CheckBox1.Checked)
+            {
+                Cards c = new Cards();
+                c.Text = btnWhite1.Text;
+                c.idCards = Convert.ToInt32(btnWhite1.Attributes["value"]);
+                CardSelect = c;
+            }
+            if (CheckBox2.Checked)
+            {
+                Cards c = new Cards();
+                c.Text = btnWhite2.Text;
+                c.idCards = Convert.ToInt32(btnWhite2.Attributes["value"]);
+                CardSelect = c;
+            }
+            if (CheckBox3.Checked)
+            {
+                Cards c = new Cards();
+                c.Text = btnWhite3.Text;
+                c.idCards = Convert.ToInt32(btnWhite3.Attributes["value"]);
+                CardSelect = c;
+            }
+            if (CheckBox4.Checked)
+            {
+                Cards c = new Cards();
+                c.Text = btnWhite4.Text;
+                c.idCards = Convert.ToInt32(btnWhite4.Attributes["value"]);
+                CardSelect = c;
+            }
+
+            FunctionsDB.WritePointUserWin(indexRoom, CardSelect);
+        }
+
+        /*if (Room.UserNotMaster(indexRoom) == 3)
+        {
+            if (CheckBox1.Checked)
+            {
+                Cards c = new Cards();
+                c.Text = btnWhite1.Text;
+                c.idCards = Convert.ToInt32(btnWhite1.Attributes["value"]);
+                CardSelect = c;
+            }
+            if (CheckBox2.Checked)
+            {
+                Cards c = new Cards();
+                c.Text = btnWhite2.Text;
+                c.idCards = Convert.ToInt32(btnWhite2.Attributes["value"]);
+                CardSelect = c;
+            }
+            if (CheckBox3.Checked)
+            {
+                Cards c = new Cards();
+                c.Text = btnWhite3.Text;
+                c.idCards = Convert.ToInt32(btnWhite3.Attributes["value"]);
+                CardSelect = c;
+            }
+        }*/
+        
+        List<Account> usernames = FunctionsDB.ReadUsernames(indexRoom);
+
+        if (spacesBlackCard == 1)
+        {
+           /* if (Room.UserNotMaster(indexRoom) == 2)
+            {*/
+                lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
+                lblUser1.Text = usernames[0].Username;
+
+                lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
+                lblUser2.Text = usernames[1].Username;
+
+                /*lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
+                lblUser3.Text = usernames[2].Username;
+
+                lblUser4.Attributes.Add("user", usernames[3].idAccount.ToString());
+                lblUser4.Text = usernames[3].Username;*/
+            /*}
+
+            if (Room.UserNotMaster(indexRoom) == 3)
+            {
+                lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
+                lblUser1.Text = usernames[0].Username;
+
+                lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
+                lblUser2.Text = usernames[1].Username;
+
+                lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
+                lblUser3.Text = usernames[2].Username;
+            }*/
+        }
+
+        if (spacesBlackCard == 2)
+        {
+            /*if (Room.UserNotMaster(indexRoom) == 2)
+            {*/
+
+                lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
+                lblUser1.Text = usernames[0].Username;
+
+                lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
+                lblUser2.Text = usernames[1].Username;
+
+                lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
+                lblUser3.Text = usernames[2].Username;
+
+                lblUser4.Attributes.Add("user", usernames[3].idAccount.ToString());
+                lblUser4.Text = usernames[3].Username;
+
+               /* lblUser5.Attributes.Add("user", usernames[4].idAccount.ToString());
+                lblUser5.Text = usernames[4].Username;
+
+                lblUser6.Attributes.Add("user", usernames[5].idAccount.ToString());
+                lblUser6.Text = usernames[5].Username;
+
+                lblUser7.Attributes.Add("user", usernames[6].idAccount.ToString());
+                lblUser7.Text = usernames[6].Username;
+
+                lblUser8.Attributes.Add("user", usernames[7].idAccount.ToString());
+                lblUser8.Text = usernames[7].Username;*/
+            /*}
+
+            if (Room.UserNotMaster(indexRoom) == 3)
+            {
+                lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
+                lblUser1.Text = usernames[0].Username;
+
+                lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
+                lblUser2.Text = usernames[1].Username;
+
+                lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
+                lblUser3.Text = usernames[2].Username;
+
+                lblUser4.Attributes.Add("user", usernames[3].idAccount.ToString());
+                lblUser4.Text = usernames[3].Username;
+
+                lblUser5.Attributes.Add("user", usernames[4].idAccount.ToString());
+                lblUser5.Text = usernames[4].Username;
+
+                lblUser6.Attributes.Add("user", usernames[5].idAccount.ToString());
+                lblUser6.Text = usernames[5].Username;
+            }*/
+        }
+
+        if (spacesBlackCard == 3)
+        {
+            /*if (Room.UserNotMaster(indexRoom) == 2)
+            {*/
+            lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
+            lblUser1.Text = usernames[0].Username;
+
+            lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
+            lblUser2.Text = usernames[1].Username;
+
+            lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
+            lblUser3.Text = usernames[2].Username;
+
+            lblUser4.Attributes.Add("user", usernames[3].idAccount.ToString());
+            lblUser4.Text = usernames[3].Username;
+
+            lblUser5.Attributes.Add("user", usernames[4].idAccount.ToString());
+            lblUser5.Text = usernames[4].Username;
+
+            lblUser6.Attributes.Add("user", usernames[5].idAccount.ToString());
+            lblUser6.Text = usernames[5].Username;
+
+            lblUser7.Attributes.Add("user", usernames[6].idAccount.ToString());
+            lblUser7.Text = usernames[6].Username;
+
+            /* lblUser8.Attributes.Add("user", usernames[7].idAccount.ToString());
+             lblUser8.Text = usernames[7].Username;
+
+             lblUser9.Attributes.Add("user", usernames[8].idAccount.ToString());
+             lblUser9.Text = usernames[8].Username;
+
+             lblUser10.Attributes.Add("user", usernames[9].idAccount.ToString());
+             lblUser10.Text = usernames[9].Username;
+
+             lblUser11.Attributes.Add("user", usernames[10].idAccount.ToString());
+             lblUser11.Text = usernames[10].Username;
+
+             lblUser12.Attributes.Add("user", usernames[11].idAccount.ToString());
+             lblUser12.Text = usernames[1].Username;*/
+            //}
+            /*if (Room.UserNotMaster(indexRoom) == 3)
+            {
+                lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
+                lblUser1.Text = usernames[0].Username;
+
+                lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
+                lblUser2.Text = usernames[1].Username;
+
+                lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
+                lblUser3.Text = usernames[2].Username;
+
+                lblUser4.Attributes.Add("user", usernames[3].idAccount.ToString());
+                lblUser4.Text = usernames[3].Username;
+
+                lblUser5.Attributes.Add("user", usernames[4].idAccount.ToString());
+                lblUser5.Text = usernames[4].Username;
+
+                lblUser6.Attributes.Add("user", usernames[5].idAccount.ToString());
+                lblUser6.Text = usernames[5].Username;
+
+                lblUser7.Attributes.Add("user", usernames[6].idAccount.ToString());
+                lblUser7.Text = usernames[6].Username;
+
+                lblUser8.Attributes.Add("user", usernames[7].idAccount.ToString());
+                lblUser8.Text = usernames[7].Username;
+
+                lblUser9.Attributes.Add("user", usernames[8].idAccount.ToString());
+                lblUser9.Text = usernames[8].Username;
+            }*/
+        }
+
+        btnConfirmWinner.Enabled = false;
     }
 </script>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
@@ -594,14 +797,12 @@
                                 <asp:Button ID="btnWhite11" CssClass="card-container white-card text-white" runat="server" Text="" />
                                 <div class="username-card">
                                     <asp:Label ID="lblUser11" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox11" runat="server" />
                                 </div>
                             </div>
                             <div class="col-card-fixed">
                                 <asp:Button ID="btnWhite12" CssClass="card-container white-card text-white" runat="server" Text="" />
                                 <div class="username-card">
                                     <asp:Label ID="lblUser12" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox12" runat="server" />
                                 </div>
                             </div>
                             <asp:Button ID="btnConfirmWinner" runat="server" Text="Conferma" OnClick="btnConfirmWinner_Click" />

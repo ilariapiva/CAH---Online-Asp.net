@@ -233,40 +233,95 @@ namespace CAHOnline
 
         /*Questa funzione permette di leggere tutti gli id degli utenti (tranne il master)  
           che sono in una stanza e inserirli in una lista*/
-        public static List<Account> ReadUsers(int room)
+        public static List<Account> ReadUsernames(int room)
         {
             OpenConnectionDB();
+            List<Account> ListUsers = new List<Account>();
 
-            String strsql = "SELECT idAccount FROM tblCardsSelect WHERE room = '" + room + "'";
-
-            List<Account> ListIdCards = new List<Account>();
+            String strsql = @"SELECT cs.idAccount, a.username FROM tblAccount AS a INNER JOIN tblCardsSelect as cs
+                              ON a.idAccount = cs.idAccount WHERE cs.room = '" + room + "' ORDER BY cs.idAccount ASC";
 
             SqlCommand cmd = new SqlCommand(strsql, cn);
             var dr = cmd.ExecuteReader();
-            if (dr.HasRows)
+
+            while (dr.Read())
             {
-                dr.Read();
-                Account value = new Account();
-                value.idAccount = Convert.ToInt32(dr["idAccount"]);
-                ListIdCards.Add(value);
+                if (dr.HasRows)
+                {
+                    //dr.Read();
+                    Account value = new Account();
+                    value.idAccount = Convert.ToInt32(dr["idAccount"]);
+                    value.Username = dr["username"].ToString();
+                    ListUsers.Add(value);
+                }
             }
             dr.Close();
             cmd.Dispose();
 
-            return ListIdCards;
+            return ListUsers;
         }
 
-        //Questa funzione permette di leggere tutti gli id delle carte selezionate e i testi e inserirli in una lista
-        public static List<Cards> ReadCardsSelect(int room)
+        public static Account ReadUserWin(int room, Cards cardId)
         {
             OpenConnectionDB();
-            SqlCommand cmd;
+
+            String strsql = "SELECT idAccount FROM tblCardsSelect WHERE room = '" + room + @"' 
+                             and idCardWhite = '" + cardId.idCards + "'";
+
+            SqlCommand cmd = new SqlCommand(strsql, cn);
+            cmd.ExecuteNonQuery();
+            var dr = cmd.ExecuteReader();
+            dr.Read();
+            Account user = new Account();
+            user.idAccount = Convert.ToInt32(dr["idAccount"]);
+            dr.Close();
+            cmd.Dispose();
+            return user;
+        }
+
+        public static Winner PointUserWin(int room, Cards cardId)
+        {
+            OpenConnectionDB();
+
+            Account user = ReadUserWin(room, cardId);
+
+            String strsql = "SELECT idAccount, points FROM tblGame WHERE idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn);
+            Winner value = new Winner();
+            var dr = cmd.ExecuteReader();
+            if (dr.HasRows)
+            {
+                dr.Read();
+                value.idAccount = Convert.ToInt32(dr["idAccount"]);
+                value.Point = Convert.ToInt32(dr["points"]); ;
+            }
+
+            dr.Close();
+            cmd.Dispose();
+            return value;
+        }
+        //Questa funzione mi permette di scrivere nella tblGame il punteggio al vincitore
+        public static void WritePointUserWin(int room, Cards cardId)
+        {
+            Winner point = PointUserWin(room, cardId);
+            String strsql = "UPDATE tblGame SET points = '" + point.Point + 1 + "' WHERE idAccount = '" + point.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+        }
+
+        /*Questa funzione permette di leggere tutti gli id delle carte selezionate e i testi e 
+        inserirli in una lista*/
+        public static List<Cards> ReadTetxtCardsSelect(int room)
+        {
+            OpenConnectionDB();
+            
 
             List<Cards> ListIdCards = new List<Cards>();
 
             String strsql = @"SELECT cs.idCardWhite, wc.text FROM tblCardsSelect as cs INNER JOIN tblWhiteCard as wc 
-                                ON cs.idCardWhite = wc.idCard WHERE room = '" + room + "'";
-            cmd = new SqlCommand(strsql, cn);
+                                ON cs.idCardWhite = wc.idCard WHERE room = '" + room + "' ORDER BY cs.idAccount ASC";
+            SqlCommand cmd = new SqlCommand(strsql, cn);
             var dr = cmd.ExecuteReader();
 
             while (dr.Read())

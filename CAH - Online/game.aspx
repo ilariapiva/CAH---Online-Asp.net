@@ -1011,9 +1011,19 @@
 
         lblTimer.Text = "TimeOut!";
 
+        Account userWin = FunctionsDB.ReadUserWin(indexRoom, CardSelect);
+        
+       /* if (!Room.IsMaster(Master.resultUser))
+        {
+
+        }*/
+        
+        FunctionsDB.DeleteLinesDB(indexRoom);
+        
         btnConfirmWinner.Enabled = false;
     }
 </script>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <link rel="stylesheet" type="text/css" href="css/game.css" />
 </asp:Content>

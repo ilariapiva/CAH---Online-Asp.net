@@ -16,7 +16,6 @@
        FunctionsDB.OpenConnectionDB();
     }
 </script>
-
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
 

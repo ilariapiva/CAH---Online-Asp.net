@@ -293,27 +293,34 @@ namespace CAHOnline
             return ListUsers;
         }
 
+        //Questa funzione permette di leggere l'id e lo username del vincitore del turno
         public static Account ReadUserWin(int room, Cards cardId)
         {
             string strcn13 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn13 = new SqlConnection(strcn13);
             cn13.Open();
 
-            String strsql = "SELECT idAccount FROM tblCardsSelect WHERE room = '" + room + @"' 
-                             and idCardWhite = '" + cardId.idCards + "'";
+            String strsql = @"SELECT a.idAccount, a.username  FROM tblAccount AS a INNER JOIN tblCardsSelect as cs
+                            ON a.idAccount = cs.idAccount WHERE cs.room = '" + room + @"' 
+                            AND idCardWhite = '" + cardId.idCards + "'";
 
             SqlCommand cmd = new SqlCommand(strsql, cn13);
             cmd.ExecuteNonQuery();
             var dr13 = cmd.ExecuteReader();
-            dr13.Read();
-            Account user = new Account();
-            user.idAccount = Convert.ToInt32(dr13["idAccount"]);
+            Account value = new Account();
+
+            while ( dr13.Read())
+            {
+                value.idAccount = Convert.ToInt32(dr13["idAccount"]);
+                value.Username = dr13["username"].ToString();
+            }
             dr13.Close();
             cmd.Dispose();
             cn13.Close();
-            return user;
+            return value;
         }
 
+        //QUesta funzione di scrivere nella tblGame e quindi permette di assegnare il punteggio al vincitore
         public static Winner PointUserWin(int room, Cards cardId)
         {
             string strcn14 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
@@ -402,6 +409,19 @@ namespace CAHOnline
             cmd.Dispose();
             cn17.Close();
             return ok;
+        }
+
+        //Questa funzione permette di eliminare le righe dalla tblCardsSelect 
+        public static void DeleteLinesDB(int room)
+        {
+            string strcn18 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn18 = new SqlConnection(strcn18);
+            cn18.Open();
+
+            String strsql = @"DELETE FROM tblCardsSelect WHERE room = '" + room + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn18);
+            cmd.Dispose();
+            cn18.Close();
         }
     }
 }

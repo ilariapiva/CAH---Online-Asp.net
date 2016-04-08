@@ -66,7 +66,7 @@ namespace CAHOnline
         //Questa verifica se l'utente è il master
         public static bool IsMaster(Account user)
         {
-            if (listUsers[indexMaster].idAccount == user.idAccount)
+           if (listUsers[indexMaster].idAccount == user.idAccount)
             {
                 return true;
             }
@@ -171,14 +171,15 @@ namespace CAHOnline
          * (lo si ottiene interrogando il db) sia uguale numero dei giocatori della stanza meno il master */
         public static bool CheckUserCardSelected(int room)
         {
-            if (HowManyUserNotMasterInRoom(room) == 2)
+            if (HowManyUserNotMasterInRoom(room) == 4)
             {
                 return true;
             }
-            else
+            if (HowManyUserNotMasterInRoom(room) == 3)
             {
-                return false;
+                return true;
             }
+            return false;
         }
 
         public static int UserNotMaster(int room)

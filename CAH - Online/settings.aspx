@@ -12,6 +12,8 @@
     
     protected void Page_Load(object sender, EventArgs e)
     {
+        FunctionsDB.OpenConnectionDB();
+        
         lblEmail.Text = Session["userEmail"].ToString();
     }
         

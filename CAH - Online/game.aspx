@@ -13,6 +13,8 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        FunctionsDB.OpenConnectionDB();
+            
         lblUser1.Visible = false;
         lblUser2.Visible = false;
         lblUser3.Visible = false;
@@ -186,176 +188,311 @@
                 if (Room.CheckUserCardSelected(indexRoom))
                 {
                     List<Cards> textCardSelect = FunctionsDB.ReadTetxtCardsSelect(indexRoom);
-                    
+
                     int spacesBlackCard = Room.CheckStringBlackCard();
-
-                    if (spacesBlackCard == 1)
+                    
+                    if (Room.UserNotMaster(indexRoom) == 4)
                     {
-                        CheckBox1.Visible = true;
-                        CheckBox2.Visible = true;
-                        CheckBox3.Visible = true;
-                        CheckBox4.Visible = true;
+                        if (spacesBlackCard == 1)
+                        {
+                            CheckBox1.Visible = true;
+                            CheckBox2.Visible = true;
+                            CheckBox3.Visible = true;
+                            CheckBox4.Visible = true;
 
-                        lblUser1.Visible = true;
-                        lblUser1.Text = "User 1";
+                            lblUser1.Visible = true;
+                            lblUser1.Text = "User 1";
 
-                        lblUser2.Visible = true;
-                        lblUser2.Text = "User 2";
+                            lblUser2.Visible = true;
+                            lblUser2.Text = "User 2";
 
-                        lblUser3.Visible = true;
-                        lblUser3.Text = "User 3";
+                            lblUser3.Visible = true;
+                            lblUser3.Text = "User 3";
 
-                        lblUser4.Visible = true;
-                        lblUser4.Text = "User 4";
+                            lblUser4.Visible = true;
+                            lblUser4.Text = "User 4";
 
-                        btnWhite1.Attributes.Add("value", textCardSelect[0].idCards.ToString());
-                        btnWhite1.Text = textCardSelect[0].Text;
+                            btnWhite1.Attributes.Add("value", textCardSelect[0].idCards.ToString());
+                            btnWhite1.Text = textCardSelect[0].Text;
 
-                        btnWhite2.Attributes.Add("value", textCardSelect[1].idCards.ToString());
-                        btnWhite2.Text = textCardSelect[1].Text;
+                            btnWhite2.Attributes.Add("value", textCardSelect[1].idCards.ToString());
+                            btnWhite2.Text = textCardSelect[1].Text;
 
-                        /*btnWhite3.Attributes.Add("textCards", textCardSelect[2].idCards.ToString());
-                        btnWhite3.Text = textCardSelect[2].Text;
+                            btnWhite3.Attributes.Add("value", textCardSelect[2].idCards.ToString());
+                            btnWhite3.Text = textCardSelect[2].Text;
 
-                        btnWhite4.Attributes.Add("textCards", textCardSelect[3].idCards.ToString());
-                        btnWhite4.Text = textCardSelect[3].Text;*/
+                            /*btnWhite4.Attributes.Add("value", textCardSelect[3].idCards.ToString());
+                            btnWhite4.Text = textCardSelect[3].Text;*/
 
+                        }
+
+                        if (spacesBlackCard == 2)
+                        {
+                            CheckBox1.Visible = true;
+                            CheckBox3.Visible = true;
+                            CheckBox5.Visible = true;
+                            CheckBox7.Visible = true;
+
+                            lblUser1.Visible = true;
+                            lblUser1.Text = "User 1";
+
+                            lblUser2.Visible = true;
+                            lblUser2.Text = "User 1";
+
+                            lblUser3.Visible = true;
+                            lblUser3.Text = "User 2";
+
+                            lblUser4.Visible = true;
+                            lblUser4.Text = "User 2";
+
+                            lblUser5.Visible = true;
+                            lblUser5.Text = "User 3";
+
+                            lblUser6.Visible = true;
+                            lblUser6.Text = "User 3";
+
+                            lblUser7.Visible = true;
+                            lblUser7.Text = "User 4";
+
+                            lblUser8.Visible = true;
+                            lblUser8.Text = "User 4";
+
+                            btnWhite1.Attributes.Add("value", textCardSelect[0].idCards.ToString());
+                            btnWhite1.Text = textCardSelect[0].Text;
+
+                            btnWhite2.Attributes.Add("value", textCardSelect[1].idCards.ToString());
+                            btnWhite2.Text = textCardSelect[1].Text;
+
+                            btnWhite3.Attributes.Add("value", textCardSelect[2].idCards.ToString());
+                            btnWhite3.Text = textCardSelect[2].Text;
+
+                            btnWhite4.Attributes.Add("value", textCardSelect[3].idCards.ToString());
+                            btnWhite4.Text = textCardSelect[3].Text;
+
+                            btnWhite5.Attributes.Add("value", textCardSelect[4].idCards.ToString());
+                            btnWhite5.Text = textCardSelect[4].Text;
+
+                            btnWhite6.Attributes.Add("value", textCardSelect[5].idCards.ToString());
+                            btnWhite6.Text = textCardSelect[5].Text;
+
+                            /*btnWhite7.Attributes.Add("value", textCardSelect[6].idCards.ToString());
+                            btnWhite7.Text = textCardSelect[6].Text;
+
+                            btnWhite8.Attributes.Add("value", textCardSelect[7].idCards.ToString());
+                            btnWhite8.Text = textCardSelect[7].Text;*/
+                        }
+
+                        if (spacesBlackCard == 3)
+                        {
+                            CheckBox1.Visible = true;
+                            CheckBox4.Visible = true;
+                            CheckBox7.Visible = true;
+                            CheckBox10.Visible = true;
+
+                            lblUser1.Visible = true;
+                            lblUser1.Text = "User 1";
+
+                            lblUser2.Visible = true;
+                            lblUser2.Text = "User 1";
+
+                            lblUser3.Visible = true;
+                            lblUser3.Text = "User 1";
+
+                            lblUser4.Visible = true;
+                            lblUser4.Text = "User 2";
+
+                            lblUser5.Visible = true;
+                            lblUser5.Text = "User 2";
+
+                            lblUser6.Visible = true;
+                            lblUser6.Text = "User 2";
+
+                            lblUser7.Visible = true;
+                            lblUser7.Text = "User 3";
+
+                            lblUser8.Visible = true;
+                            lblUser8.Text = "User 3";
+
+                            lblUser9.Visible = true;
+                            lblUser9.Text = "User 3";
+
+                            lblUser10.Visible = true;
+                            lblUser10.Text = "User 4";
+
+                            lblUser11.Visible = true;
+                            lblUser11.Text = "User 4";
+
+                            lblUser12.Visible = true;
+                            lblUser12.Text = "User 4";
+
+                            btnWhite1.Attributes.Add("value", textCardSelect[0].idCards.ToString());
+                            btnWhite1.Text = textCardSelect[0].Text;
+
+                            btnWhite2.Attributes.Add("value", textCardSelect[1].idCards.ToString());
+                            btnWhite2.Text = textCardSelect[1].Text;
+
+                            btnWhite3.Attributes.Add("value", textCardSelect[2].idCards.ToString());
+                            btnWhite3.Text = textCardSelect[2].Text;
+
+                            btnWhite4.Attributes.Add("value", textCardSelect[3].idCards.ToString());
+                            btnWhite4.Text = textCardSelect[3].Text;
+
+                            btnWhite5.Attributes.Add("value", textCardSelect[4].idCards.ToString());
+                            btnWhite5.Text = textCardSelect[4].Text;
+
+                            btnWhite6.Attributes.Add("value", textCardSelect[5].idCards.ToString());
+                            btnWhite6.Text = textCardSelect[5].Text;
+
+                            btnWhite7.Attributes.Add("value", textCardSelect[6].idCards.ToString());
+                            btnWhite7.Text = textCardSelect[6].Text;
+
+                            btnWhite8.Attributes.Add("value", textCardSelect[7].idCards.ToString());
+                            btnWhite8.Text = textCardSelect[7].Text;
+
+                            btnWhite9.Attributes.Add("value", textCardSelect[8].idCards.ToString());
+                            btnWhite9.Text = textCardSelect[8].Text;
+
+                            /*btnWhite10.Attributes.Add("value", textCardSelect[9].idCards.ToString());
+                            btnWhite10.Text = textCardSelect[9].Text;
+
+                            btnWhite11.Attributes.Add("value", textCardSelect[10].idCards.ToString());
+                            btnWhite11.Text = textCardSelect[10].Text;
+
+                            btnWhite12.Attributes.Add("value", textCardSelect[11].idCards.ToString());
+                            btnWhite12.Text = textCardSelect[11].Text;*/
+                        }
                     }
 
-                    if (spacesBlackCard == 2)
+                    if (Room.UserNotMaster(indexRoom) == 3)
                     {
-                        CheckBox1.Visible = true;
-                        CheckBox2.Visible = true;
-                        CheckBox3.Visible = true;
-                        CheckBox4.Visible = true;
+                        if (spacesBlackCard == 1)
+                        {
+                            CheckBox1.Visible = true;
+                            CheckBox2.Visible = true;
+                            CheckBox3.Visible = true;
+                           
+                            lblUser1.Visible = true;
+                            lblUser1.Text = "User 1";
 
-                        lblUser1.Visible = true;
-                        lblUser1.Text = "User 1";
+                            lblUser2.Visible = true;
+                            lblUser2.Text = "User 2";
 
-                        lblUser2.Visible = true;
-                        lblUser2.Text = "User 1";
+                            lblUser3.Visible = true;
+                            lblUser3.Text = "User 3";
 
-                        lblUser3.Visible = true;
-                        lblUser3.Text = "User 2";
+                            btnWhite1.Attributes.Add("value", textCardSelect[0].idCards.ToString());
+                            btnWhite1.Text = textCardSelect[0].Text;
 
-                        lblUser4.Visible = true;
-                        lblUser4.Text = "User 2";
+                            btnWhite2.Attributes.Add("value", textCardSelect[1].idCards.ToString());
+                            btnWhite2.Text = textCardSelect[1].Text;
 
-                        lblUser5.Visible = true;
-                        lblUser5.Text = "User 3";
+                            btnWhite3.Attributes.Add("value", textCardSelect[2].idCards.ToString());
+                            btnWhite3.Text = textCardSelect[2].Text;
+                        }
 
-                        lblUser6.Visible = true;
-                        lblUser6.Text = "User 3";
+                        if (spacesBlackCard == 2)
+                        {
+                            CheckBox1.Visible = true;
+                            CheckBox3.Visible = true;
+                            CheckBox5.Visible = true;
 
-                        lblUser7.Visible = true;
-                        lblUser7.Text = "User 4";
+                            lblUser1.Visible = true;
+                            lblUser1.Text = "User 1";
 
-                        lblUser8.Visible = true;
-                        lblUser8.Text = "User 4";
+                            lblUser2.Visible = true;
+                            lblUser2.Text = "User 1";
 
-                        btnWhite1.Attributes.Add("textCards", textCardSelect[0].idCards.ToString());
-                        btnWhite1.Text = textCardSelect[0].Text;
+                            lblUser3.Visible = true;
+                            lblUser3.Text = "User 2";
 
-                        btnWhite2.Attributes.Add("textCards", textCardSelect[1].idCards.ToString());
-                        btnWhite2.Text = textCardSelect[1].Text;
+                            lblUser4.Visible = true;
+                            lblUser4.Text = "User 2";
 
-                        btnWhite3.Attributes.Add("textCards", textCardSelect[2].idCards.ToString());
-                        btnWhite3.Text = textCardSelect[2].Text;
+                            lblUser5.Visible = true;
+                            lblUser5.Text = "User 3";
 
-                        btnWhite4.Attributes.Add("textCards", textCardSelect[3].idCards.ToString());
-                        btnWhite4.Text = textCardSelect[3].Text;
+                            lblUser6.Visible = true;
+                            lblUser6.Text = "User 3";
 
-                        /*btnWhite5.Attributes.Add("textCards", textCardSelect[4].idCards.ToString());
-                         btnWhite5.Text = textCardSelect[4].Text;
+                            btnWhite1.Attributes.Add("value", textCardSelect[0].idCards.ToString());
+                            btnWhite1.Text = textCardSelect[0].Text;
 
-                         btnWhite6.Attributes.Add("textCards", textCardSelect[5].idCards.ToString());
-                         btnWhite6.Text = textCardSelect[5].Text;
+                            btnWhite2.Attributes.Add("value", textCardSelect[1].idCards.ToString());
+                            btnWhite2.Text = textCardSelect[1].Text;
 
-                         btnWhite7.Attributes.Add("textCards", textCardSelect[6].idCards.ToString());
-                         btnWhite7.Text = textCardSelect[6].Text;
+                            btnWhite3.Attributes.Add("value", textCardSelect[2].idCards.ToString());
+                            btnWhite3.Text = textCardSelect[2].Text;
 
-                         btnWhite8.Attributes.Add("textCards", textCardSelect[7].idCards.ToString());
-                         btnWhite8.Text = textCardSelect[7].Text;*/
-                    }
+                            btnWhite4.Attributes.Add("value", textCardSelect[3].idCards.ToString());
+                            btnWhite4.Text = textCardSelect[3].Text;
 
-                    if (spacesBlackCard == 3)
-                    {
-                        CheckBox1.Visible = true;
-                        CheckBox2.Visible = true;
-                        CheckBox3.Visible = true;
-                        CheckBox4.Visible = true;
-                        
-                        lblUser1.Visible = true;
-                        lblUser1.Text = "User 1";
+                            btnWhite5.Attributes.Add("value", textCardSelect[4].idCards.ToString());
+                            btnWhite5.Text = textCardSelect[4].Text;
 
-                        lblUser2.Visible = true;
-                        lblUser2.Text = "User 1";
+                            btnWhite6.Attributes.Add("value", textCardSelect[5].idCards.ToString());
+                            btnWhite6.Text = textCardSelect[5].Text;
+                        }
 
-                        lblUser3.Visible = true;
-                        lblUser3.Text = "User 1";
+                        if (spacesBlackCard == 3)
+                        {
+                            CheckBox1.Visible = true;
+                            CheckBox4.Visible = true;
+                            CheckBox7.Visible = true;
+                            
+                            lblUser1.Visible = true;
+                            lblUser1.Text = "User 1";
 
-                        lblUser4.Visible = true;
-                        lblUser4.Text = "User 2";
+                            lblUser2.Visible = true;
+                            lblUser2.Text = "User 1";
 
-                        lblUser5.Visible = true;
-                        lblUser5.Text = "User 2";
+                            lblUser3.Visible = true;
+                            lblUser3.Text = "User 1";
 
-                        lblUser6.Visible = true;
-                        lblUser6.Text = "User 2";
+                            lblUser4.Visible = true;
+                            lblUser4.Text = "User 2";
 
-                        lblUser7.Visible = true;
-                        lblUser7.Text = "User 3";
+                            lblUser5.Visible = true;
+                            lblUser5.Text = "User 2";
 
-                        lblUser8.Visible = true;
-                        lblUser8.Text = "User 3";
+                            lblUser6.Visible = true;
+                            lblUser6.Text = "User 2";
 
-                        lblUser9.Visible = true;
-                        lblUser9.Text = "User 3";
+                            lblUser7.Visible = true;
+                            lblUser7.Text = "User 3";
 
-                        lblUser10.Visible = true;
-                        lblUser10.Text = "User 4";
+                            lblUser8.Visible = true;
+                            lblUser8.Text = "User 3";
 
-                        lblUser11.Visible = true;
-                        lblUser11.Text = "User 4";
+                            lblUser9.Visible = true;
+                            lblUser9.Text = "User 3";
 
-                        lblUser12.Visible = true;
-                        lblUser12.Text = "User 4";
+                            btnWhite1.Attributes.Add("value", textCardSelect[0].idCards.ToString());
+                            btnWhite1.Text = textCardSelect[0].Text;
 
-                        btnWhite1.Attributes.Add("textCards", textCardSelect[0].idCards.ToString());
-                        btnWhite1.Text = textCardSelect[0].Text;
+                            btnWhite2.Attributes.Add("value", textCardSelect[1].idCards.ToString());
+                            btnWhite2.Text = textCardSelect[1].Text;
 
-                        btnWhite2.Attributes.Add("textCards", textCardSelect[1].idCards.ToString());
-                        btnWhite2.Text = textCardSelect[1].Text;
+                            btnWhite3.Attributes.Add("value", textCardSelect[2].idCards.ToString());
+                            btnWhite3.Text = textCardSelect[2].Text;
 
-                        btnWhite3.Attributes.Add("textCards", textCardSelect[2].idCards.ToString());
-                        btnWhite3.Text = textCardSelect[2].Text;
+                            btnWhite4.Attributes.Add("value", textCardSelect[3].idCards.ToString());
+                            btnWhite4.Text = textCardSelect[3].Text;
 
-                        btnWhite4.Attributes.Add("textCards", textCardSelect[3].idCards.ToString());
-                        btnWhite4.Text = textCardSelect[3].Text;
+                            btnWhite5.Attributes.Add("value", textCardSelect[4].idCards.ToString());
+                            btnWhite5.Text = textCardSelect[4].Text;
 
-                        btnWhite5.Attributes.Add("textCards", textCardSelect[4].idCards.ToString());
-                        btnWhite5.Text = textCardSelect[4].Text;
+                            btnWhite6.Attributes.Add("value", textCardSelect[5].idCards.ToString());
+                            btnWhite6.Text = textCardSelect[5].Text;
 
-                        btnWhite6.Attributes.Add("textCards", textCardSelect[5].idCards.ToString());
-                        btnWhite6.Text = textCardSelect[5].Text;
+                            btnWhite7.Attributes.Add("value", textCardSelect[6].idCards.ToString());
+                            btnWhite7.Text = textCardSelect[6].Text;
 
-                        /*btnWhite7.Attributes.Add("textCards", textCardSelect[6].idCards.ToString());
-                         btnWhite7.Text = textCardSelect[6].Text;
+                            btnWhite8.Attributes.Add("value", textCardSelect[7].idCards.ToString());
+                            btnWhite8.Text = textCardSelect[7].Text;
 
-                         btnWhite8.Attributes.Add("textCards", textCardSelect[7].idCards.ToString());
-                         btnWhite8.Text = textCardSelect[7].Text;
-
-                         btnWhite9.Attributes.Add("textCards", textCardSelect[8].idCards.ToString());
-                         btnWhite9.Text = textCardSelect[8].Text;
-
-                         btnWhite10.Attributes.Add("textCards", textCardSelect[9].idCards.ToString());
-                         btnWhite10.Text = textCardSelect[9].Text;
-
-                         btnWhite11.Attributes.Add("textCards", textCardSelect[10].idCards.ToString());
-                         btnWhite11.Text = textCardSelect[10].Text;
-
-                         btnWhite12.Attributes.Add("textCards", textCardSelect[11].idCards.ToString());
-                         btnWhite12.Text = textCardSelect[11].Text;*/
+                            btnWhite9.Attributes.Add("value", textCardSelect[8].idCards.ToString());
+                            btnWhite9.Text = textCardSelect[8].Text;
+                        }
                     }
                 }
             }
@@ -464,6 +601,10 @@
         
         Room.UsersAndCards(CardsSelect, indexRoom, user);
 
+        Timer1.Enabled = false;
+        
+        lblTimer.Text = "TimeOut!";
+
        // btnConfirmCardSelect.Enabled = false;
     }
 
@@ -473,219 +614,402 @@
 
         int spacesBlackCard = Room.CheckStringBlackCard();
 
-        if (Room.UserNotMaster(indexRoom) == 2)
+        if (Room.UserNotMaster(indexRoom) == 4)
         {
-            if (CheckBox1.Checked)
+            if (spacesBlackCard == 1)
             {
-                Cards c = new Cards();
-                c.Text = btnWhite1.Text;
-                c.idCards = Convert.ToInt32(btnWhite1.Attributes["value"]);
-                CardSelect = c;
-            }
-            if (CheckBox2.Checked)
-            {
-                Cards c = new Cards();
-                c.Text = btnWhite2.Text;
-                c.idCards = Convert.ToInt32(btnWhite2.Attributes["value"]);
-                CardSelect = c;
-            }
-            if (CheckBox3.Checked)
-            {
-                Cards c = new Cards();
-                c.Text = btnWhite3.Text;
-                c.idCards = Convert.ToInt32(btnWhite3.Attributes["value"]);
-                CardSelect = c;
-            }
-            if (CheckBox4.Checked)
-            {
-                Cards c = new Cards();
-                c.Text = btnWhite4.Text;
-                c.idCards = Convert.ToInt32(btnWhite4.Attributes["value"]);
-                CardSelect = c;
+                if (CheckBox1.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite1.Text;
+                    c.idCards = Convert.ToInt32(btnWhite1.Attributes["value"]);
+                    CardSelect = c;
+                }
+                if (CheckBox2.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite2.Text;
+                    c.idCards = Convert.ToInt32(btnWhite2.Attributes["value"]);
+                    CardSelect = c;
+                }
+                if (CheckBox3.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite3.Text;
+                    c.idCards = Convert.ToInt32(btnWhite3.Attributes["value"]);
+                    CardSelect = c;
+                }
+                if (CheckBox4.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite4.Text;
+                    c.idCards = Convert.ToInt32(btnWhite4.Attributes["value"]);
+                    CardSelect = c;
+                }
+
+                lblUser1.Visible = true;
+                lblUser2.Visible = true;
+                lblUser3.Visible = true;
+                lblUser4.Visible = true;
             }
 
-            FunctionsDB.WritePointUserWin(indexRoom, CardSelect);
+            if (spacesBlackCard == 2)
+            {
+                if (CheckBox1.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite1.Text;
+                    c.idCards = Convert.ToInt32(btnWhite1.Attributes["value"]);
+                    CardSelect = c;
+                }
+
+                if (CheckBox3.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite3.Text;
+                    c.idCards = Convert.ToInt32(btnWhite3.Attributes["value"]);
+                    CardSelect = c;
+                }
+
+                if (CheckBox5.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite5.Text;
+                    c.idCards = Convert.ToInt32(btnWhite5.Attributes["value"]);
+                    CardSelect = c;
+                }
+
+                if (CheckBox7.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite7.Text;
+                    c.idCards = Convert.ToInt32(btnWhite7.Attributes["value"]);
+                    CardSelect = c;
+                }
+
+                lblUser1.Visible = true;
+                lblUser2.Visible = true;
+                lblUser3.Visible = true;
+                lblUser4.Visible = true;
+                lblUser5.Visible = true;
+                lblUser6.Visible = true;
+                lblUser7.Visible = true;
+                lblUser8.Visible = true;
+            }
+
+            if (spacesBlackCard == 3)
+            {
+                if (CheckBox1.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite1.Text;
+                    c.idCards = Convert.ToInt32(btnWhite1.Attributes["value"]);
+                    CardSelect = c;
+                }
+
+                if (CheckBox4.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite4.Text;
+                    c.idCards = Convert.ToInt32(btnWhite4.Attributes["value"]);
+                    CardSelect = c;
+                }
+
+                if (CheckBox7.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite7.Text;
+                    c.idCards = Convert.ToInt32(btnWhite7.Attributes["value"]);
+                    CardSelect = c;
+                }
+
+                if (CheckBox10.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite10.Text;
+                    c.idCards = Convert.ToInt32(btnWhite10.Attributes["value"]);
+                    CardSelect = c;
+                }
+
+                lblUser1.Visible = true;
+                lblUser2.Visible = true;
+                lblUser3.Visible = true;
+                lblUser4.Visible = true;
+                lblUser5.Visible = true;
+                lblUser6.Visible = true;
+                lblUser7.Visible = true;
+                lblUser8.Visible = true;
+                lblUser9.Visible = true;
+                lblUser10.Visible = true;
+                lblUser11.Visible = true;
+                lblUser12.Visible = true;
+            }
         }
 
-        /*if (Room.UserNotMaster(indexRoom) == 3)
+        if (Room.UserNotMaster(indexRoom) == 3)
         {
-            if (CheckBox1.Checked)
+            if (spacesBlackCard == 1)
             {
-                Cards c = new Cards();
-                c.Text = btnWhite1.Text;
-                c.idCards = Convert.ToInt32(btnWhite1.Attributes["value"]);
-                CardSelect = c;
-            }
-            if (CheckBox2.Checked)
-            {
-                Cards c = new Cards();
-                c.Text = btnWhite2.Text;
-                c.idCards = Convert.ToInt32(btnWhite2.Attributes["value"]);
-                CardSelect = c;
-            }
-            if (CheckBox3.Checked)
-            {
-                Cards c = new Cards();
-                c.Text = btnWhite3.Text;
-                c.idCards = Convert.ToInt32(btnWhite3.Attributes["value"]);
-                CardSelect = c;
-            }
-        }*/
-        
-        List<Account> usernames = FunctionsDB.ReadUsernames(indexRoom);
+                if (CheckBox1.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite1.Text;
+                    c.idCards = Convert.ToInt32(btnWhite1.Attributes["value"]);
+                    CardSelect = c;
+                }
+                if (CheckBox2.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite2.Text;
+                    c.idCards = Convert.ToInt32(btnWhite2.Attributes["value"]);
+                    CardSelect = c;
+                }
+                if (CheckBox3.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite3.Text;
+                    c.idCards = Convert.ToInt32(btnWhite3.Attributes["value"]);
+                    CardSelect = c;
+                }
 
+                lblUser1.Visible = true;
+                lblUser2.Visible = true;
+                lblUser3.Visible = true;
+            }
+
+            if (spacesBlackCard == 2)
+            {
+                if (CheckBox1.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite1.Text;
+                    c.idCards = Convert.ToInt32(btnWhite1.Attributes["value"]);
+                    CardSelect = c;
+                }
+
+                if (CheckBox3.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite3.Text;
+                    c.idCards = Convert.ToInt32(btnWhite3.Attributes["value"]);
+                    CardSelect = c;
+                }
+
+                if (CheckBox5.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite5.Text;
+                    c.idCards = Convert.ToInt32(btnWhite5.Attributes["value"]);
+                    CardSelect = c;
+                }
+
+                lblUser1.Visible = true;
+                lblUser2.Visible = true;
+                lblUser3.Visible = true;
+                lblUser4.Visible = true;
+                lblUser5.Visible = true;
+                lblUser6.Visible = true;
+            }
+
+            if (spacesBlackCard == 3)
+            {
+                if (CheckBox1.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite1.Text;
+                    c.idCards = Convert.ToInt32(btnWhite1.Attributes["value"]);
+                    CardSelect = c;
+                }
+
+                if (CheckBox4.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite4.Text;
+                    c.idCards = Convert.ToInt32(btnWhite4.Attributes["value"]);
+                    CardSelect = c;
+                }
+
+                if (CheckBox7.Checked)
+                {
+                    Cards c = new Cards();
+                    c.Text = btnWhite7.Text;
+                    c.idCards = Convert.ToInt32(btnWhite7.Attributes["value"]);
+                    CardSelect = c;
+                }
+
+                lblUser1.Visible = true;
+                lblUser2.Visible = true;
+                lblUser3.Visible = true;
+                lblUser4.Visible = true;
+                lblUser5.Visible = true;
+                lblUser6.Visible = true;
+                lblUser7.Visible = true;
+                lblUser8.Visible = true;
+                lblUser9.Visible = true;
+            }
+        }
+
+        FunctionsDB.WritePointUserWin(indexRoom, CardSelect);
+
+        List<Account> usernames = FunctionsDB.ReadUsernames(indexRoom);
+        
         if (spacesBlackCard == 1)
         {
-           /* if (Room.UserNotMaster(indexRoom) == 2)
-            {*/
-                lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
+            if (Room.UserNotMaster(indexRoom) == 4)
+            {
+                lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
                 lblUser1.Text = usernames[0].Username;
 
-                lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
+                lblUser2.Attributes.Add("value", usernames[1].idAccount.ToString());
                 lblUser2.Text = usernames[1].Username;
 
-                /*lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
+                lblUser3.Attributes.Add("value", usernames[2].idAccount.ToString());
                 lblUser3.Text = usernames[2].Username;
 
-                lblUser4.Attributes.Add("user", usernames[3].idAccount.ToString());
+                /*lblUser4.Attributes.Add("value", usernames[3].idAccount.ToString());
                 lblUser4.Text = usernames[3].Username;*/
-            /*}
+            }
 
             if (Room.UserNotMaster(indexRoom) == 3)
             {
-                lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
+                lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
                 lblUser1.Text = usernames[0].Username;
 
-                lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
+                lblUser2.Attributes.Add("value", usernames[1].idAccount.ToString());
                 lblUser2.Text = usernames[1].Username;
 
-                lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
+                lblUser3.Attributes.Add("value", usernames[2].idAccount.ToString());
                 lblUser3.Text = usernames[2].Username;
-            }*/
+            }
         }
 
         if (spacesBlackCard == 2)
         {
-            /*if (Room.UserNotMaster(indexRoom) == 2)
-            {*/
+            if (Room.UserNotMaster(indexRoom) == 4)
+            {
 
-                lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
+                lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
                 lblUser1.Text = usernames[0].Username;
 
-                lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
+                lblUser2.Attributes.Add("value", usernames[1].idAccount.ToString());
                 lblUser2.Text = usernames[1].Username;
 
-                lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
+                lblUser3.Attributes.Add("value", usernames[2].idAccount.ToString());
                 lblUser3.Text = usernames[2].Username;
 
-                lblUser4.Attributes.Add("user", usernames[3].idAccount.ToString());
+                lblUser4.Attributes.Add("value", usernames[3].idAccount.ToString());
                 lblUser4.Text = usernames[3].Username;
 
-               /* lblUser5.Attributes.Add("user", usernames[4].idAccount.ToString());
+                lblUser5.Attributes.Add("value", usernames[4].idAccount.ToString());
                 lblUser5.Text = usernames[4].Username;
 
-                lblUser6.Attributes.Add("user", usernames[5].idAccount.ToString());
+                lblUser6.Attributes.Add("value", usernames[5].idAccount.ToString());
                 lblUser6.Text = usernames[5].Username;
 
-                lblUser7.Attributes.Add("user", usernames[6].idAccount.ToString());
+                /* lblUser7.Attributes.Add("value", usernames[6].idAccount.ToString());
                 lblUser7.Text = usernames[6].Username;
 
-                lblUser8.Attributes.Add("user", usernames[7].idAccount.ToString());
+                lblUser8.Attributes.Add("value", usernames[7].idAccount.ToString());
                 lblUser8.Text = usernames[7].Username;*/
-            /*}
+            }
 
             if (Room.UserNotMaster(indexRoom) == 3)
             {
-                lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
+                lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
                 lblUser1.Text = usernames[0].Username;
 
-                lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
+                lblUser2.Attributes.Add("value", usernames[1].idAccount.ToString());
                 lblUser2.Text = usernames[1].Username;
 
-                lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
+                lblUser3.Attributes.Add("value", usernames[2].idAccount.ToString());
                 lblUser3.Text = usernames[2].Username;
 
-                lblUser4.Attributes.Add("user", usernames[3].idAccount.ToString());
+                lblUser4.Attributes.Add("value", usernames[3].idAccount.ToString());
                 lblUser4.Text = usernames[3].Username;
 
-                lblUser5.Attributes.Add("user", usernames[4].idAccount.ToString());
+                lblUser5.Attributes.Add("value", usernames[4].idAccount.ToString());
                 lblUser5.Text = usernames[4].Username;
 
-                lblUser6.Attributes.Add("user", usernames[5].idAccount.ToString());
+                lblUser6.Attributes.Add("value", usernames[5].idAccount.ToString());
                 lblUser6.Text = usernames[5].Username;
-            }*/
+            }
         }
 
         if (spacesBlackCard == 3)
         {
-            /*if (Room.UserNotMaster(indexRoom) == 2)
-            {*/
-            lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
-            lblUser1.Text = usernames[0].Username;
-
-            lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
-            lblUser2.Text = usernames[1].Username;
-
-            lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
-            lblUser3.Text = usernames[2].Username;
-
-            lblUser4.Attributes.Add("user", usernames[3].idAccount.ToString());
-            lblUser4.Text = usernames[3].Username;
-
-            lblUser5.Attributes.Add("user", usernames[4].idAccount.ToString());
-            lblUser5.Text = usernames[4].Username;
-
-            lblUser6.Attributes.Add("user", usernames[5].idAccount.ToString());
-            lblUser6.Text = usernames[5].Username;
-
-            lblUser7.Attributes.Add("user", usernames[6].idAccount.ToString());
-            lblUser7.Text = usernames[6].Username;
-
-            /* lblUser8.Attributes.Add("user", usernames[7].idAccount.ToString());
-             lblUser8.Text = usernames[7].Username;
-
-             lblUser9.Attributes.Add("user", usernames[8].idAccount.ToString());
-             lblUser9.Text = usernames[8].Username;
-
-             lblUser10.Attributes.Add("user", usernames[9].idAccount.ToString());
-             lblUser10.Text = usernames[9].Username;
-
-             lblUser11.Attributes.Add("user", usernames[10].idAccount.ToString());
-             lblUser11.Text = usernames[10].Username;
-
-             lblUser12.Attributes.Add("user", usernames[11].idAccount.ToString());
-             lblUser12.Text = usernames[1].Username;*/
-            //}
-            /*if (Room.UserNotMaster(indexRoom) == 3)
+            if (Room.UserNotMaster(indexRoom) == 4)
             {
-                lblUser1.Attributes.Add("user", usernames[0].idAccount.ToString());
+                lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
                 lblUser1.Text = usernames[0].Username;
 
-                lblUser2.Attributes.Add("user", usernames[1].idAccount.ToString());
+                lblUser2.Attributes.Add("value", usernames[1].idAccount.ToString());
                 lblUser2.Text = usernames[1].Username;
 
-                lblUser3.Attributes.Add("user", usernames[2].idAccount.ToString());
+                lblUser3.Attributes.Add("value", usernames[2].idAccount.ToString());
                 lblUser3.Text = usernames[2].Username;
 
-                lblUser4.Attributes.Add("user", usernames[3].idAccount.ToString());
+                lblUser4.Attributes.Add("value", usernames[3].idAccount.ToString());
                 lblUser4.Text = usernames[3].Username;
 
-                lblUser5.Attributes.Add("user", usernames[4].idAccount.ToString());
+                lblUser5.Attributes.Add("value", usernames[4].idAccount.ToString());
                 lblUser5.Text = usernames[4].Username;
 
-                lblUser6.Attributes.Add("user", usernames[5].idAccount.ToString());
+                lblUser6.Attributes.Add("value", usernames[5].idAccount.ToString());
                 lblUser6.Text = usernames[5].Username;
 
-                lblUser7.Attributes.Add("user", usernames[6].idAccount.ToString());
+                lblUser7.Attributes.Add("value", usernames[6].idAccount.ToString());
                 lblUser7.Text = usernames[6].Username;
 
-                lblUser8.Attributes.Add("user", usernames[7].idAccount.ToString());
+                lblUser8.Attributes.Add("value", usernames[7].idAccount.ToString());
                 lblUser8.Text = usernames[7].Username;
 
-                lblUser9.Attributes.Add("user", usernames[8].idAccount.ToString());
+                lblUser9.Attributes.Add("value", usernames[8].idAccount.ToString());
                 lblUser9.Text = usernames[8].Username;
-            }*/
+
+                /*lblUser10.Attributes.Add("value", usernames[9].idAccount.ToString());
+                lblUser10.Text = usernames[9].Username;
+
+                lblUser11.Attributes.Add("value", usernames[10].idAccount.ToString());
+                lblUser11.Text = usernames[10].Username;
+
+                lblUser12.Attributes.Add("value", usernames[11].idAccount.ToString());
+                lblUser12.Text = usernames[1].Username;*/
+            }
+
+            if (Room.UserNotMaster(indexRoom) == 3)
+            {
+                lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
+                lblUser1.Text = usernames[0].Username;
+
+                lblUser2.Attributes.Add("value", usernames[1].idAccount.ToString());
+                lblUser2.Text = usernames[1].Username;
+
+                lblUser3.Attributes.Add("value", usernames[2].idAccount.ToString());
+                lblUser3.Text = usernames[2].Username;
+
+                lblUser4.Attributes.Add("value", usernames[3].idAccount.ToString());
+                lblUser4.Text = usernames[3].Username;
+
+                lblUser5.Attributes.Add("value", usernames[4].idAccount.ToString());
+                lblUser5.Text = usernames[4].Username;
+
+                lblUser6.Attributes.Add("value", usernames[5].idAccount.ToString());
+                lblUser6.Text = usernames[5].Username;
+
+                lblUser7.Attributes.Add("value", usernames[6].idAccount.ToString());
+                lblUser7.Text = usernames[6].Username;
+
+                lblUser8.Attributes.Add("value", usernames[7].idAccount.ToString());
+                lblUser8.Text = usernames[7].Username;
+
+                lblUser9.Attributes.Add("value", usernames[8].idAccount.ToString());
+                lblUser9.Text = usernames[8].Username;
+            }
         }
+        
+        Timer1.Enabled = false;
+
+        lblTimer.Text = "TimeOut!";
 
         btnConfirmWinner.Enabled = false;
     }

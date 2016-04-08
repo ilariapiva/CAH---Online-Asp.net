@@ -13,7 +13,7 @@
     protected void Page_Init(object sender, EventArgs e)
     {
         FunctionsDB.OpenConnectionDB();
-        
+
         FunctionsDB.CookiesRequest();
         
         resultUser = FunctionsDB.ReadValuesProfileDB();
@@ -36,6 +36,11 @@
     {
         Response.Redirect("settings.aspx");
     }*/
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+
+    }
 </script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>

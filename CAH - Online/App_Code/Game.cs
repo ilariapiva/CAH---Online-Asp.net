@@ -11,9 +11,6 @@ namespace CAHOnline
 
         public Game()
         {
-            //
-            // TODO: aggiungere qui la logica del costruttore
-            //
         }
 
         //Aggiunge gli user alle rooms

@@ -8,7 +8,7 @@ namespace CAHOnline
     public class Room
     {
         static List<Account> listUsers = new List<Account>();
-        static List<Cards> RandomCardBlack, RandomCardsWhite, CardsWhiteSelect;
+        static List<Cards> RandomCardBlack, RandomCardsWhite;
         static int indexCardBlack, indexCardWhite, numberCardWhite, indexMaster;
          
         public Room()
@@ -66,7 +66,7 @@ namespace CAHOnline
         //Questa verifica se l'utente è il master
         public static bool IsMaster(Account user)
         {
-           if (listUsers[indexMaster].idAccount == user.idAccount)
+            if (listUsers[indexMaster].idAccount == user.idAccount)
             {
                 return true;
             }
@@ -148,41 +148,23 @@ namespace CAHOnline
             }
         }
 
-        /*Questa funziona mi ritorna il numero dei giocatori meno il master presenti nella stanza
-         * e il controllo lo fa interrogando il db*/
-        public static int HowManyUserNotMasterInRoom(int room)
-        {
-            int count = 0;
-
-            foreach (Account user in listUsers)
-            {
-                if (!IsMaster(user))
-                {
-                    if(FunctionsDB.ReadListUserInRoom(user, room))
-                    {
-                        count++;
-                    }
-                }
-            }
-            return count;
-        }
-
         /*Questa funzione permette di controllare se il numero dei giocatori che hanno selezionato le carte 
          * (lo si ottiene interrogando il db) sia uguale numero dei giocatori della stanza meno il master */
         public static bool CheckUserCardSelected(int room)
         {
-            if (HowManyUserNotMasterInRoom(room) == 4)
+            if (UsersNotMaster(room) == 4)
             {
                 return true;
             }
-            if (HowManyUserNotMasterInRoom(room) == 3)
+            if (UsersNotMaster(room) == 2)
             {
                 return true;
             }
             return false;
         }
 
-        public static int UserNotMaster(int room)
+        //Questa funziona mi ritorna il numero dei giocatori meno il master presenti nella stanza
+        public static int UsersNotMaster(int room)
         {
             int count = 0;
 
@@ -194,6 +176,20 @@ namespace CAHOnline
                 }
             }
             return count;
+        }
+
+        public static int NewMaster(int room)
+        {
+            foreach (Account user in listUsers)
+            {
+                if (IsMaster(user))
+                {
+                    indexMaster++;
+                    indexMaster = indexMaster % listUsers.Count; 
+                    break;
+                }
+            }
+            return indexMaster;
         }
     }
 }

@@ -392,25 +392,6 @@ namespace CAHOnline
             return ListIdCards;
         }
 
-        //Questa funzione permette di leggere il numero delle persone di una stanza che hanno selezionato le carte
-        public static bool ReadListUserInRoom(Account user, int room)
-        {
-            string strcn17 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn17 = new SqlConnection(strcn17);
-            cn17.Open();
-
-            String strsql = @"SELECT COUNT(*), idAccount FROM tblCardsSelect GROUP BY idAccount 
-                              HAVING COUNT(*) >= 1 AND idAccount = '" + user.idAccount + "'";
-            SqlCommand cmd = new SqlCommand(strsql, cn17);
-            var dr17 = cmd.ExecuteReader();
-            dr17.Read();
-            bool ok = dr17.HasRows;
-            dr17.Close();
-            cmd.Dispose();
-            cn17.Close();
-            return ok;
-        }
-
         //Questa funzione permette di eliminare le righe dalla tblCardsSelect 
         public static void DeleteLinesDB(int room)
         {
@@ -420,8 +401,33 @@ namespace CAHOnline
 
             String strsql = @"DELETE FROM tblCardsSelect WHERE room = '" + room + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn18);
+            cmd.ExecuteNonQuery();
             cmd.Dispose();
             cn18.Close();
+        }
+
+       public static int ReadPoints(int room, Account user)
+        {
+            string strcn19 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn19 = new SqlConnection(strcn19);
+            cn19.Open();
+
+            String strsql = "SELECT points FROM tblGame WHERE idAccount = '" + user.idAccount + "' and room = '" + room + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn19);
+            cmd.ExecuteNonQuery();
+
+            int value = 0;
+            var dr17 = cmd.ExecuteReader();
+            if (dr17.HasRows)
+            {
+                dr17.Read();
+                value = Convert.ToInt32(dr17["points"]); ;
+            }
+
+            dr17.Close();
+            cmd.Dispose();
+            cn19.Close();
+            return value;
         }
     }
 }

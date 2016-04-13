@@ -353,7 +353,7 @@ namespace CAHOnline
             cn15.Open();
 
             Winner point = PointUserWin(room, cardId);
-            String strsql = "UPDATE tblGame SET points = '" + point.Point + 1 + "' WHERE idAccount = '" + point.idAccount + "'";
+            String strsql = "UPDATE tblGame SET points = '" + (point.Point + 1) + "' WHERE idAccount = '" + point.idAccount + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn15);
             cmd.ExecuteNonQuery();
             cmd.Dispose();

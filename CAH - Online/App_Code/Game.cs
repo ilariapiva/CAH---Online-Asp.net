@@ -20,7 +20,7 @@ namespace CAHOnline
             {
                 Room room = new Room();
                 Rooms.Add(room);
-                Room.AddUser(user);
+                room.AddUser(user);
                 FunctionsDB.WriteGame(user, 0);
                 return true;
             }
@@ -28,18 +28,20 @@ namespace CAHOnline
             {
                 foreach(Room i in Rooms)
                 {
-                    if(!Room.IsFull())
+                    if(!i.IsFull())
                     {
-                        Room.AddUser(user);
+                        i.AddUser(user);
                         FunctionsDB.WriteGame(user, Rooms.IndexOf(i));
+                        i.GenerateCardsForUser(user);
                         return true;
                     }
                 }
 
                 Room room = new Room(); //altrimenti creo una nuova room e aggiungo lo user alla lista
                 Rooms.Add(room);
-                Room.AddUser(user);
+                room.AddUser(user);
                 FunctionsDB.WriteGame(user, Rooms.Count - 1);
+                room.GenerateCardsForUser(user);
                 return true;
             }
         }

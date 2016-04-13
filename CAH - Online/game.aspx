@@ -9,25 +9,62 @@
     Room room;
     Cards blackCard;
     List<Cards> whiteCards = new List<Cards>();
-    bool stateChanged;
+    bool stateChanged = false;
     int totalSeconds = 0;
     int seconds = 0;
     int minutes = 0;
     string time = "";
 
-    protected void StateChanged()
+    protected void Page_Load(object sender, EventArgs e)
     {
+        FunctionsDB.OpenConnectionDB();
+
+        //recupero l'id della room
+        indexRoom = FunctionsDB.GetRoom(Master.resultUser);
+            
+        //assegno l'idRoom
+        room = Game.UserEntered(indexRoom);
+        
+        int points = FunctionsDB.ReadPoints(indexRoom, Master.resultUser);
+        
+        lblPoints.Text = "Punteggio: " + points;
+         
+        btnNewCard.Visible = false;
+        
+        lblUser1.Visible = false;
+        lblUser2.Visible = false;
+        lblUser3.Visible = false;
+        lblUser4.Visible = false;
+        lblUser5.Visible = false;
+        lblUser6.Visible = false;
+        lblUser7.Visible = false;
+        lblUser8.Visible = false;
+        lblUser9.Visible = false;
+        lblUser10.Visible = false;
+        lblUser11.Visible = false;
+        lblUser12.Visible = false;
+
+        btnWhite11.Visible = false;
+        btnWhite12.Visible = false;
+
+        if (!Page.IsPostBack)
+        {
+            stateChanged = true;
+            Session["time1"] = 40; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
+            Session["time2"] = 40;
+            /* 100 = 1 min e 40 sec
+             * 90 = 1 min 30 sec
+             * 50 = 50 sec
+             */
+        }
+        
+        //room.GenerateCardsForUser(Master.resultUser);
+
         if (stateChanged)
         {
-            //recupero l'id della room
-            indexRoom = FunctionsDB.GetRoom(Master.resultUser);
-
-            //assegno l'idRoom
-            room = Game.UserEntered(indexRoom);
-
             //se l'utente è il master visualizzo solo la carta master 
-            if (Room.IsMaster(Master.resultUser))
-            {
+            if (room.IsMaster(Master.resultUser))
+            { 
                 lblTimer.Visible = false;
 
                 btnConfirmWinner.Visible = false;
@@ -45,11 +82,11 @@
 
                 btnConfirmCardSelect.Visible = false;
 
-                blackCard = Room.GetCardBlack();
+                blackCard = room.GetCardBlack();
                 lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
                 lblBlack.Text = blackCard.Text;
 
-                int spacesBlackCard = Room.CheckStringBlackCard();
+                int spacesBlackCard = room.CheckStringBlackCard();
 
                 if (spacesBlackCard == 1)
                 {
@@ -74,19 +111,30 @@
                 }
             }
 
-            //se l'utente nella stanza non è il master allora visualizzo la carta nera e le carte bianche
-            if (!Room.IsMaster(Master.resultUser))
+             //se l'utente nella stanza non è il master allora visualizzo la carta nera e le carte bianche
+            if (!room.IsMaster(Master.resultUser))
             {
+               /*btnWhite1.Attributes.Clear();
+                btnWhite2.Attributes.Clear();
+                btnWhite3.Attributes.Clear();
+                btnWhite4.Attributes.Clear();
+                btnWhite5.Attributes.Clear();
+                btnWhite6.Attributes.Clear();
+                btnWhite7.Attributes.Clear();
+                btnWhite8.Attributes.Clear();
+                btnWhite9.Attributes.Clear();
+                btnWhite10.Attributes.Clear();*/
+                
                 lblTimerMaster.Visible = false;
 
                 btnConfirmWinner.Visible = false;
 
-                blackCard = Room.GetCardBlack();
+                blackCard = room.GetCardBlack();
                 lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
                 lblBlack.Text = blackCard.Text;
 
-                whiteCards = Room.GetNewCardsWhite();
-
+                whiteCards = room.GetCardsWhite(Master.resultUser);
+                
                 /* lblWhite1.Attributes.Add("value", whiteCards[0].idCards.ToString());
                  lblWhite1.Text = whiteCards[0].Text;*/
 
@@ -120,49 +168,9 @@
                 btnWhite10.Attributes.Add("value", whiteCards[9].idCards.ToString());
                 btnWhite10.Text = whiteCards[9].Text;
             }
-            
+             
             stateChanged = false;
-        }
-    }
-    
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        FunctionsDB.OpenConnectionDB();
-            
-        int points = FunctionsDB.ReadPoints(indexRoom, Master.resultUser);
-        
-        lblPoints.Text = "Punteggio: " + points;
-         
-        btnNewCard.Visible = false;
-        
-        lblUser1.Visible = false;
-        lblUser2.Visible = false;
-        lblUser3.Visible = false;
-        lblUser4.Visible = false;
-        lblUser5.Visible = false;
-        lblUser6.Visible = false;
-        lblUser7.Visible = false;
-        lblUser8.Visible = false;
-        lblUser9.Visible = false;
-        lblUser10.Visible = false;
-        lblUser11.Visible = false;
-        lblUser12.Visible = false;
-
-        btnWhite11.Visible = false;
-        btnWhite12.Visible = false;
-
-        if (!Page.IsPostBack)
-        {
-            stateChanged = true;
-            Session["time1"] = 40; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
-            Session["time2"] = 40;
-            /* 100 = 1 min e 40 sec
-             * 90 = 1 min 30 sec
-             * 50 = 50 sec
-             */
-        }
-
-        StateChanged();     
+        }  
     }
     
     protected void Timer1_Tick(object sender, EventArgs e)
@@ -172,7 +180,7 @@
         {
             lblTimer.Text = "TimeOut!";
 
-            if (Room.IsMaster(Master.resultUser))
+            if (room.IsMaster(Master.resultUser))
             {
                 lblTimerMaster.Visible = true;
                 btnConfirmWinner.Visible = true;
@@ -193,13 +201,13 @@
                     lblTimerMaster.Text = time;
                 }
 
-                if (Room.CheckUserCardSelected(indexRoom))
+                if (room.CheckUserCardSelected(indexRoom))
                 {
                     List<Cards> textCardSelect = FunctionsDB.ReadTetxtCardsSelect(indexRoom);
 
-                    int spacesBlackCard = Room.CheckStringBlackCard();
+                    int spacesBlackCard = room.CheckStringBlackCard();
                     
-                    if (Room.UsersNotMaster(indexRoom) == 4)
+                    if (room.UsersNotMaster(indexRoom) == 4)
                     {
                         if (spacesBlackCard == 1)
                         {
@@ -231,7 +239,6 @@
 
                             /*btnWhite4.Attributes.Add("value", textCardSelect[3].idCards.ToString());
                             btnWhite4.Text = textCardSelect[3].Text;*/
-
                         }
 
                         if (spacesBlackCard == 2)
@@ -371,7 +378,7 @@
                         }
                     }
 
-                    if (Room.UsersNotMaster(indexRoom) == 2)
+                    if (room.UsersNotMaster(indexRoom) == 2)
                     {
                         if (spacesBlackCard == 1)
                         {
@@ -532,7 +539,9 @@
             c.Text = btnWhite1.Text;
             c.idCards = Convert.ToInt32(btnWhite1.Attributes["value"]);
             CardsSelect.Add(c);
+            btnWhite1.Attributes.Clear();
             btnWhite1.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
         if (CheckBox2.Checked)
         {
@@ -540,7 +549,9 @@
             c.Text = btnWhite2.Text;
             c.idCards = Convert.ToInt32(btnWhite2.Attributes["value"]);
             CardsSelect.Add(c);
+            btnWhite2.Attributes.Clear();
             btnWhite2.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
         if (CheckBox3.Checked)
         {
@@ -548,7 +559,9 @@
             c.Text = btnWhite3.Text;
             c.idCards = Convert.ToInt32(btnWhite3.Attributes["value"]);
             CardsSelect.Add(c);
+            btnWhite3.Attributes.Clear();
             btnWhite3.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
         if (CheckBox4.Checked)
         {
@@ -556,7 +569,9 @@
             c.Text = btnWhite4.Text;
             c.idCards = Convert.ToInt32(btnWhite4.Attributes["value"]);
             CardsSelect.Add(c);
+            btnWhite4.Attributes.Clear();
             btnWhite4.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
         if (CheckBox5.Checked)
         {
@@ -564,7 +579,9 @@
             c.Text = btnWhite5.Text;
             c.idCards = Convert.ToInt32(btnWhite5.Attributes["value"]);
             CardsSelect.Add(c);
+            btnWhite5.Attributes.Clear();
             btnWhite5.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
         if (CheckBox6.Checked)
         {
@@ -572,7 +589,9 @@
             c.Text = btnWhite6.Text;
             c.idCards = Convert.ToInt32(btnWhite6.Attributes["value"]);
             CardsSelect.Add(c);
+            btnWhite6.Attributes.Clear();
             btnWhite6.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
         if (CheckBox7.Checked)
         {
@@ -580,7 +599,9 @@
             c.Text = btnWhite7.Text;
             c.idCards = Convert.ToInt32(btnWhite7.Attributes["value"]);
             CardsSelect.Add(c);
+            btnWhite7.Attributes.Clear();
             btnWhite7.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
         if (CheckBox8.Checked)
         {
@@ -588,7 +609,9 @@
             c.Text = btnWhite8.Text;
             c.idCards = Convert.ToInt32(btnWhite8.Attributes["value"]);
             CardsSelect.Add(c);
+            btnWhite8.Attributes.Clear();
             btnWhite8.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
         if (CheckBox9.Checked)
         {
@@ -596,7 +619,9 @@
             c.Text = btnWhite9.Text;
             c.idCards = Convert.ToInt32(btnWhite9.Attributes["value"]);
             CardsSelect.Add(c);
+            btnWhite9.Attributes.Clear();
             btnWhite9.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
         if (CheckBox10.Checked)
         {
@@ -604,19 +629,22 @@
             c.Text = btnWhite10.Text;
             c.idCards = Convert.ToInt32(btnWhite10.Attributes["value"]);
             CardsSelect.Add(c);
+            btnWhite10.Attributes.Clear();
             btnWhite10.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
         
-        Room.UsersAndCards(CardsSelect, indexRoom, user);
+        room.UsersAndCards(CardsSelect, indexRoom, user);
 
         Timer1.Enabled = false;
         
         lblTimer.Text = "TimeOut!";
 
-        if(!Room.IsMaster(Master.resultUser))
+        if(!room.IsMaster(Master.resultUser))
         {
             btnNewCard.Visible = true;
         }
+        
         btnConfirmCardSelect.Enabled = false;
     }
 
@@ -624,9 +652,9 @@
     {
         Cards CardSelect = new Cards();
 
-        int spacesBlackCard = Room.CheckStringBlackCard();
+        int spacesBlackCard = room.CheckStringBlackCard();
 
-        if (Room.UsersNotMaster(indexRoom) == 4)
+        if (room.UsersNotMaster(indexRoom) == 4)
         {
             if (spacesBlackCard == 1)
             {
@@ -758,7 +786,7 @@
             }
         }
 
-        if (Room.UsersNotMaster(indexRoom) == 2)
+        if (room.UsersNotMaster(indexRoom) == 2)
         {
             if (spacesBlackCard == 1)
             {
@@ -867,7 +895,7 @@
 
         if (spacesBlackCard == 1)
         {
-            if (Room.UsersNotMaster(indexRoom) == 4)
+            if (room.UsersNotMaster(indexRoom) == 4)
             {
                 lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
                 lblUser1.Text = usernames[0].Username;
@@ -882,7 +910,7 @@
                 lblUser4.Text = usernames[3].Username;*/
             }
 
-            if (Room.UsersNotMaster(indexRoom) == 2)
+            if (room.UsersNotMaster(indexRoom) == 2)
             {
                 lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
                 lblUser1.Text = usernames[0].Username;
@@ -897,9 +925,8 @@
 
         if (spacesBlackCard == 2)
         {
-            if (Room.UsersNotMaster(indexRoom) == 4)
+            if (room.UsersNotMaster(indexRoom) == 4)
             {
-
                 lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
                 lblUser1.Text = usernames[0].Username;
 
@@ -925,7 +952,7 @@
                 lblUser8.Text = usernames[7].Username;*/
             }
 
-            if (Room.UsersNotMaster(indexRoom) == 2)
+            if (room.UsersNotMaster(indexRoom) == 2)
             {
                 lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
                 lblUser1.Text = usernames[0].Username;
@@ -949,7 +976,7 @@
 
         if (spacesBlackCard == 3)
         {
-            if (Room.UsersNotMaster(indexRoom) == 4)
+            if (room.UsersNotMaster(indexRoom) == 4)
             {
                 lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
                 lblUser1.Text = usernames[0].Username;
@@ -988,7 +1015,7 @@
                 lblUser12.Text = usernames[1].Username;*/
             }
 
-            if (Room.UsersNotMaster(indexRoom) == 2)
+            if (room.UsersNotMaster(indexRoom) == 2)
             {
                 lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
                 lblUser1.Text = usernames[0].Username;
@@ -1034,88 +1061,95 @@
 
         btnConfirmWinner.Enabled = false;
 
-        if(Room.IsMaster(Master.resultUser))
-        {
-            Cards NewBlackCard = Room.GetCardBlack();
-            lblBlack.Attributes.Add("value", NewBlackCard.idCards.ToString());
-            lblBlack.Text = NewBlackCard.Text;
-        }
-        if(!Room.IsMaster(Master.resultUser))
-        {
-            Cards NewBlackCard = Room.GetCardBlack();
-            lblBlack.Attributes.Add("value", NewBlackCard.idCards.ToString());
-            lblBlack.Text = NewBlackCard.Text;
-        }
-        Room.NewMaster(indexRoom);
+        room.NewRaund(indexRoom);
     }
 
     protected void NewCardWhite()
     {
         if (btnWhite1.Text == "")
         {
-            Cards textCard = Room.GetNewCardWhite();
+            room.GenerateCardForUser(Master.resultUser);
+            Cards textCard = room.GetNewCardWhite(Master.resultUser);
+            
             btnWhite1.Attributes.Add("value", textCard.idCards.ToString());
             btnWhite1.Text = textCard.Text;
         }
         if (btnWhite2.Text == "")
         {
-            Cards textCard = Room.GetNewCardWhite();
+            room.GenerateCardForUser(Master.resultUser);
+            Cards textCard = room.GetNewCardWhite(Master.resultUser);
+
             btnWhite2.Attributes.Add("value", textCard.idCards.ToString());
             btnWhite2.Text = textCard.Text;
         }
         if (btnWhite3.Text == "")
         {
-            Cards textCard = Room.GetNewCardWhite();
+            room.GenerateCardForUser(Master.resultUser);
+            Cards textCard = room.GetNewCardWhite(Master.resultUser);
+
             btnWhite3.Attributes.Add("value", textCard.idCards.ToString());
             btnWhite3.Text = textCard.Text;
         }
         if (btnWhite4.Text == "")
         {
-            Cards textCard = Room.GetNewCardWhite();
+            room.GenerateCardForUser(Master.resultUser);
+            Cards textCard = room.GetNewCardWhite(Master.resultUser);
+
             btnWhite4.Attributes.Add("value", textCard.idCards.ToString());
             btnWhite4.Text = textCard.Text;
         }
         if (btnWhite5.Text == "")
         {
-            Cards textCard = Room.GetNewCardWhite();
+            room.GenerateCardForUser(Master.resultUser);
+            Cards textCard = room.GetNewCardWhite(Master.resultUser);
+
             btnWhite5.Attributes.Add("value", textCard.idCards.ToString());
             btnWhite5.Text = textCard.Text;
         }
         if (btnWhite6.Text == "")
         {
-            Cards textCard = Room.GetNewCardWhite();
+            room.GenerateCardForUser(Master.resultUser);
+            Cards textCard = room.GetNewCardWhite(Master.resultUser);
+
             btnWhite6.Attributes.Add("value", textCard.idCards.ToString());
             btnWhite6.Text = textCard.Text;
         }
         if (btnWhite7.Text == "")
         {
-            Cards textCard = Room.GetNewCardWhite();
+            room.GenerateCardForUser(Master.resultUser);
+            Cards textCard = room.GetNewCardWhite(Master.resultUser);
+
             btnWhite7.Attributes.Add("value", textCard.idCards.ToString());
             btnWhite7.Text = textCard.Text;
         }
         if (btnWhite8.Text == "")
         {
-            Cards textCard = Room.GetNewCardWhite();
+            room.GenerateCardForUser(Master.resultUser);
+            Cards textCard = room.GetNewCardWhite(Master.resultUser);
+
             btnWhite8.Attributes.Add("value", textCard.idCards.ToString());
             btnWhite8.Text = textCard.Text;
         }
         if (btnWhite9.Text == "")
         {
-            Cards textCard = Room.GetNewCardWhite();
+            room.GenerateCardForUser(Master.resultUser);
+            Cards textCard = room.GetNewCardWhite(Master.resultUser);
+
             btnWhite9.Attributes.Add("value", textCard.idCards.ToString());
             btnWhite9.Text = textCard.Text;
         }
         if (btnWhite10.Text == "")
         {
-            Cards textCard = Room.GetNewCardWhite();
+            room.GenerateCardForUser(Master.resultUser);
+            Cards textCard = room.GetNewCardWhite(Master.resultUser);
+
             btnWhite10.Attributes.Add("value", textCard.idCards.ToString());
             btnWhite10.Text = textCard.Text;
         }
     }
     protected void btnNewCard_Click(object sender, EventArgs e)
     {
-        int spacesBlackCard = Room.CheckStringBlackCard();
-
+        int spacesBlackCard = room.CheckStringBlackCard();
         if (spacesBlackCard == 1)
         {
             NewCardWhite();
@@ -1130,6 +1164,7 @@
         {
             NewCardWhite();
         }
+
     }
 </script>
 

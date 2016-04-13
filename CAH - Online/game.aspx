@@ -1061,7 +1061,12 @@
 
         btnConfirmWinner.Enabled = false;
 
+        if(room.IsMaster(Master.resultUser))
+        {
+            room.GenerateCardsForUser(Master.resultUser);
+        }
         room.NewRaund(indexRoom);
+        
     }
 
     protected void NewCardWhite()
@@ -1164,7 +1169,6 @@
         {
             NewCardWhite();
         }
-
     }
 </script>
 

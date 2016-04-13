@@ -22,6 +22,7 @@ namespace CAHOnline
                 Rooms.Add(room);
                 room.AddUser(user);
                 FunctionsDB.WriteGame(user, 0);
+                room.GenerateCardsForUser(user);
                 return true;
             }
             else //Se la lista rooms non è vuota allora controllo nelle rooms se c'è spazio, e se ce nè allora aggiungo lo user nella prima room non piena

@@ -165,7 +165,7 @@
                 btnWhite9.Attributes.Add("value", whiteCards[8].idCards.ToString());
                 btnWhite9.Text = whiteCards[8].Text;
 
-                btnWhite10.Attributes.Add("value", whiteCards[9].idCards.ToString());
+                //btnWhite10.Attributes.Add("value", whiteCards[9].idCards.ToString());
                 btnWhite10.Text = whiteCards[9].Text;
             }
              
@@ -640,9 +640,35 @@
         
         lblTimer.Text = "TimeOut!";
 
-        if(!room.IsMaster(Master.resultUser))
+        if (!room.IsMaster(Master.resultUser))
         {
-            btnNewCard.Visible = true;
+            CheckBox1.Enabled = false;
+            CheckBox2.Enabled = false;
+            CheckBox3.Enabled = false;
+            CheckBox4.Enabled = false;
+            CheckBox5.Enabled = false;
+            CheckBox6.Enabled = false;
+            CheckBox7.Enabled = false;
+            CheckBox8.Enabled = false;
+            CheckBox9.Enabled = false;
+            CheckBox10.Enabled = false;
+
+            int spacesBlackCard = room.CheckStringBlackCard();
+            if (spacesBlackCard == 1)
+            {
+                NewCardWhite();
+            }
+
+            if (spacesBlackCard == 2)
+            {
+                NewCardWhite();
+            }
+
+            if (spacesBlackCard == 3)
+            {
+                NewCardWhite();
+            }
+
         }
         
         btnConfirmCardSelect.Enabled = false;
@@ -1061,10 +1087,10 @@
 
         btnConfirmWinner.Enabled = false;
 
-        if(room.IsMaster(Master.resultUser))
+       /* if(room.IsMaster(Master.resultUser))
         {
             room.GenerateCardsForUser(Master.resultUser);
-        }
+        }*/
         room.NewRaund(indexRoom);
         
     }

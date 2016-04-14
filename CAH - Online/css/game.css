@@ -27,7 +27,11 @@
 	margin: auto;
 	box-shadow: 5px 5px 5px #757575;
 	font-size: 1em;
+    padding-bottom: 155px;
+    text-align: left;
+    white-space: normal;
 }
+
 
 .white-card p, .black-card p
 {
@@ -72,7 +76,7 @@
 }
 
 .game-container{
-	padding: 25px;
+	padding: 35px;
 	background-image: url(../img/sfondo1.jpg);
 	border-radius: 8px;
 }
@@ -82,6 +86,6 @@
 	height: calc(100% - 200px);
 }
 
-a.text-white{
+text-white{
     color: black !important;
 }

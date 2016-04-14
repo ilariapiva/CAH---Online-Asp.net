@@ -28,9 +28,7 @@
         int points = FunctionsDB.ReadPoints(indexRoom, Master.resultUser);
         
         lblPoints.Text = "Punteggio: " + points;
-         
-        btnNewCard.Visible = false;
-        
+
         lblUser1.Visible = false;
         lblUser2.Visible = false;
         lblUser3.Visible = false;
@@ -68,18 +66,6 @@
                 lblTimer.Visible = false;
 
                 btnConfirmWinner.Visible = false;
-
-                CheckBox1.Visible = false;
-                CheckBox2.Visible = false;
-                CheckBox3.Visible = false;
-                CheckBox4.Visible = false;
-                CheckBox5.Visible = false;
-                CheckBox6.Visible = false;
-                CheckBox7.Visible = false;
-                CheckBox8.Visible = false;
-                CheckBox9.Visible = false;
-                CheckBox10.Visible = false;
-
                 btnConfirmCardSelect.Visible = false;
 
                 blackCard = room.GetCardBlack();
@@ -114,17 +100,6 @@
              //se l'utente nella stanza non è il master allora visualizzo la carta nera e le carte bianche
             if (!room.IsMaster(Master.resultUser))
             {
-               /*btnWhite1.Attributes.Clear();
-                btnWhite2.Attributes.Clear();
-                btnWhite3.Attributes.Clear();
-                btnWhite4.Attributes.Clear();
-                btnWhite5.Attributes.Clear();
-                btnWhite6.Attributes.Clear();
-                btnWhite7.Attributes.Clear();
-                btnWhite8.Attributes.Clear();
-                btnWhite9.Attributes.Clear();
-                btnWhite10.Attributes.Clear();*/
-                
                 lblTimerMaster.Visible = false;
 
                 btnConfirmWinner.Visible = false;
@@ -134,10 +109,7 @@
                 lblBlack.Text = blackCard.Text;
 
                 whiteCards = room.GetCardsWhite(Master.resultUser);
-                
-                /* lblWhite1.Attributes.Add("value", whiteCards[0].idCards.ToString());
-                 lblWhite1.Text = whiteCards[0].Text;*/
-
+               
                 btnWhite1.Attributes.Add("value", whiteCards[0].idCards.ToString());
                 btnWhite1.Text = whiteCards[0].Text;
 
@@ -165,7 +137,7 @@
                 btnWhite9.Attributes.Add("value", whiteCards[8].idCards.ToString());
                 btnWhite9.Text = whiteCards[8].Text;
 
-                //btnWhite10.Attributes.Add("value", whiteCards[9].idCards.ToString());
+                btnWhite10.Attributes.Add("value", whiteCards[9].idCards.ToString());
                 btnWhite10.Text = whiteCards[9].Text;
             }
              
@@ -211,11 +183,6 @@
                     {
                         if (spacesBlackCard == 1)
                         {
-                            CheckBox1.Visible = true;
-                            CheckBox2.Visible = true;
-                            CheckBox3.Visible = true;
-                            CheckBox4.Visible = true;
-
                             lblUser1.Visible = true;
                             lblUser1.Text = "User 1";
 
@@ -243,11 +210,6 @@
 
                         if (spacesBlackCard == 2)
                         {
-                            CheckBox1.Visible = true;
-                            CheckBox3.Visible = true;
-                            CheckBox5.Visible = true;
-                            CheckBox7.Visible = true;
-
                             lblUser1.Visible = true;
                             lblUser1.Text = "User 1";
 
@@ -295,15 +257,16 @@
 
                             btnWhite8.Attributes.Add("value", textCardSelect[7].idCards.ToString());
                             btnWhite8.Text = textCardSelect[7].Text;*/
+
+                            btnWhite2.Enabled = false;
+                            btnWhite4.Enabled = false;
+                            btnWhite6.Enabled = false;
+                            //btnWhite8.Enabled = false;
+                            
                         }
 
                         if (spacesBlackCard == 3)
                         {
-                            CheckBox1.Visible = true;
-                            CheckBox4.Visible = true;
-                            CheckBox7.Visible = true;
-                            CheckBox10.Visible = true;
-
                             lblUser1.Visible = true;
                             lblUser1.Text = "User 1";
 
@@ -375,6 +338,15 @@
 
                             btnWhite12.Attributes.Add("value", textCardSelect[11].idCards.ToString());
                             btnWhite12.Text = textCardSelect[11].Text;*/
+
+                            btnWhite2.Enabled = false;
+                            btnWhite3.Enabled = false;
+                            btnWhite5.Enabled = false;
+                            btnWhite6.Enabled = false;
+                            btnWhite8.Enabled = false;
+                            btnWhite9.Enabled = false;
+                            /*btnWhite11.Enabled = false;
+                            btnWhite10.Enabled = false;*/
                         }
                     }
 
@@ -382,10 +354,6 @@
                     {
                         if (spacesBlackCard == 1)
                         {
-                            CheckBox1.Visible = true;
-                            CheckBox2.Visible = true;
-                           //CheckBox3.Visible = true;
-                           
                             lblUser1.Visible = true;
                             lblUser1.Text = "User 1";
 
@@ -407,10 +375,6 @@
 
                         if (spacesBlackCard == 2)
                         {
-                            CheckBox1.Visible = true;
-                            CheckBox3.Visible = true;
-                           //CheckBox5.Visible = true;
-
                             lblUser1.Visible = true;
                             lblUser1.Text = "User 1";
 
@@ -446,14 +410,14 @@
 
                             btnWhite6.Attributes.Add("value", textCardSelect[5].idCards.ToString());
                             btnWhite6.Text = textCardSelect[5].Text;*/
+                            
+                            btnWhite2.Enabled = false;
+                            btnWhite4.Enabled = false;
+                            //btnWhite6.Enabled = false;                   
                         }
 
                         if (spacesBlackCard == 3)
                         {
-                            CheckBox1.Visible = true;
-                            CheckBox4.Visible = true;
-                            //CheckBox7.Visible = true;
-                            
                             lblUser1.Visible = true;
                             lblUser1.Text = "User 1";
 
@@ -507,6 +471,13 @@
 
                             btnWhite9.Attributes.Add("value", textCardSelect[8].idCards.ToString());
                             btnWhite9.Text = textCardSelect[8].Text;*/
+
+                            btnWhite2.Enabled = false;
+                            btnWhite3.Enabled = false;
+                            btnWhite5.Enabled = false;
+                            btnWhite6.Enabled = false;
+                            /*btnWhite8.Enabled = false;
+                            btnWhite9.Enabled = false; */
                         }
                     }
                 }
@@ -533,7 +504,8 @@
 
         /*Controllo se ogni checkBox è stata selezionata, e se è stata selezionata 
           allora inserisco l'id della carta in una lista*/
-        if (CheckBox1.Checked)
+       
+        if(btnWhite1.BackColor == System.Drawing.Color.LightBlue)
         {
             Cards c = new Cards();
             c.Text = btnWhite1.Text;
@@ -543,7 +515,7 @@
             btnWhite1.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
-        if (CheckBox2.Checked)
+        if (btnWhite2.BackColor == System.Drawing.Color.LightBlue)
         {
             Cards c = new Cards();
             c.Text = btnWhite2.Text;
@@ -553,7 +525,7 @@
             btnWhite2.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
-        if (CheckBox3.Checked)
+        if (btnWhite3.BackColor == System.Drawing.Color.LightBlue)
         {
             Cards c = new Cards();
             c.Text = btnWhite3.Text;
@@ -563,7 +535,7 @@
             btnWhite3.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
-        if (CheckBox4.Checked)
+        if (btnWhite4.BackColor == System.Drawing.Color.LightBlue)
         {
             Cards c = new Cards();
             c.Text = btnWhite4.Text;
@@ -573,7 +545,7 @@
             btnWhite4.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
-        if (CheckBox5.Checked)
+        if (btnWhite5.BackColor == System.Drawing.Color.LightBlue)
         {
             Cards c = new Cards();
             c.Text = btnWhite5.Text;
@@ -583,7 +555,7 @@
             btnWhite5.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
-        if (CheckBox6.Checked)
+        if (btnWhite6.BackColor == System.Drawing.Color.LightBlue)
         {
             Cards c = new Cards();
             c.Text = btnWhite6.Text;
@@ -593,7 +565,7 @@
             btnWhite6.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
-        if (CheckBox7.Checked)
+        if (btnWhite7.BackColor == System.Drawing.Color.LightBlue)
         {
             Cards c = new Cards();
             c.Text = btnWhite7.Text;
@@ -603,7 +575,7 @@
             btnWhite7.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
-        if (CheckBox8.Checked)
+        if (btnWhite8.BackColor == System.Drawing.Color.LightBlue)
         {
             Cards c = new Cards();
             c.Text = btnWhite8.Text;
@@ -613,7 +585,7 @@
             btnWhite8.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
-        if (CheckBox9.Checked)
+        if (btnWhite9.BackColor == System.Drawing.Color.LightBlue)
         {
             Cards c = new Cards();
             c.Text = btnWhite9.Text;
@@ -623,7 +595,7 @@
             btnWhite9.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
-        if (CheckBox10.Checked)
+        if (btnWhite10.BackColor == System.Drawing.Color.LightBlue)
         {
             Cards c = new Cards();
             c.Text = btnWhite10.Text;
@@ -642,17 +614,6 @@
 
         if (!room.IsMaster(Master.resultUser))
         {
-            CheckBox1.Enabled = false;
-            CheckBox2.Enabled = false;
-            CheckBox3.Enabled = false;
-            CheckBox4.Enabled = false;
-            CheckBox5.Enabled = false;
-            CheckBox6.Enabled = false;
-            CheckBox7.Enabled = false;
-            CheckBox8.Enabled = false;
-            CheckBox9.Enabled = false;
-            CheckBox10.Enabled = false;
-
             int spacesBlackCard = room.CheckStringBlackCard();
             if (spacesBlackCard == 1)
             {
@@ -684,28 +645,28 @@
         {
             if (spacesBlackCard == 1)
             {
-                if (CheckBox1.Checked)
+                if (btnWhite1.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite1.Text;
                     c.idCards = Convert.ToInt32(btnWhite1.Attributes["value"]);
                     CardSelect = c;
                 }
-                if (CheckBox2.Checked)
+                if (btnWhite2.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite2.Text;
                     c.idCards = Convert.ToInt32(btnWhite2.Attributes["value"]);
                     CardSelect = c;
                 }
-                if (CheckBox3.Checked)
+                if (btnWhite3.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite3.Text;
                     c.idCards = Convert.ToInt32(btnWhite3.Attributes["value"]);
                     CardSelect = c;
                 }
-                if (CheckBox4.Checked)
+                if (btnWhite4.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite4.Text;
@@ -721,7 +682,7 @@
 
             if (spacesBlackCard == 2)
             {
-                if (CheckBox1.Checked)
+                if (btnWhite1.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite1.Text;
@@ -729,7 +690,7 @@
                     CardSelect = c;
                 }
 
-                if (CheckBox3.Checked)
+                if (btnWhite3.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite3.Text;
@@ -737,7 +698,7 @@
                     CardSelect = c;
                 }
 
-                if (CheckBox5.Checked)
+                if (btnWhite5.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite5.Text;
@@ -745,14 +706,13 @@
                     CardSelect = c;
                 }
 
-                if (CheckBox7.Checked)
+                if (btnWhite7.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite7.Text;
                     c.idCards = Convert.ToInt32(btnWhite7.Attributes["value"]);
                     CardSelect = c;
                 }
-
                 lblUser1.Visible = true;
                 lblUser2.Visible = true;
                 lblUser3.Visible = true;
@@ -765,7 +725,7 @@
 
             if (spacesBlackCard == 3)
             {
-                if (CheckBox1.Checked)
+                if (btnWhite1.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite1.Text;
@@ -773,7 +733,7 @@
                     CardSelect = c;
                 }
 
-                if (CheckBox4.Checked)
+                if (btnWhite4.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite4.Text;
@@ -781,7 +741,7 @@
                     CardSelect = c;
                 }
 
-                if (CheckBox7.Checked)
+                if (btnWhite7.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite7.Text;
@@ -789,14 +749,14 @@
                     CardSelect = c;
                 }
 
-                if (CheckBox10.Checked)
+                if (btnWhite10.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite10.Text;
                     c.idCards = Convert.ToInt32(btnWhite10.Attributes["value"]);
                     CardSelect = c;
                 }
-
+               
                 lblUser1.Visible = true;
                 lblUser2.Visible = true;
                 lblUser3.Visible = true;
@@ -816,21 +776,21 @@
         {
             if (spacesBlackCard == 1)
             {
-                if (CheckBox1.Checked)
+                if (btnWhite1.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite1.Text;
                     c.idCards = Convert.ToInt32(btnWhite1.Attributes["value"]);
                     CardSelect = c;
                 }
-                if (CheckBox2.Checked)
+                if (btnWhite2.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite2.Text;
                     c.idCards = Convert.ToInt32(btnWhite2.Attributes["value"]);
                     CardSelect = c;
                 }
-                /*if (CheckBox3.Checked)
+                /*if (btnWhite3.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite3.Text;
@@ -845,7 +805,7 @@
 
             if (spacesBlackCard == 2)
             {
-                if (CheckBox1.Checked)
+                if (btnWhite1.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite1.Text;
@@ -853,7 +813,7 @@
                     CardSelect = c;
                 }
 
-                if (CheckBox3.Checked)
+                if (btnWhite3.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite3.Text;
@@ -861,14 +821,14 @@
                     CardSelect = c;
                 }
 
-                /* if (CheckBox5.Checked)
+                /* if (btnWhite5.BackColor == System.Drawing.Color.LightBlue)
                  {
                      Cards c = new Cards();
                      c.Text = btnWhite5.Text;
                      c.idCards = Convert.ToInt32(btnWhite5.Attributes["value"]);
                      CardSelect = c;
                  }*/
-
+                
                 lblUser1.Visible = true;
                 lblUser2.Visible = true;
                 lblUser3.Visible = true;
@@ -879,7 +839,7 @@
 
             if (spacesBlackCard == 3)
             {
-                if (CheckBox1.Checked)
+                if (btnWhite1.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite1.Text;
@@ -887,7 +847,7 @@
                     CardSelect = c;
                 }
 
-                if (CheckBox4.Checked)
+                if (btnWhite4.BackColor == System.Drawing.Color.LightBlue)
                 {
                     Cards c = new Cards();
                     c.Text = btnWhite4.Text;
@@ -895,14 +855,14 @@
                     CardSelect = c;
                 }
 
-                /* if (CheckBox7.Checked)
+                /* if (btnWhite7.BackColor == System.Drawing.Color.LightBlue)
                  {
                      Cards c = new Cards();
                      c.Text = btnWhite7.Text;
                      c.idCards = Convert.ToInt32(btnWhite7.Attributes["value"]);
                      CardSelect = c;
                  }*/
-
+              
                 lblUser1.Visible = true;
                 lblUser2.Visible = true;
                 lblUser3.Visible = true;
@@ -1078,19 +1038,10 @@
 
         Account userWin = FunctionsDB.ReadUserWin(indexRoom, CardSelect);
 
-        /* if (!Room.IsMaster(Master.resultUser))
-         {
-
-         }*/
-
         FunctionsDB.DeleteLinesDB(indexRoom);
 
         btnConfirmWinner.Enabled = false;
 
-       /* if(room.IsMaster(Master.resultUser))
-        {
-            room.GenerateCardsForUser(Master.resultUser);
-        }*/
         room.NewRaund(indexRoom);
         
     }
@@ -1099,14 +1050,25 @@
     {
         if (btnWhite1.Text == "")
         {
+            if (btnWhite1.BackColor == System.Drawing.Color.LightBlue)
+            {
+                btnWhite1.BackColor = System.Drawing.Color.White;
+            }
+           
             room.GenerateCardForUser(Master.resultUser);
             Cards textCard = room.GetNewCardWhite(Master.resultUser);
             
             btnWhite1.Attributes.Add("value", textCard.idCards.ToString());
             btnWhite1.Text = textCard.Text;
+            
         }
         if (btnWhite2.Text == "")
         {
+            if (btnWhite2.BackColor == System.Drawing.Color.LightBlue)
+            {
+                btnWhite2.BackColor = System.Drawing.Color.White;
+            }
+      
             room.GenerateCardForUser(Master.resultUser);
             Cards textCard = room.GetNewCardWhite(Master.resultUser);
 
@@ -1115,6 +1077,10 @@
         }
         if (btnWhite3.Text == "")
         {
+            if (btnWhite3.BackColor == System.Drawing.Color.LightBlue)
+            {
+                btnWhite3.BackColor = System.Drawing.Color.White;
+            }
             room.GenerateCardForUser(Master.resultUser);
             Cards textCard = room.GetNewCardWhite(Master.resultUser);
 
@@ -1123,6 +1089,10 @@
         }
         if (btnWhite4.Text == "")
         {
+            if (btnWhite4.BackColor == System.Drawing.Color.LightBlue)
+            {
+                btnWhite4.BackColor = System.Drawing.Color.White;
+            }
             room.GenerateCardForUser(Master.resultUser);
             Cards textCard = room.GetNewCardWhite(Master.resultUser);
 
@@ -1131,6 +1101,10 @@
         }
         if (btnWhite5.Text == "")
         {
+            if (btnWhite5.BackColor == System.Drawing.Color.LightBlue)
+            {
+                btnWhite5.BackColor = System.Drawing.Color.White;
+            }
             room.GenerateCardForUser(Master.resultUser);
             Cards textCard = room.GetNewCardWhite(Master.resultUser);
 
@@ -1139,6 +1113,10 @@
         }
         if (btnWhite6.Text == "")
         {
+            if (btnWhite6.BackColor == System.Drawing.Color.LightBlue)
+            {
+                btnWhite6.BackColor = System.Drawing.Color.White;
+            }
             room.GenerateCardForUser(Master.resultUser);
             Cards textCard = room.GetNewCardWhite(Master.resultUser);
 
@@ -1147,6 +1125,10 @@
         }
         if (btnWhite7.Text == "")
         {
+            if (btnWhite7.BackColor == System.Drawing.Color.LightBlue)
+            {
+                btnWhite7.BackColor = System.Drawing.Color.White;
+            }
             room.GenerateCardForUser(Master.resultUser);
             Cards textCard = room.GetNewCardWhite(Master.resultUser);
 
@@ -1155,6 +1137,10 @@
         }
         if (btnWhite8.Text == "")
         {
+            if (btnWhite8.BackColor == System.Drawing.Color.LightBlue)
+            {
+                btnWhite8.BackColor = System.Drawing.Color.White;
+            }
             room.GenerateCardForUser(Master.resultUser);
             Cards textCard = room.GetNewCardWhite(Master.resultUser);
 
@@ -1163,6 +1149,10 @@
         }
         if (btnWhite9.Text == "")
         {
+            if (btnWhite9.BackColor == System.Drawing.Color.LightBlue)
+            {
+                btnWhite9.BackColor = System.Drawing.Color.White;
+            }
             room.GenerateCardForUser(Master.resultUser);
             Cards textCard = room.GetNewCardWhite(Master.resultUser);
 
@@ -1171,6 +1161,10 @@
         }
         if (btnWhite10.Text == "")
         {
+            if (btnWhite10.BackColor == System.Drawing.Color.LightBlue)
+            {
+                btnWhite10.BackColor = System.Drawing.Color.White;
+            }
             room.GenerateCardForUser(Master.resultUser);
             Cards textCard = room.GetNewCardWhite(Master.resultUser);
 
@@ -1178,22 +1172,124 @@
             btnWhite10.Text = textCard.Text;
         }
     }
-    protected void btnNewCard_Click(object sender, EventArgs e)
+   
+    protected void btnWhite1_Click(object sender, EventArgs e)
     {
-        int spacesBlackCard = room.CheckStringBlackCard();
-        if (spacesBlackCard == 1)
+        if (btnWhite1.BackColor == System.Drawing.Color.LightBlue)
         {
-            NewCardWhite();
+            btnWhite1.BackColor = System.Drawing.Color.White;
         }
-
-        if (spacesBlackCard == 2)
+        else
         {
-            NewCardWhite();
+            btnWhite1.BackColor = System.Drawing.Color.LightBlue;
         }
+    }
 
-        if (spacesBlackCard == 3)
+    protected void btnWhite2_Click(object sender, EventArgs e)
+    {
+        if(btnWhite2.BackColor == System.Drawing.Color.LightBlue)
         {
-            NewCardWhite();
+            btnWhite2.BackColor = System.Drawing.Color.White;
+        }
+        else
+        {
+            btnWhite2.BackColor = System.Drawing.Color.LightBlue;
+        }
+    }
+
+    protected void btnWhite3_Click(object sender, EventArgs e)
+    {
+        if(btnWhite3.BackColor == System.Drawing.Color.LightBlue)
+        {
+            btnWhite3.BackColor = System.Drawing.Color.White;
+        }
+        else
+        {
+            btnWhite3.BackColor = System.Drawing.Color.LightBlue;
+        }
+    }
+
+    protected void btnWhite4_Click(object sender, EventArgs e)
+    {
+        if(btnWhite4.BackColor == System.Drawing.Color.LightBlue)
+        {
+            btnWhite4.BackColor = System.Drawing.Color.White;   
+        }
+        else
+        {
+            btnWhite4.BackColor = System.Drawing.Color.LightBlue;
+        }
+    }
+
+    protected void btnWhite5_Click(object sender, EventArgs e)
+    {
+        if(btnWhite5.BackColor == System.Drawing.Color.LightBlue)
+        {
+            btnWhite5.BackColor = System.Drawing.Color.White;
+        }
+        else
+        {
+            btnWhite5.BackColor = System.Drawing.Color.LightBlue;
+        }
+    }
+
+    protected void btnWhite6_Click(object sender, EventArgs e)
+    {
+        if(btnWhite6.BackColor == System.Drawing.Color.LightBlue)
+        {
+            btnWhite6.BackColor = System.Drawing.Color.White;
+        }
+        else
+        {
+            btnWhite6.BackColor = System.Drawing.Color.LightBlue;
+        }
+    }
+
+    protected void btnWhite7_Click(object sender, EventArgs e)
+    {
+        if(btnWhite7.BackColor == System.Drawing.Color.LightBlue)
+        {
+            btnWhite7.BackColor = System.Drawing.Color.White;
+        }
+        else
+        {
+            btnWhite7.BackColor = System.Drawing.Color.LightBlue;
+        }
+    }
+
+    protected void btnWhite8_Click(object sender, EventArgs e)
+    {
+        if(btnWhite8.BackColor == System.Drawing.Color.LightBlue)
+        {
+            btnWhite8.BackColor = System.Drawing.Color.White;
+        }
+        else
+        {
+            btnWhite8.BackColor = System.Drawing.Color.LightBlue;
+        }
+    }
+
+    protected void btnWhite9_Click(object sender, EventArgs e)
+    {
+        if(btnWhite9.BackColor == System.Drawing.Color.LightBlue)
+        {
+            btnWhite9.BackColor = System.Drawing.Color.White;
+        }
+        else
+        {
+            btnWhite9.BackColor = System.Drawing.Color.LightBlue;
+        }
+    }
+
+    protected void btnWhite10_Click(object sender, EventArgs e)
+    {
+        if(btnWhite10.BackColor == System.Drawing.Color.LightBlue)
+        {
+            btnWhite10.BackColor = System.Drawing.Color.White;
+        }
+        else
+        {
+            btnWhite10.BackColor = System.Drawing.Color.LightBlue;
         }
     }
 </script>
@@ -1216,7 +1312,7 @@
                 <br />
                 <asp:Label ID="lblPoints" runat="server"></asp:Label>
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="card-black-container">
                             <div class="black-card">
                                 <asp:Label ID="lblBlack" runat="server"></asp:Label>
@@ -1226,85 +1322,66 @@
                     <div class="col-md-9">
                         <div class="row">
                             <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite1" CssClass="card-container white-card text-white" runat="server" Text="" />
-                                <!--<div class="card-container">
-                            <div class="white-card">
-                               
-                                <asp:HyperLink ID="lblWhite1" runat="server" CssClass="text-white"></asp:HyperLink>
-                            </div>
-
-                        </div>-->
+                                <asp:Button ID="btnWhite1" CssClass="card-container white-card text-white" runat="server" Text="" OnClick="btnWhite1_Click" />
                                 <div class="username-card">
                                     <asp:Label ID="lblUser1" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox1" runat="server" />
                                 </div>
-
                             </div>
                             <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite2" CssClass="card-container white-card text-white" runat="server" Text="" />
+                                <asp:Button ID="btnWhite2" CssClass="card-container white-card text-white" runat="server" Text="" OnClick="btnWhite2_Click" />
                                 <div class="username-card">
                                     <asp:Label ID="lblUser2" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox2" runat="server" />
                                 </div>
                             </div>
                             <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite3" CssClass="card-container white-card text-white" runat="server" Text="" />
+                                <asp:Button ID="btnWhite3" CssClass="card-container white-card text-white" runat="server" Text="" OnClick="btnWhite3_Click" />
                                 <div class="username-card">
                                     <asp:Label ID="lblUser3" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox3" runat="server" />
                                 </div>
                             </div>
                             <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite4" CssClass="card-container white-card text-white" runat="server" Text="" />
+                                <asp:Button ID="btnWhite4" CssClass="card-container white-card text-white" runat="server" Text="" OnClick="btnWhite4_Click" />
                                 <div class="username-card">
                                     <asp:Label ID="lblUser4" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox4" runat="server" />
                                 </div>
                             </div>
                             <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite5" CssClass="card-container white-card text-white" runat="server" Text="" />
+                                <asp:Button ID="btnWhite5" CssClass="card-container white-card text-white" runat="server" Text="" OnClick="btnWhite5_Click" />
                                 <div class="username-card">
                                     <asp:Label ID="lblUser5" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox5" runat="server" />
                                 </div>
                             </div>
                             <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite6" CssClass="card-container white-card text-white" runat="server" Text="" />
+                                <asp:Button ID="btnWhite6" CssClass="card-container white-card text-white" runat="server" Text="" OnClick="btnWhite6_Click" />
                                 <div class="username-card">
                                     <asp:Label ID="lblUser6" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox6" runat="server" />
                                 </div>
                             </div>
                             <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite7" CssClass="card-container white-card text-white" runat="server" Text="" />
+                                <asp:Button ID="btnWhite7" CssClass="card-container white-card text-white" runat="server" Text="" OnClick="btnWhite7_Click" />
                                 <div class="username-card">
                                     <asp:Label ID="lblUser7" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox7" runat="server" />
                                 </div>
                             </div>
                             <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite8" CssClass="card-container white-card text-white" runat="server" Text="" />
+                                <asp:Button ID="btnWhite8" CssClass="card-container white-card text-white" runat="server" Text="" OnClick="btnWhite8_Click" />
                                 <div class="username-card">
                                     <asp:Label ID="lblUser8" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox8" runat="server" />
                                 </div>
                             </div>
                             <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite9" CssClass="card-container white-card text-white" runat="server" Text="" />
+                                <asp:Button ID="btnWhite9" CssClass="card-container white-card text-white" runat="server" Text="" OnClick="btnWhite9_Click" />
                                 <div class="username-card">
                                     <asp:Label ID="lblUser9" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox9" runat="server" />
                                 </div>
                             </div>
                             <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite10" CssClass="card-container white-card text-white" runat="server" Text="" />
+                                <asp:Button ID="btnWhite10" CssClass="card-container white-card text-white" runat="server" Text="" OnClick="btnWhite10_Click" />
                                 <div class="username-card">
                                     <asp:Label ID="lblUser10" runat="server" Text="Label"></asp:Label>
-                                    <asp:CheckBox ID="CheckBox10" runat="server" />
                                 </div>
-                            </div>
-                            <asp:Button ID="btnConfirmCardSelect" runat="server" Text="Conferma" OnClick="btnConfirmCardSelect_Click" />
-                            <asp:Button ID="btnNewCard" runat="server" Text="Nuove carte" OnClick="btnNewCard_Click"/>
+                            </div> 
+                            <asp:Button ID="btnConfirmCardSelect" runat="server" Text="Conferma" OnClick="btnConfirmCardSelect_Click" />   
                             <div class="col-card-fixed">
                                 <asp:Button ID="btnWhite11" CssClass="card-container white-card text-white" runat="server" Text="" />
                                 <div class="username-card">
@@ -1318,9 +1395,9 @@
                                 </div>
                             </div>
                             <asp:Button ID="btnConfirmWinner" runat="server" Text="Conferma" OnClick="btnConfirmWinner_Click" />
-                        </div>
-                    </div>
-                </div>
+                        </div>                
+                    </div>                                    
+                </div> 
             </ContentTemplate>
             <Triggers>
                 <asp:AsyncPostBackTrigger ControlID="Timer1" EventName="Tick" />

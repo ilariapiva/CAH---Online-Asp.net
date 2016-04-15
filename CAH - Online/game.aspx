@@ -48,8 +48,10 @@
         if (!Page.IsPostBack)
         {
             stateChanged = true;
+            Timer2.Enabled = false;
             Session["time1"] = 40; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
             Session["time2"] = 40;
+            Session["time3"] = 5;       
             /* 100 = 1 min e 40 sec
              * 90 = 1 min 30 sec
              * 50 = 50 sec
@@ -161,8 +163,6 @@
                 if (Convert.ToInt16(Session["time2"]) <= 0)
                 {
                     lblTimerMaster.Text = "TimeOut!";
-                    //insert_result();
-                    //Response.Redirect("Show_result.aspx");
                 }
                 else
                 {
@@ -482,9 +482,6 @@
                     }
                 }
             }
-
-            //insert_result();
-            //Response.Redirect("Show_result.aspx");
         }
 
         else
@@ -756,7 +753,7 @@
                     c.idCards = Convert.ToInt32(btnWhite10.Attributes["value"]);
                     CardSelect = c;
                 }
-               
+
                 lblUser1.Visible = true;
                 lblUser2.Visible = true;
                 lblUser3.Visible = true;
@@ -828,7 +825,7 @@
                      c.idCards = Convert.ToInt32(btnWhite5.Attributes["value"]);
                      CardSelect = c;
                  }*/
-                
+
                 lblUser1.Visible = true;
                 lblUser2.Visible = true;
                 lblUser3.Visible = true;
@@ -862,7 +859,7 @@
                      c.idCards = Convert.ToInt32(btnWhite7.Attributes["value"]);
                      CardSelect = c;
                  }*/
-              
+
                 lblUser1.Visible = true;
                 lblUser2.Visible = true;
                 lblUser3.Visible = true;
@@ -1034,16 +1031,17 @@
 
         Timer1.Enabled = false;
 
-        lblTimer.Text = "TimeOut!";
+        lblTimerMaster.Text = "TimeOut!";
 
         Account userWin = FunctionsDB.ReadUserWin(indexRoom, CardSelect);
+
+        Timer2.Enabled = true;
 
         FunctionsDB.DeleteLinesDB(indexRoom);
 
         btnConfirmWinner.Enabled = false;
 
         room.NewRaund(indexRoom);
-        
     }
 
     protected void NewCardWhite()
@@ -1292,6 +1290,26 @@
             btnWhite10.BackColor = System.Drawing.Color.LightBlue;
         }
     }
+
+    protected void Timer2_Tick(object sender, EventArgs e)
+    {
+        Session["time3"] = Convert.ToInt16(Session["time3"]) - 1;
+        if (Convert.ToInt16(Session["time3"]) <= 0)
+        {
+            if(!room.IsMaster(Master.resultUser))
+            {
+                Response.Redirect("~/game.aspx");
+            }
+            Response.Redirect("~/game.aspx");
+        }
+        else
+        {
+            totalSeconds = Convert.ToInt16(Session["time3"]);
+            seconds = totalSeconds % 60;
+            minutes = totalSeconds / 60;
+            time = minutes + ":" + seconds;
+        }
+    }
 </script>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
@@ -1303,6 +1321,8 @@
         <div>
             <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
             <asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="Timer1_Tick"></asp:Timer>
+            <asp:Timer ID="Timer2" runat="server" OnTick="Timer2_Tick" Interval="5000">
+            </asp:Timer>
         </div>
         <asp:UpdatePanel ID="Pannello" runat="server" UpdateMode="Conditional">
             <ContentTemplate>

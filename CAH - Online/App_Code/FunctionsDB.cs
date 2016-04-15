@@ -309,7 +309,7 @@ namespace CAHOnline
             var dr13 = cmd.ExecuteReader();
             Account value = new Account();
 
-            while ( dr13.Read())
+            while (dr13.Read())
             {
                 value.idAccount = Convert.ToInt32(dr13["idAccount"]);
                 value.Username = dr13["username"].ToString();
@@ -376,7 +376,7 @@ namespace CAHOnline
             var dr16 = cmd.ExecuteReader();
 
             while (dr16.Read())
-            {   
+            {
                 if (dr16.HasRows)
                 {
                     //dr.Read();
@@ -384,7 +384,7 @@ namespace CAHOnline
                     value.idCards = Convert.ToInt32(dr16["idCardWhite"]);
                     value.Text = dr16["text"].ToString();
                     ListIdCards.Add(value);
-                } 
+                }
             }
             dr16.Close();
             cmd.Dispose();
@@ -406,7 +406,8 @@ namespace CAHOnline
             cn18.Close();
         }
 
-       public static int ReadPoints(int room, Account user)
+        //Questa funzione permette di leggere il punteggio di un utente in una stanza
+        public static int ReadPoints(int room, Account user)
         {
             string strcn19 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn19 = new SqlConnection(strcn19);
@@ -421,12 +422,37 @@ namespace CAHOnline
             if (dr17.HasRows)
             {
                 dr17.Read();
-                value = Convert.ToInt32(dr17["points"]); ;
+                value = Convert.ToInt32(dr17["points"]);
             }
 
             dr17.Close();
             cmd.Dispose();
             cn19.Close();
+            return value;
+        }
+
+        //Questa funzione permette di leggere quanti utenti ci sono nella stanza
+        public static int ReadUsersInRoom(int room)
+        {
+            string strcn20 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn20 = new SqlConnection(strcn20);
+            cn20.Open();
+
+            String strsql = "SELECT COUNT(idAccount) as C FROM tblGame WHERE room = '" + room + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn20);
+            cmd.ExecuteNonQuery();
+
+            int value = 0;
+            var dr18 = cmd.ExecuteReader();
+            if (dr18.HasRows)
+            {
+                dr18.Read();
+                value = Convert.ToInt32(dr18["C"]);
+            }
+
+            dr18.Close();
+            cmd.Dispose();
+            cn20.Close();
             return value;
         }
     }

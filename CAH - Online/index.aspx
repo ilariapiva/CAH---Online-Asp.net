@@ -7,10 +7,7 @@
 
     protected void SelectButton_Click(object sender, EventArgs e)
     {
-        Game.NewGame(Master.resultUser);
-       /* Room room = new Room();
-        room.GenerateCardsForUser(Master.resultUser);*/
-        Response.Redirect("~/game.aspx");
+        Response.Redirect("~/waitingRoom.aspx");
     }
 
     protected void Page_Load(object sender, EventArgs e)

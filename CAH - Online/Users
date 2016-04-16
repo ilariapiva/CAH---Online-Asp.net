@@ -1,0 +1,12 @@
+Session["time0"] = Convert.ToInt16(Session["time0"]) - 1;
+if (Convert.ToInt16(Session["time0"]) <= 0)
+{
+}
+
+else
+{
+    totalSeconds = Convert.ToInt16(Session["time0"]);
+    seconds = totalSeconds % 60;
+    minutes = totalSeconds / 60;
+    time = minutes + ":" + seconds;
+}

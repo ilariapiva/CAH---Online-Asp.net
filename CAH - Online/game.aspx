@@ -14,6 +14,7 @@
     int seconds = 0;
     int minutes = 0;
     string time = "";
+    Account userWin;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -48,10 +49,10 @@
         if (!Page.IsPostBack)
         {
             stateChanged = true;
-            Timer2.Enabled = false;
+            Session["time0"] = 50; 
             Session["time1"] = 40; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
             Session["time2"] = 40;
-            Session["time3"] = 5;       
+            Session["time3"] = 3;       
             /* 100 = 1 min e 40 sec
              * 90 = 1 min 30 sec
              * 50 = 50 sec
@@ -78,6 +79,11 @@
 
                 if (spacesBlackCard == 1)
                 {
+                    btnWhite1.Enabled = false;
+                    btnWhite2.Enabled = false;
+                    btnWhite3.Enabled = false;
+                    btnWhite4.Enabled = false;
+                    
                     btnWhite5.Visible = false;
                     btnWhite6.Visible = false;
                     btnWhite7.Visible = false;
@@ -88,6 +94,15 @@
 
                 if (spacesBlackCard == 2)
                 {
+                    btnWhite1.Enabled = false;
+                    btnWhite2.Enabled = false;
+                    btnWhite3.Enabled = false;
+                    btnWhite4.Enabled = false;
+                    btnWhite5.Enabled = false;
+                    btnWhite6.Enabled = false;
+                    btnWhite7.Enabled = false;
+                    btnWhite8.Enabled = false;
+                    
                     btnWhite9.Visible = false;
                     btnWhite10.Visible = false;
                 }
@@ -96,6 +111,19 @@
                 {
                     btnWhite11.Visible = true;
                     btnWhite12.Visible = true;
+                    
+                    btnWhite1.Enabled = false;
+                    btnWhite2.Enabled = false;
+                    btnWhite3.Enabled = false;
+                    btnWhite4.Enabled = false;
+                    btnWhite5.Enabled = false;
+                    btnWhite6.Enabled = false;
+                    btnWhite7.Enabled = false;
+                    btnWhite8.Enabled = false;
+                    btnWhite9.Enabled = false;
+                    btnWhite10.Enabled = false;
+                    btnWhite11.Enabled = false;
+                    btnWhite12.Enabled = false;               
                 }
             }
 
@@ -147,13 +175,18 @@
         }  
     }
     
+    protected int RandomCard(List<Cards> listCards)
+    {
+        Random random = new Random();
+        int r = random.Next(listCards.Count);
+        return r;
+    }
+
     protected void Timer1_Tick(object sender, EventArgs e)
     {
-        Session["time1"] = Convert.ToInt16(Session["time1"]) - 1;
-        if (Convert.ToInt16(Session["time1"]) <= 0)
+        Session["time0"] = Convert.ToInt16(Session["time0"]) - 1;
+        if (Convert.ToInt16(Session["time0"]) <= 0)
         {
-            lblTimer.Text = "TimeOut!";
-
             if (room.IsMaster(Master.resultUser))
             {
                 lblTimerMaster.Visible = true;
@@ -164,6 +197,7 @@
                 {
                     lblTimerMaster.Text = "TimeOut!";
                 }
+
                 else
                 {
                     totalSeconds = Convert.ToInt16(Session["time2"]);
@@ -178,7 +212,7 @@
                     List<Cards> textCardSelect = FunctionsDB.ReadTetxtCardsSelect(indexRoom);
 
                     int spacesBlackCard = room.CheckStringBlackCard();
-                    
+
                     if (room.UsersNotMaster(indexRoom) == 4)
                     {
                         if (spacesBlackCard == 1)
@@ -206,6 +240,11 @@
 
                             /*btnWhite4.Attributes.Add("value", textCardSelect[3].idCards.ToString());
                             btnWhite4.Text = textCardSelect[3].Text;*/
+
+                            btnWhite1.Enabled = true;
+                            btnWhite2.Enabled = true;
+                            btnWhite3.Enabled = true;
+                            btnWhite4.Enabled = true;
                         }
 
                         if (spacesBlackCard == 2)
@@ -258,11 +297,10 @@
                             btnWhite8.Attributes.Add("value", textCardSelect[7].idCards.ToString());
                             btnWhite8.Text = textCardSelect[7].Text;*/
 
-                            btnWhite2.Enabled = false;
-                            btnWhite4.Enabled = false;
-                            btnWhite6.Enabled = false;
-                            //btnWhite8.Enabled = false;
-                            
+                            btnWhite1.Enabled = true;
+                            btnWhite3.Enabled = true;
+                            btnWhite5.Enabled = true;
+                            btnWhite7.Enabled = true;
                         }
 
                         if (spacesBlackCard == 3)
@@ -339,14 +377,10 @@
                             btnWhite12.Attributes.Add("value", textCardSelect[11].idCards.ToString());
                             btnWhite12.Text = textCardSelect[11].Text;*/
 
-                            btnWhite2.Enabled = false;
-                            btnWhite3.Enabled = false;
-                            btnWhite5.Enabled = false;
-                            btnWhite6.Enabled = false;
-                            btnWhite8.Enabled = false;
-                            btnWhite9.Enabled = false;
-                            /*btnWhite11.Enabled = false;
-                            btnWhite10.Enabled = false;*/
+                            btnWhite1.Enabled = true;
+                            btnWhite4.Enabled = true;
+                            btnWhite7.Enabled = true;
+                            btnWhite10.Enabled = true;
                         }
                     }
 
@@ -371,6 +405,10 @@
 
                             /*btnWhite3.Attributes.Add("value", textCardSelect[2].idCards.ToString());
                             btnWhite3.Text = textCardSelect[2].Text;*/
+
+                            btnWhite1.Enabled = true;
+                            btnWhite2.Enabled = true;
+                            //btnWhite3.Enabled = true;
                         }
 
                         if (spacesBlackCard == 2)
@@ -387,11 +425,11 @@
                             lblUser4.Visible = true;
                             lblUser4.Text = "User 2";
 
-                           /* lblUser5.Visible = true;
-                            lblUser5.Text = "User 3";
+                            /* lblUser5.Visible = true;
+                             lblUser5.Text = "User 3";
 
-                            lblUser6.Visible = true;
-                            lblUser6.Text = "User 3";*/
+                             lblUser6.Visible = true;
+                             lblUser6.Text = "User 3";*/
 
                             btnWhite1.Attributes.Add("value", textCardSelect[0].idCards.ToString());
                             btnWhite1.Text = textCardSelect[0].Text;
@@ -410,10 +448,10 @@
 
                             btnWhite6.Attributes.Add("value", textCardSelect[5].idCards.ToString());
                             btnWhite6.Text = textCardSelect[5].Text;*/
-                            
-                            btnWhite2.Enabled = false;
-                            btnWhite4.Enabled = false;
-                            //btnWhite6.Enabled = false;                   
+
+                            btnWhite1.Enabled = true;
+                            btnWhite3.Enabled = true;
+                            //btnWhite5.Enabled = true;   
                         }
 
                         if (spacesBlackCard == 3)
@@ -463,21 +501,18 @@
                             btnWhite6.Attributes.Add("value", textCardSelect[5].idCards.ToString());
                             btnWhite6.Text = textCardSelect[5].Text;
 
-                           /*btnWhite7.Attributes.Add("value", textCardSelect[6].idCards.ToString());
-                            btnWhite7.Text = textCardSelect[6].Text;
+                            /*btnWhite7.Attributes.Add("value", textCardSelect[6].idCards.ToString());
+                             btnWhite7.Text = textCardSelect[6].Text;
 
-                            btnWhite8.Attributes.Add("value", textCardSelect[7].idCards.ToString());
-                            btnWhite8.Text = textCardSelect[7].Text;
+                             btnWhite8.Attributes.Add("value", textCardSelect[7].idCards.ToString());
+                             btnWhite8.Text = textCardSelect[7].Text;
 
-                            btnWhite9.Attributes.Add("value", textCardSelect[8].idCards.ToString());
-                            btnWhite9.Text = textCardSelect[8].Text;*/
+                             btnWhite9.Attributes.Add("value", textCardSelect[8].idCards.ToString());
+                             btnWhite9.Text = textCardSelect[8].Text;*/
 
-                            btnWhite2.Enabled = false;
-                            btnWhite3.Enabled = false;
-                            btnWhite5.Enabled = false;
-                            btnWhite6.Enabled = false;
-                            /*btnWhite8.Enabled = false;
-                            btnWhite9.Enabled = false; */
+                            btnWhite1.Enabled = true;
+                            btnWhite4.Enabled = true;
+                            //btnWhite7.Enabled = true;
                         }
                     }
                 }
@@ -486,23 +521,119 @@
 
         else
         {
-            totalSeconds = Convert.ToInt16(Session["time1"]);
+            totalSeconds = Convert.ToInt16(Session["time0"]);
             seconds = totalSeconds % 60;
             minutes = totalSeconds / 60;
             time = minutes + ":" + seconds;
-            lblTimer.Text = time;
+
+            Session["time1"] = Convert.ToInt16(Session["time1"]) - 1;
+            if (Convert.ToInt16(Session["time1"]) <= 0)
+            {
+                lblTimer.Text = "TimeOut!";
+
+                if (!room.IsMaster(Master.resultUser))
+                {
+                    if (btnConfirmCardSelect.Enabled == true)
+                    {
+                        int spacesBlackCard = room.CheckStringBlackCard();
+
+                        List<Cards> listCards = room.GetCardsWhite(Master.resultUser);
+
+                        if (spacesBlackCard == 1)
+                        {
+                            int cardCount = RandomCard(listCards);
+                            List<Cards> cardSelect = new List<Cards>();
+                            cardSelect.Add(listCards[cardCount]);
+                            room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
+                            room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
+                            room.GenerateCardForUser(Master.resultUser);
+                            btnConfirmCardSelect.Enabled = false;
+                        }
+
+                        if (spacesBlackCard == 2)
+                        {
+                            int value = FunctionsDB.ReadCardsUser(indexRoom, Master.resultUser);
+
+                            if (value == 1)
+                            {
+                                int cardCount = RandomCard(listCards);
+                                List<Cards> cardSelect = new List<Cards>();
+                                cardSelect.Add(listCards[cardCount]);
+                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
+                                room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
+                                room.GenerateCardForUser(Master.resultUser);
+                                btnConfirmCardSelect.Enabled = false;
+                            }
+                            else
+                            {
+                                int count = 2;
+                                List<Cards> cardSelect = new List<Cards>();
+                                while (count == 0)
+                                {
+                                    int cardCount = RandomCard(listCards);
+                                    cardSelect.Add(listCards[cardCount]);
+                                    room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
+                                    room.GenerateCardForUser(Master.resultUser);
+                                }
+                                room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
+
+                                btnConfirmCardSelect.Enabled = false;
+                            }
+                        }
+
+                        if (spacesBlackCard == 3)
+                        {
+                            int value = FunctionsDB.ReadCardsUser(indexRoom, Master.resultUser);
+                            if (value == 1)
+                            {
+                                int cardCount = RandomCard(listCards);
+                                List<Cards> cardSelect = new List<Cards>();
+                                cardSelect.Add(listCards[cardCount]);
+                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
+                                room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
+                                room.GenerateCardForUser(Master.resultUser);
+                                btnConfirmCardSelect.Enabled = false;
+                            }
+                            else if (value == 2)
+                            {
+                                int count = 2;
+                                List<Cards> cardSelect = new List<Cards>();
+                                while (count == 0)
+                                {
+                                    int cardCount = RandomCard(listCards);
+                                    cardSelect.Add(listCards[cardCount]);
+                                    room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
+                                    room.GenerateCardForUser(Master.resultUser);
+                                }
+                                room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
+
+                                btnConfirmCardSelect.Enabled = false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            else
+            {
+                totalSeconds = Convert.ToInt16(Session["time1"]);
+                seconds = totalSeconds % 60;
+                minutes = totalSeconds / 60;
+                time = minutes + ":" + seconds;
+                lblTimer.Text = time;
+            }
         }
     }
-
-    protected void btnConfirmCardSelect_Click(object sender, EventArgs e)
+    
+    public void ConfirmCardSelect()
     {
         List<Cards> CardsSelect = new List<Cards>();
         Account user = Master.resultUser;
 
         /*Controllo se ogni checkBox è stata selezionata, e se è stata selezionata 
           allora inserisco l'id della carta in una lista*/
-       
-        if(btnWhite1.BackColor == System.Drawing.Color.LightBlue)
+
+        if (btnWhite1.BackColor == System.Drawing.Color.LightBlue)
         {
             Cards c = new Cards();
             c.Text = btnWhite1.Text;
@@ -602,39 +733,79 @@
             btnWhite10.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
-        
+
         room.UsersAndCards(CardsSelect, indexRoom, user);
-
-        Timer1.Enabled = false;
-        
-        lblTimer.Text = "TimeOut!";
-
-        if (!room.IsMaster(Master.resultUser))
-        {
-            int spacesBlackCard = room.CheckStringBlackCard();
-            if (spacesBlackCard == 1)
-            {
-                NewCardWhite();
-            }
-
-            if (spacesBlackCard == 2)
-            {
-                NewCardWhite();
-            }
-
-            if (spacesBlackCard == 3)
-            {
-                NewCardWhite();
-            }
-
-        }
-        
-        btnConfirmCardSelect.Enabled = false;
     }
+    
+    protected void btnConfirmCardSelect_Click(object sender, EventArgs e)
+    {
+        ConfirmCardSelect();
+        
+        int spacesBlackCard = room.CheckStringBlackCard();
+        
+        if (spacesBlackCard == 1)
+        {
+            Timer1.Enabled = false;
 
+            lblTimer.Text = "TimeOut!";
+
+            btnConfirmCardSelect.Enabled = false;
+            
+            NewCardWhite();
+        }
+
+        if (spacesBlackCard == 2)
+        {
+            int value = FunctionsDB.ReadCardsUser(indexRoom, Master.resultUser);
+            if(value == 2)
+            {
+                Timer1.Enabled = false;
+
+                lblTimer.Text = "TimeOut!";
+                
+                btnConfirmCardSelect.Enabled = false;
+                
+                NewCardWhite();
+            }
+            else
+            {
+                string script = "alert(\"Devi selezionare ancora 1 carta!\");";
+                ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+            }    
+        }
+
+        if (spacesBlackCard == 3)
+        {
+            int value = FunctionsDB.ReadCardsUser(indexRoom, Master.resultUser);
+            if (value == 3)
+            {
+                Timer1.Enabled = false;
+
+                lblTimer.Text = "TimeOut!";
+
+                btnConfirmCardSelect.Enabled = false;
+                
+                NewCardWhite();
+            }
+            else
+            {
+                if (value == 1)
+                {
+                    string script = "alert(\"Devi selezionare ancora 2 carta!\");";
+                    ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                }
+                if (value == 2)
+                {
+                    string script = "alert(\"Devi selezionare ancora 1 carta!\");";
+                    ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                }
+            }
+        } 
+    }
+    
     protected void btnConfirmWinner_Click(object sender, EventArgs e)
     {
-        Cards CardSelect = new Cards();
+         Cards CardSelect = new Cards();
 
         int spacesBlackCard = room.CheckStringBlackCard();
 
@@ -1029,19 +1200,20 @@
             }
         }
 
-        Timer1.Enabled = false;
-
-        lblTimerMaster.Text = "TimeOut!";
-
         Account userWin = FunctionsDB.ReadUserWin(indexRoom, CardSelect);
-
-        Timer2.Enabled = true;
 
         FunctionsDB.DeleteLinesDB(indexRoom);
 
         btnConfirmWinner.Enabled = false;
 
         room.NewRaund(indexRoom);
+        
+        Timer1.Enabled = false;
+
+        /*string script = "alert(\"" + userWin.Username + "\");";
+        ScriptManager.RegisterStartupScript(this, GetType(), "Il vincitore è: ", script, true);*/
+
+        lblTimerMaster.Text = "TimeOut!";         
     }
 
     protected void NewCardWhite()
@@ -1050,6 +1222,7 @@
         {
             if (btnWhite1.BackColor == System.Drawing.Color.LightBlue)
             {
+                btnWhite1.BorderColor = System.Drawing.Color.White;
                 btnWhite1.BackColor = System.Drawing.Color.White;
             }
            
@@ -1064,6 +1237,7 @@
         {
             if (btnWhite2.BackColor == System.Drawing.Color.LightBlue)
             {
+                btnWhite2.BorderColor = System.Drawing.Color.White;
                 btnWhite2.BackColor = System.Drawing.Color.White;
             }
       
@@ -1077,6 +1251,7 @@
         {
             if (btnWhite3.BackColor == System.Drawing.Color.LightBlue)
             {
+                btnWhite3.BorderColor = System.Drawing.Color.White;
                 btnWhite3.BackColor = System.Drawing.Color.White;
             }
             room.GenerateCardForUser(Master.resultUser);
@@ -1089,6 +1264,7 @@
         {
             if (btnWhite4.BackColor == System.Drawing.Color.LightBlue)
             {
+                btnWhite4.BorderColor = System.Drawing.Color.White;
                 btnWhite4.BackColor = System.Drawing.Color.White;
             }
             room.GenerateCardForUser(Master.resultUser);
@@ -1101,6 +1277,7 @@
         {
             if (btnWhite5.BackColor == System.Drawing.Color.LightBlue)
             {
+                btnWhite5.BorderColor = System.Drawing.Color.White;
                 btnWhite5.BackColor = System.Drawing.Color.White;
             }
             room.GenerateCardForUser(Master.resultUser);
@@ -1113,6 +1290,7 @@
         {
             if (btnWhite6.BackColor == System.Drawing.Color.LightBlue)
             {
+                btnWhite6.BorderColor = System.Drawing.Color.White;
                 btnWhite6.BackColor = System.Drawing.Color.White;
             }
             room.GenerateCardForUser(Master.resultUser);
@@ -1125,6 +1303,7 @@
         {
             if (btnWhite7.BackColor == System.Drawing.Color.LightBlue)
             {
+                btnWhite7.BorderColor = System.Drawing.Color.White;
                 btnWhite7.BackColor = System.Drawing.Color.White;
             }
             room.GenerateCardForUser(Master.resultUser);
@@ -1137,6 +1316,7 @@
         {
             if (btnWhite8.BackColor == System.Drawing.Color.LightBlue)
             {
+                btnWhite8.BorderColor = System.Drawing.Color.White;
                 btnWhite8.BackColor = System.Drawing.Color.White;
             }
             room.GenerateCardForUser(Master.resultUser);
@@ -1149,6 +1329,7 @@
         {
             if (btnWhite9.BackColor == System.Drawing.Color.LightBlue)
             {
+                btnWhite9.BorderColor = System.Drawing.Color.White;
                 btnWhite9.BackColor = System.Drawing.Color.White;
             }
             room.GenerateCardForUser(Master.resultUser);
@@ -1161,6 +1342,7 @@
         {
             if (btnWhite10.BackColor == System.Drawing.Color.LightBlue)
             {
+                btnWhite10.BorderColor = System.Drawing.Color.White;
                 btnWhite10.BackColor = System.Drawing.Color.White;
             }
             room.GenerateCardForUser(Master.resultUser);
@@ -1175,10 +1357,12 @@
     {
         if (btnWhite1.BackColor == System.Drawing.Color.LightBlue)
         {
+            btnWhite1.BorderColor = System.Drawing.Color.White;
             btnWhite1.BackColor = System.Drawing.Color.White;
         }
         else
         {
+            btnWhite1.BorderColor = System.Drawing.Color.LightBlue;
             btnWhite1.BackColor = System.Drawing.Color.LightBlue;
         }
     }
@@ -1187,10 +1371,12 @@
     {
         if(btnWhite2.BackColor == System.Drawing.Color.LightBlue)
         {
+            btnWhite2.BorderColor = System.Drawing.Color.White;
             btnWhite2.BackColor = System.Drawing.Color.White;
         }
         else
         {
+            btnWhite2.BorderColor = System.Drawing.Color.LightBlue;
             btnWhite2.BackColor = System.Drawing.Color.LightBlue;
         }
     }
@@ -1199,10 +1385,12 @@
     {
         if(btnWhite3.BackColor == System.Drawing.Color.LightBlue)
         {
+            btnWhite3.BorderColor = System.Drawing.Color.White;
             btnWhite3.BackColor = System.Drawing.Color.White;
         }
         else
         {
+            btnWhite3.BorderColor = System.Drawing.Color.LightBlue;
             btnWhite3.BackColor = System.Drawing.Color.LightBlue;
         }
     }
@@ -1211,22 +1399,26 @@
     {
         if(btnWhite4.BackColor == System.Drawing.Color.LightBlue)
         {
+            btnWhite4.BorderColor = System.Drawing.Color.White;
             btnWhite4.BackColor = System.Drawing.Color.White;   
         }
         else
         {
+            btnWhite4.BorderColor = System.Drawing.Color.LightBlue;
             btnWhite4.BackColor = System.Drawing.Color.LightBlue;
         }
     }
 
     protected void btnWhite5_Click(object sender, EventArgs e)
-    {
+    {    
         if(btnWhite5.BackColor == System.Drawing.Color.LightBlue)
         {
+            btnWhite5.BorderColor = System.Drawing.Color.White;
             btnWhite5.BackColor = System.Drawing.Color.White;
         }
         else
         {
+            btnWhite5.BorderColor = System.Drawing.Color.LightBlue;
             btnWhite5.BackColor = System.Drawing.Color.LightBlue;
         }
     }
@@ -1235,10 +1427,12 @@
     {
         if(btnWhite6.BackColor == System.Drawing.Color.LightBlue)
         {
+            btnWhite6.BorderColor = System.Drawing.Color.White;
             btnWhite6.BackColor = System.Drawing.Color.White;
         }
         else
         {
+            btnWhite6.BorderColor = System.Drawing.Color.LightBlue;
             btnWhite6.BackColor = System.Drawing.Color.LightBlue;
         }
     }
@@ -1247,10 +1441,12 @@
     {
         if(btnWhite7.BackColor == System.Drawing.Color.LightBlue)
         {
+            btnWhite7.BorderColor = System.Drawing.Color.White;
             btnWhite7.BackColor = System.Drawing.Color.White;
         }
         else
         {
+            btnWhite7.BorderColor = System.Drawing.Color.LightBlue;
             btnWhite7.BackColor = System.Drawing.Color.LightBlue;
         }
     }
@@ -1259,10 +1455,12 @@
     {
         if(btnWhite8.BackColor == System.Drawing.Color.LightBlue)
         {
+            btnWhite8.BorderColor = System.Drawing.Color.White;
             btnWhite8.BackColor = System.Drawing.Color.White;
         }
         else
         {
+            btnWhite8.BorderColor = System.Drawing.Color.LightBlue;
             btnWhite8.BackColor = System.Drawing.Color.LightBlue;
         }
     }
@@ -1271,10 +1469,12 @@
     {
         if(btnWhite9.BackColor == System.Drawing.Color.LightBlue)
         {
+            btnWhite9.BorderColor = System.Drawing.Color.White;
             btnWhite9.BackColor = System.Drawing.Color.White;
         }
         else
         {
+            btnWhite9.BorderColor = System.Drawing.Color.LightBlue;
             btnWhite9.BackColor = System.Drawing.Color.LightBlue;
         }
     }
@@ -1283,10 +1483,12 @@
     {
         if(btnWhite10.BackColor == System.Drawing.Color.LightBlue)
         {
+            btnWhite10.BorderColor = System.Drawing.Color.White;
             btnWhite10.BackColor = System.Drawing.Color.White;
         }
         else
         {
+            btnWhite10.BorderColor = System.Drawing.Color.LightBlue;
             btnWhite10.BackColor = System.Drawing.Color.LightBlue;
         }
     }
@@ -1296,11 +1498,7 @@
         Session["time3"] = Convert.ToInt16(Session["time3"]) - 1;
         if (Convert.ToInt16(Session["time3"]) <= 0)
         {
-            if(!room.IsMaster(Master.resultUser))
-            {
-                Response.Redirect("~/game.aspx");
-            }
-            Response.Redirect("~/game.aspx");
+            Response.Redirect("~/game.aspx");     
         }
         else
         {
@@ -1308,6 +1506,13 @@
             seconds = totalSeconds % 60;
             minutes = totalSeconds / 60;
             time = minutes + ":" + seconds;
+            if (!room.IsMaster(Master.resultUser))
+            {
+                if(lblTimer.Text == "TimeOut!")
+                {
+                    Timer1.Enabled = false;
+                }
+            }
         }
     }
 </script>
@@ -1321,7 +1526,7 @@
         <div>
             <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
             <asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="Timer1_Tick"></asp:Timer>
-            <asp:Timer ID="Timer2" runat="server" OnTick="Timer2_Tick" Interval="5000">
+            <asp:Timer ID="Timer2" runat="server" OnTick="Timer2_Tick" Interval="20000" Enabled="True">
             </asp:Timer>
         </div>
         <asp:UpdatePanel ID="Pannello" runat="server" UpdateMode="Conditional">
@@ -1400,8 +1605,8 @@
                                 <div class="username-card">
                                     <asp:Label ID="lblUser10" runat="server" Text="Label"></asp:Label>
                                 </div>
-                            </div> 
-                            <asp:Button ID="btnConfirmCardSelect" runat="server" Text="Conferma" OnClick="btnConfirmCardSelect_Click" />   
+                            </div>
+                            <asp:Button ID="btnConfirmCardSelect" runat="server" Text="Conferma" OnClick="btnConfirmCardSelect_Click" />
                             <div class="col-card-fixed">
                                 <asp:Button ID="btnWhite11" CssClass="card-container white-card text-white" runat="server" Text="" />
                                 <div class="username-card">
@@ -1415,9 +1620,9 @@
                                 </div>
                             </div>
                             <asp:Button ID="btnConfirmWinner" runat="server" Text="Conferma" OnClick="btnConfirmWinner_Click" />
-                        </div>                
-                    </div>                                    
-                </div> 
+                        </div>
+                    </div>
+                </div>
             </ContentTemplate>
             <Triggers>
                 <asp:AsyncPostBackTrigger ControlID="Timer1" EventName="Tick" />

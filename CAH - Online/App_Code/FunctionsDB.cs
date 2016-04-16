@@ -300,7 +300,7 @@ namespace CAHOnline
             SqlConnection cn13 = new SqlConnection(strcn13);
             cn13.Open();
 
-            String strsql = @"SELECT a.idAccount, a.username  FROM tblAccount AS a INNER JOIN tblCardsSelect as cs
+            String strsql = @"SELECT a.idAccount, a.username FROM tblAccount AS a INNER JOIN tblCardsSelect as cs
                             ON a.idAccount = cs.idAccount WHERE cs.room = '" + room + @"' 
                             AND idCardWhite = '" + cardId.idCards + "'";
 
@@ -453,6 +453,33 @@ namespace CAHOnline
             dr18.Close();
             cmd.Dispose();
             cn20.Close();
+            return value;
+        }
+
+        //Questa funzione permette di leggere qaunte carte ha selezionato l'utente
+        public static int ReadCardsUser(int room, Account user)
+        {
+            string strcn21 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn21 = new SqlConnection(strcn21);
+            cn21.Open();
+
+            String strsql = "SELECT COUNT(idAccount) as C FROM tblCardsSelect WHERE room = '" + room + @"' 
+                             AND idAccount = '"+ user.idAccount + "'";
+
+            SqlCommand cmd = new SqlCommand(strsql, cn21);
+            cmd.ExecuteNonQuery();
+
+            int value = 0;
+            var dr19 = cmd.ExecuteReader();
+            if (dr19.HasRows)
+            {
+                dr19.Read();
+                value = Convert.ToInt32(dr19["C"]);
+            }
+
+            dr19.Close();
+            cmd.Dispose();
+            cn21.Close();
             return value;
         }
     }

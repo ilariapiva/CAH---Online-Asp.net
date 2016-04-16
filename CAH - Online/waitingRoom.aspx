@@ -17,6 +17,8 @@
 
         int NumberUsers = FunctionsDB.ReadUsersInRoom(indexRoom);
 
+        System.Threading.Thread.Sleep(3000);
+
         if (NumberUsers == 3)
         {
             Timer1.Enabled = false;
@@ -61,7 +63,11 @@
     </div>
     <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
-            
+            <div class="row">
+                <div class="col-md-4">
+                    <p style="color: #FFFFFF">Attendere, altri giocatori …</p>
+                </div>
+            </div>
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>

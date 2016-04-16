@@ -21,7 +21,7 @@ namespace CAHOnline
             //prendo tutte le carte dalla tabella BlackCard e le inserisco in una lista
             Random rndBlackCard = new Random();
 
-            String BlackCard = "SELECT idCard, text FROM tblBlackCard";
+            String BlackCard = "SELECT * FROM tblBlackCard";
             List<Cards> cardBlack = FunctionsDB.Cards(BlackCard);
 
             RandomCardBlack = (cardBlack.OrderBy(x => rndBlackCard.Next())).ToList();
@@ -30,7 +30,7 @@ namespace CAHOnline
             //prendo tutte le carte dalla tabella WhiteCard e le inserisco in una lista
             Random rndWhiteCards = new Random();
 
-            String WhiteCards = "SELECT idCard, text FROM tblWhiteCard";
+            String WhiteCards = "SELECT * FROM tblWhiteCard";
             List<Cards> cardsWhite = FunctionsDB.Cards(WhiteCards);
 
             RandomCardsWhite = (cardsWhite.OrderBy(x => rndWhiteCards.Next())).ToList();

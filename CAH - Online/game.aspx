@@ -14,8 +14,7 @@
     int seconds = 0;
     int minutes = 0;
     string time = "";
-    Account userWin;
-
+    
     protected void Page_Load(object sender, EventArgs e)
     {
         FunctionsDB.OpenConnectionDB();
@@ -184,29 +183,19 @@
 
     protected void Timer1_Tick(object sender, EventArgs e)
     {
-        Session["time0"] = Convert.ToInt16(Session["time0"]) - 1;
+        /*Session["time0"] = Convert.ToInt16(Session["time0"]) - 1;
         if (Convert.ToInt16(Session["time0"]) <= 0)
+        {*/
+        if (room.IsMaster(Master.resultUser))
         {
-            if (room.IsMaster(Master.resultUser))
+            lblTimerMaster.Visible = true;
+            btnConfirmWinner.Visible = true;
+           
+            Session["time0"] = Convert.ToInt16(Session["time0"]) - 1;
+            if (Convert.ToInt16(Session["time0"]) <= 0)
             {
-                lblTimerMaster.Visible = true;
-                btnConfirmWinner.Visible = true;
-
-                Session["time2"] = Convert.ToInt16(Session["time2"]) - 1;
-                if (Convert.ToInt16(Session["time2"]) <= 0)
-                {
-                    lblTimerMaster.Text = "TimeOut!";
-                }
-
-                else
-                {
-                    totalSeconds = Convert.ToInt16(Session["time2"]);
-                    seconds = totalSeconds % 60;
-                    minutes = totalSeconds / 60;
-                    time = minutes + ":" + seconds;
-                    lblTimerMaster.Text = time;
-                }
-
+                lblTimer.Text = "TimeOut!";
+                
                 if (room.CheckUserCardSelected(indexRoom))
                 {
                     List<Cards> textCardSelect = FunctionsDB.ReadTetxtCardsSelect(indexRoom);
@@ -431,7 +420,7 @@
                              lblUser6.Visible = true;
                              lblUser6.Text = "User 3";*/
 
-                            btnWhite1.Attributes.Add("value", textCardSelect[0].idCards.ToString());
+                            //btnWhite1.Attributes.Add("value", textCardSelect[0].idCards.ToString());
                             btnWhite1.Text = textCardSelect[0].Text;
 
                             btnWhite2.Attributes.Add("value", textCardSelect[1].idCards.ToString());
@@ -515,17 +504,88 @@
                             //btnWhite7.Enabled = true;
                         }
                     }
+
+                    Session["time2"] = Convert.ToInt16(Session["time2"]) - 1;
+                    if (Convert.ToInt16(Session["time2"]) <= 0)
+                    {
+                        lblTimerMaster.Text = "TimeOut!";
+
+                        if (btnConfirmWinner.Enabled == true)
+                        {
+                            int BlackCardSpaces = room.CheckStringBlackCard();
+
+                            List<Cards> listCards = FunctionsDB.ReadTetxtCardsSelect(indexRoom);
+
+                            if (BlackCardSpaces == 1)
+                            {
+                                int cardCount = RandomCard(listCards);
+                                Cards cardSelect = new Cards();
+                                cardSelect = listCards[cardCount];
+                                NameUsers(BlackCardSpaces);
+                                FunctionsDB.WritePointUserWin(indexRoom, cardSelect);
+                                FunctionsDB.DeleteLinesDB(indexRoom);
+                                btnConfirmWinner.Enabled = false;
+                                room.NewRaund(indexRoom);
+                                Timer1.Enabled = false;
+                            }
+
+                            if (BlackCardSpaces == 2)
+                            {
+                                int cardCount = RandomCard(listCards);
+                                Cards cardSelect = new Cards();
+                                cardSelect = listCards[cardCount];
+                                NameUsers(BlackCardSpaces);
+                                FunctionsDB.WritePointUserWin(indexRoom, cardSelect);
+                                FunctionsDB.DeleteLinesDB(indexRoom);
+                                btnConfirmWinner.Enabled = false;
+                                room.NewRaund(indexRoom);
+                                Timer1.Enabled = false;
+                            }
+
+                            if (BlackCardSpaces == 3)
+                            {
+                                int cardCount = RandomCard(listCards);
+                                Cards cardSelect = new Cards();
+                                cardSelect = listCards[cardCount];
+                                NameUsers(BlackCardSpaces);
+                                FunctionsDB.WritePointUserWin(indexRoom, cardSelect);
+                                FunctionsDB.DeleteLinesDB(indexRoom);
+                                btnConfirmWinner.Enabled = false;
+                                room.NewRaund(indexRoom);
+                                Timer1.Enabled = false;
+                            }
+                        }  
+                    }
+                    else
+                    {
+                        totalSeconds = Convert.ToInt16(Session["time2"]);
+                        seconds = totalSeconds % 60;
+                        minutes = totalSeconds / 60;
+                        time = minutes + ":" + seconds;
+                        lblTimerMaster.Text = time;
+                    }
                 }
             }
-        }
 
-        else
+            else
+            {
+                totalSeconds = Convert.ToInt16(Session["time2"]);
+                seconds = totalSeconds % 60;
+                minutes = totalSeconds / 60;
+                time = minutes + ":" + seconds;
+                lblTimer.Text = time;
+            }
+        }
+        //}
+
+        /*else
         {
             totalSeconds = Convert.ToInt16(Session["time0"]);
             seconds = totalSeconds % 60;
             minutes = totalSeconds / 60;
-            time = minutes + ":" + seconds;
-
+            time = minutes + ":" + seconds;*/
+        else if (!room.IsMaster(Master.resultUser))
+        {
             Session["time1"] = Convert.ToInt16(Session["time1"]) - 1;
             if (Convert.ToInt16(Session["time1"]) <= 0)
             {
@@ -548,6 +608,7 @@
                             room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
                             room.GenerateCardForUser(Master.resultUser);
                             btnConfirmCardSelect.Enabled = false;
+                            Timer1.Enabled = false;
                         }
 
                         if (spacesBlackCard == 2)
@@ -563,21 +624,27 @@
                                 room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
                                 room.GenerateCardForUser(Master.resultUser);
                                 btnConfirmCardSelect.Enabled = false;
+                                Timer1.Enabled = false;
                             }
-                            else
-                            {
-                                int count = 2;
+                            else if (value == 0)
+                            {                                                                
                                 List<Cards> cardSelect = new List<Cards>();
-                                while (count == 0)
-                                {
-                                    int cardCount = RandomCard(listCards);
-                                    cardSelect.Add(listCards[cardCount]);
-                                    room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
-                                    room.GenerateCardForUser(Master.resultUser);
-                                }
+                                
+                                int cardCount = RandomCard(listCards);
+                                cardSelect.Add(listCards[cardCount]);
+                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
+
+                                int cardCount2 = RandomCard(listCards);
+                                cardSelect.Add(listCards[cardCount2]);
+                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount2].idCards);
+                                
+                                room.GenerateCardForUser(Master.resultUser);
+                                room.GenerateCardForUser(Master.resultUser);
+                               
                                 room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
 
                                 btnConfirmCardSelect.Enabled = false;
+                                Timer1.Enabled = false;
                             }
                         }
 
@@ -593,27 +660,57 @@
                                 room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
                                 room.GenerateCardForUser(Master.resultUser);
                                 btnConfirmCardSelect.Enabled = false;
+                                Timer1.Enabled = false;
                             }
                             else if (value == 2)
                             {
-                                int count = 2;
                                 List<Cards> cardSelect = new List<Cards>();
-                                while (count == 0)
-                                {
-                                    int cardCount = RandomCard(listCards);
-                                    cardSelect.Add(listCards[cardCount]);
-                                    room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
-                                    room.GenerateCardForUser(Master.resultUser);
-                                }
+
+                                int cardCount = RandomCard(listCards);
+                                cardSelect.Add(listCards[cardCount]);
+                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
+
+                                int cardCount2 = RandomCard(listCards);
+                                cardSelect.Add(listCards[cardCount2]);
+                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount2].idCards);
+
+                                room.GenerateCardForUser(Master.resultUser);
+                                room.GenerateCardForUser(Master.resultUser);
+
                                 room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
 
                                 btnConfirmCardSelect.Enabled = false;
+                                Timer1.Enabled = false;
+                            }
+                            else if (value == 0)
+                            {
+                                List<Cards> cardSelect = new List<Cards>();
+
+                                int cardCount = RandomCard(listCards);
+                                cardSelect.Add(listCards[cardCount]);
+                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
+
+                                int cardCount2 = RandomCard(listCards);
+                                cardSelect.Add(listCards[cardCount2]);
+                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount2].idCards);
+
+                                int cardCount3 = RandomCard(listCards);
+                                cardSelect.Add(listCards[cardCount3]);
+                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount3].idCards);
+
+                                room.GenerateCardForUser(Master.resultUser);
+                                room.GenerateCardForUser(Master.resultUser);
+                                room.GenerateCardForUser(Master.resultUser);
+
+                                room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
+
+                                btnConfirmCardSelect.Enabled = false;
+                                Timer1.Enabled = false;
                             }
                         }
                     }
                 }
             }
-
             else
             {
                 totalSeconds = Convert.ToInt16(Session["time1"]);
@@ -624,7 +721,7 @@
             }
         }
     }
-    
+
     public void ConfirmCardSelect()
     {
         List<Cards> CardsSelect = new List<Cards>();
@@ -805,7 +902,7 @@
     
     protected void btnConfirmWinner_Click(object sender, EventArgs e)
     {
-         Cards CardSelect = new Cards();
+        Cards CardSelect = new Cards();
 
         int spacesBlackCard = room.CheckStringBlackCard();
 
@@ -1043,8 +1140,28 @@
             }
         }
 
+        NameUsers(spacesBlackCard);
+        
         FunctionsDB.WritePointUserWin(indexRoom, CardSelect);
 
+        Account userWin = FunctionsDB.ReadUserWin(indexRoom, CardSelect);
+
+        FunctionsDB.DeleteLinesDB(indexRoom);
+
+        btnConfirmWinner.Enabled = false;
+
+        room.NewRaund(indexRoom);
+        
+        Timer1.Enabled = false;
+
+        /*string script = "alert(\"" + userWin.Username + "\");";
+        ScriptManager.RegisterStartupScript(this, GetType(), "Il vincitore è: ", script, true);*/
+
+        lblTimerMaster.Text = "TimeOut!";         
+    }
+
+    protected void NameUsers(int spacesBlackCard)
+    {
         List<Account> usernames = FunctionsDB.ReadUsernames(indexRoom);
 
         if (spacesBlackCard == 1)
@@ -1200,22 +1317,7 @@
             }
         }
 
-        Account userWin = FunctionsDB.ReadUserWin(indexRoom, CardSelect);
-
-        FunctionsDB.DeleteLinesDB(indexRoom);
-
-        btnConfirmWinner.Enabled = false;
-
-        room.NewRaund(indexRoom);
-        
-        Timer1.Enabled = false;
-
-        /*string script = "alert(\"" + userWin.Username + "\");";
-        ScriptManager.RegisterStartupScript(this, GetType(), "Il vincitore è: ", script, true);*/
-
-        lblTimerMaster.Text = "TimeOut!";         
     }
-
     protected void NewCardWhite()
     {
         if (btnWhite1.Text == "")
@@ -1526,7 +1628,7 @@
         <div>
             <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
             <asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="Timer1_Tick"></asp:Timer>
-            <asp:Timer ID="Timer2" runat="server" OnTick="Timer2_Tick" Interval="20000" Enabled="True">
+            <asp:Timer ID="Timer2" runat="server" OnTick="Timer2_Tick" Interval="30000" Enabled="True">
             </asp:Timer>
         </div>
         <asp:UpdatePanel ID="Pannello" runat="server" UpdateMode="Conditional">

@@ -6,6 +6,7 @@
 <script runat="server">
 
     int indexRoom;
+    Room room;
     int totalSeconds = 0;
     int seconds = 0;
     int minutes = 0;
@@ -15,20 +16,10 @@
     {
         FunctionsDB.OpenConnectionDB();
 
-        int NumberUsers = FunctionsDB.ReadUsersInRoom(indexRoom);
-
-        System.Threading.Thread.Sleep(3000);
-
-        if (NumberUsers == 3)
-        {
-            Timer1.Enabled = false;
-            Response.Redirect("~/game.aspx");
-        }
-        
         if (!Page.IsPostBack)
         {
             Game.NewGame(Master.resultUser);
-            Session["time1"] = 20; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
+            Session["time1"] = 5; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
         }
     }
 
@@ -38,10 +29,22 @@
         if (Convert.ToInt16(Session["time1"]) <= 0)
         {
             int NumberUsers = FunctionsDB.ReadUsersInRoom(indexRoom);
-            
-            if (NumberUsers == 3)
+
+            if (NumberUsers == 5)
             {
                 Response.Redirect("~/game.aspx");
+            }
+            else if (NumberUsers == 3)
+            {
+                Response.Redirect("~/game.aspx");
+                room.IsFull() = true;
+            }
+            else if (NumberUsers < 3)
+            {
+                string script = "alert(\"Non ci sono abbastanza giocatori in attesa di iniziare una partita!\");";
+                ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                FunctionsDB.DeleteRommDB(indexRoom);
+                Response.Redirect("~/index.aspx");
             }
         }
         else

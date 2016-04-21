@@ -523,7 +523,7 @@
                                 cardSelect = listCards[cardCount];
                                 NameUsers(BlackCardSpaces);
                                 FunctionsDB.WritePointUserWin(indexRoom, cardSelect);
-                                FunctionsDB.DeleteLinesDB(indexRoom);
+                                FunctionsDB.DeleteCardSelectDB(indexRoom);
                                 btnConfirmWinner.Enabled = false;
                                 room.NewRaund(indexRoom);
                                 Timer1.Enabled = false;
@@ -536,7 +536,7 @@
                                 cardSelect = listCards[cardCount];
                                 NameUsers(BlackCardSpaces);
                                 FunctionsDB.WritePointUserWin(indexRoom, cardSelect);
-                                FunctionsDB.DeleteLinesDB(indexRoom);
+                                FunctionsDB.DeleteCardSelectDB(indexRoom);
                                 btnConfirmWinner.Enabled = false;
                                 room.NewRaund(indexRoom);
                                 Timer1.Enabled = false;
@@ -549,7 +549,7 @@
                                 cardSelect = listCards[cardCount];
                                 NameUsers(BlackCardSpaces);
                                 FunctionsDB.WritePointUserWin(indexRoom, cardSelect);
-                                FunctionsDB.DeleteLinesDB(indexRoom);
+                                FunctionsDB.DeleteCardSelectDB(indexRoom);
                                 btnConfirmWinner.Enabled = false;
                                 room.NewRaund(indexRoom);
                                 Timer1.Enabled = false;
@@ -722,13 +722,13 @@
         }
     }
 
-    public void ConfirmCardSelect()
+   /* public List<Cards> ConfirmCardsSelect()
     {
         List<Cards> CardsSelect = new List<Cards>();
         Account user = Master.resultUser;
 
-        /*Controllo se ogni checkBox è stata selezionata, e se è stata selezionata 
-          allora inserisco l'id della carta in una lista*/
+        //Controllo se ogni checkBox è stata selezionata, e se è stata selezionata 
+        //allora inserisco l'id della carta in una lista
 
         if (btnWhite1.BackColor == System.Drawing.Color.LightBlue)
         {
@@ -831,49 +831,176 @@
             room.DeleteCardForUser(Master.resultUser, c.idCards);
         }
 
-        room.UsersAndCards(CardsSelect, indexRoom, user);
+        return CardsSelect;
+        //room.UsersAndCards(CardsSelect, indexRoom, user);
+    }*/
+
+    public void ConfirmCardSelect()
+    {
+        Account user = Master.resultUser;
+
+        Cards c = new Cards();
+        
+        if (btnWhite1.BackColor == System.Drawing.Color.LightBlue)
+        {
+            c.Text = btnWhite1.Text;
+            c.idCards = Convert.ToInt32(btnWhite1.Attributes["value"]);
+            btnWhite1.Attributes.Clear();
+            btnWhite1.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
+            FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            btnWhite1.BackColor = System.Drawing.Color.White;
+        }
+        if (btnWhite2.BackColor == System.Drawing.Color.LightBlue)
+        {
+            c.Text = btnWhite2.Text;
+            c.idCards = Convert.ToInt32(btnWhite2.Attributes["value"]);
+            btnWhite2.Attributes.Clear();
+            btnWhite2.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
+            FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            btnWhite2.BackColor = System.Drawing.Color.White;
+        }
+        if (btnWhite3.BackColor == System.Drawing.Color.LightBlue)
+        {
+            c.Text = btnWhite3.Text;
+            c.idCards = Convert.ToInt32(btnWhite3.Attributes["value"]);
+            btnWhite3.Attributes.Clear();
+            btnWhite3.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
+            FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            btnWhite3.BackColor = System.Drawing.Color.White;
+        }
+        if (btnWhite4.BackColor == System.Drawing.Color.LightBlue)
+        {
+            c.Text = btnWhite4.Text;
+            c.idCards = Convert.ToInt32(btnWhite4.Attributes["value"]);
+            btnWhite4.Attributes.Clear();
+            btnWhite4.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
+            FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            btnWhite4.BackColor = System.Drawing.Color.White;
+        }
+        if (btnWhite5.BackColor == System.Drawing.Color.LightBlue)
+        {
+            c.Text = btnWhite5.Text;
+            c.idCards = Convert.ToInt32(btnWhite5.Attributes["value"]);
+            btnWhite5.Attributes.Clear();
+            btnWhite5.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
+            FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            btnWhite5.BackColor = System.Drawing.Color.White;
+        }
+        if (btnWhite6.BackColor == System.Drawing.Color.LightBlue)
+        {
+            c.Text = btnWhite6.Text;
+            c.idCards = Convert.ToInt32(btnWhite6.Attributes["value"]);
+            btnWhite6.Attributes.Clear();
+            btnWhite6.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
+            FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            btnWhite6.BackColor = System.Drawing.Color.White;
+        }
+        if (btnWhite7.BackColor == System.Drawing.Color.LightBlue)
+        {
+            c.Text = btnWhite7.Text;
+            c.idCards = Convert.ToInt32(btnWhite7.Attributes["value"]);
+            btnWhite7.Attributes.Clear();
+            btnWhite7.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
+            FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            btnWhite7.BackColor = System.Drawing.Color.White;
+        }
+        if (btnWhite8.BackColor == System.Drawing.Color.LightBlue)
+        {
+            c.Text = btnWhite8.Text;
+            c.idCards = Convert.ToInt32(btnWhite8.Attributes["value"]);
+            btnWhite8.Attributes.Clear();
+            btnWhite8.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
+            FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            btnWhite8.BackColor = System.Drawing.Color.White;
+        }
+        if (btnWhite9.BackColor == System.Drawing.Color.LightBlue)
+        {
+            c.Text = btnWhite9.Text;
+            c.idCards = Convert.ToInt32(btnWhite9.Attributes["value"]);
+            btnWhite9.Attributes.Clear();
+            btnWhite9.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
+            FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            btnWhite9.BackColor = System.Drawing.Color.White;
+        }
+        if (btnWhite10.BackColor == System.Drawing.Color.LightBlue)
+        {
+            c.Text = btnWhite10.Text;
+            c.idCards = Convert.ToInt32(btnWhite10.Attributes["value"]);
+            btnWhite10.Attributes.Clear();
+            btnWhite10.Text = "";
+            room.DeleteCardForUser(Master.resultUser, c.idCards);
+            FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            btnWhite10.BackColor = System.Drawing.Color.White;
+        }
+
+       // FunctionsDB.WriteCardsSelect(user, c, indexRoom);
     }
     
     protected void btnConfirmCardSelect_Click(object sender, EventArgs e)
     {
+        Account user = Master.resultUser;
+       
         ConfirmCardSelect();
-        
+
         int spacesBlackCard = room.CheckStringBlackCard();
-        
+       
         if (spacesBlackCard == 1)
         {
-            Timer1.Enabled = false;
+            int value = FunctionsDB.ReadCardsUser(indexRoom, Master.resultUser);
 
-            lblTimer.Text = "TimeOut!";
+            if (value == 1)
+            {
+                Timer1.Enabled = false;
 
-            btnConfirmCardSelect.Enabled = false;
-            
-            NewCardWhite();
+                lblTimer.Text = "TimeOut!";
+
+                btnConfirmCardSelect.Enabled = false;
+
+                NewCardWhite();
+            }       
         }
 
         if (spacesBlackCard == 2)
         {
             int value = FunctionsDB.ReadCardsUser(indexRoom, Master.resultUser);
-            if(value == 2)
+
+            if (value == 2)
             {
                 Timer1.Enabled = false;
 
                 lblTimer.Text = "TimeOut!";
-                
+
                 btnConfirmCardSelect.Enabled = false;
-                
+
                 NewCardWhite();
             }
-            else
+            else if(value == 1)
             {
                 string script = "alert(\"Devi selezionare ancora 1 carta!\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                btnConfirmCardSelect.Enabled = true;
+            }    
+            else if(value == 0)
+            {
+                string script = "alert(\"Devi selezionare le carte!\");";
+                ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                btnConfirmCardSelect.Enabled = true;
             }    
         }
 
         if (spacesBlackCard == 3)
         {
             int value = FunctionsDB.ReadCardsUser(indexRoom, Master.resultUser);
+            
             if (value == 3)
             {
                 Timer1.Enabled = false;
@@ -881,7 +1008,7 @@
                 lblTimer.Text = "TimeOut!";
 
                 btnConfirmCardSelect.Enabled = false;
-                
+
                 NewCardWhite();
             }
             else
@@ -890,12 +1017,20 @@
                 {
                     string script = "alert(\"Devi selezionare ancora 2 carta!\");";
                     ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    btnConfirmCardSelect.Enabled = true;
                 }
-                if (value == 2)
+                else if (value == 2)
                 {
                     string script = "alert(\"Devi selezionare ancora 1 carta!\");";
                     ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    btnConfirmCardSelect.Enabled = true;
                 }
+                else if (value == 0)
+                {
+                    string script = "alert(\"Devi selezionare le carte!\");";
+                    ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    btnConfirmCardSelect.Enabled = true;
+                }  
             }
         } 
     }
@@ -1146,7 +1281,7 @@
 
         Account userWin = FunctionsDB.ReadUserWin(indexRoom, CardSelect);
 
-        FunctionsDB.DeleteLinesDB(indexRoom);
+        FunctionsDB.DeleteCardSelectDB(indexRoom);
 
         btnConfirmWinner.Enabled = false;
 

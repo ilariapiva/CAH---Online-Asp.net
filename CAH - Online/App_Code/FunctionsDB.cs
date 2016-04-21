@@ -371,7 +371,7 @@ namespace CAHOnline
             List<Cards> ListIdCards = new List<Cards>();
 
             String strsql = @"SELECT cs.idCardWhite, wc.text FROM tblCardsSelect as cs INNER JOIN tblWhiteCard as wc 
-                                ON cs.idCardWhite = wc.idCard WHERE room = '" + room + "' ORDER BY cs.idAccount ASC";
+                                ON cs.idCardWhite = wc.idCard WHERE room = '" + room + "' ORDER BY cs.idAccount";
             SqlCommand cmd = new SqlCommand(strsql, cn16);
             var dr16 = cmd.ExecuteReader();
 
@@ -393,7 +393,7 @@ namespace CAHOnline
         }
 
         //Questa funzione permette di eliminare le righe dalla tblCardsSelect 
-        public static void DeleteLinesDB(int room)
+        public static void DeleteCardSelectDB(int room)
         {
             string strcn18 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn18 = new SqlConnection(strcn18);
@@ -481,6 +481,20 @@ namespace CAHOnline
             cmd.Dispose();
             cn21.Close();
             return value;
+        }
+
+        //Questa funzione permette di eliminare le righe dalla tblGame
+        public static void DeleteRommDB(int room)
+        {
+            string strcn20 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn20 = new SqlConnection(strcn20);
+            cn20.Open();
+
+            String strsql = @"DELETE FROM tblGame WHERE room = '" + room + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn20);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn20.Close();
         }
     }
 }

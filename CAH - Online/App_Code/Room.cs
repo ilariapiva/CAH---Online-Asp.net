@@ -54,6 +54,19 @@ namespace CAHOnline
             }
         }
 
+        //Elimino i giocatori dalla lista
+        public void DeleteUser(Account user)
+        {
+            foreach (Account u in listUsers)
+            {
+                if (u.idAccount == user.idAccount)
+                {
+                    listUsers.Remove(u);
+                    break;
+                }
+            }
+        }
+
         //Controllo che la lista degli utenti non sia piena
         public bool IsFull()
         {
@@ -128,6 +141,17 @@ namespace CAHOnline
             }
         }
 
+        //Questa funzione permette di eliminare tutte le carte di un utente
+        /*public void DeleteCards(Account user, List<Cards> listCards)
+        {
+            for (int i = 0; i < listCards.Count(); i++)
+            {
+                int card = listCards[i].idCards;
+
+                DeleteCardForUser(user, card);
+            }             
+        }*/
+
         //Questa funzione restituisce la carta nera del turno a tutti i giocatori
         public Cards GetCardBlack()
         {
@@ -185,10 +209,6 @@ namespace CAHOnline
             {
                 return true;
             }
-            if (UsersNotMaster(room) == 2)
-            {
-                return true;
-            }
             return false;
         }
 
@@ -207,6 +227,7 @@ namespace CAHOnline
             return count;
         }
 
+        //Questa funzione permette di fare un nuovo round mandando avanti l'indice del master
         public int NewRaund(int room)
         {
             foreach (Account user in listUsers)

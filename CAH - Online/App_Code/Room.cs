@@ -11,7 +11,7 @@ namespace CAHOnline
         static List<Cards> RandomCardBlack, RandomCardsWhite;
         static int indexCardBlack, indexCardWhite, numberCardWhite, indexMaster;
         static Dictionary<int, List<Cards>> listCardsUsers;
-         
+
         public Room()
         {
             indexCardBlack = 0;
@@ -36,7 +36,7 @@ namespace CAHOnline
             RandomCardsWhite = (cardsWhite.OrderBy(x => rndWhiteCards.Next())).ToList();
 
             listCardsUsers = new Dictionary<int, List<Cards>>();
-            
+
         }
 
         //Controllo che nella lista listUsers non ci siano già 5 giocatori
@@ -74,7 +74,7 @@ namespace CAHOnline
             {
                 return false;
             }
-            else 
+            else
             {
                 return true;
             }
@@ -131,26 +131,15 @@ namespace CAHOnline
         //Questa funzione permette di eliminare una carta dalla lista delle carte di un utente
         public void DeleteCardForUser(Account user, int idCard)
         {
-            foreach(Cards c in listCardsUsers[user.idAccount])
+            foreach (Cards c in listCardsUsers[user.idAccount])
             {
-                if(c.idCards == idCard)
+                if (c.idCards == idCard)
                 {
                     listCardsUsers[user.idAccount].Remove(c);
                     break;
                 }
             }
         }
-
-        //Questa funzione permette di eliminare tutte le carte di un utente
-        /*public void DeleteCards(Account user, List<Cards> listCards)
-        {
-            for (int i = 0; i < listCards.Count(); i++)
-            {
-                int card = listCards[i].idCards;
-
-                DeleteCardForUser(user, card);
-            }             
-        }*/
 
         //Questa funzione restituisce la carta nera del turno a tutti i giocatori
         public Cards GetCardBlack()
@@ -209,6 +198,10 @@ namespace CAHOnline
             {
                 return true;
             }
+            /*if (UsersNotMaster(room) == 2)
+            {
+                return true;
+            }*/
             return false;
         }
 
@@ -227,7 +220,6 @@ namespace CAHOnline
             return count;
         }
 
-        //Questa funzione permette di fare un nuovo round mandando avanti l'indice del master
         public int NewRaund(int room)
         {
             foreach (Account user in listUsers)
@@ -236,7 +228,7 @@ namespace CAHOnline
                 {
                     indexMaster++;
                     indexCardBlack++;
-                    indexMaster = indexMaster % listUsers.Count; 
+                    indexMaster = indexMaster % listUsers.Count;
                     break;
                 }
             }

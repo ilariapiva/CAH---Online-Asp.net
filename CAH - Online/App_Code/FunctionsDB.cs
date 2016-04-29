@@ -464,7 +464,7 @@ namespace CAHOnline
             cn21.Open();
 
             String strsql = "SELECT COUNT(idAccount) as C FROM tblCardsSelect WHERE room = '" + room + @"' 
-                             AND idAccount = '"+ user.idAccount + "'";
+                             AND idAccount = '" + user.idAccount + "'";
 
             SqlCommand cmd = new SqlCommand(strsql, cn21);
             cmd.ExecuteNonQuery();

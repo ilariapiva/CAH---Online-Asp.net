@@ -4,26 +4,27 @@
 <%@ Import Namespace="CAHOnline" %>
 
 <script runat="server">
-    
+
     int indexRoom;
-    Room room = new Room();
+    Room room;
     int totalSeconds = 0;
     int seconds = 0;
     int minutes = 0;
     string time = "";
-    
+
     protected void Page_Load(object sender, EventArgs e)
     {
+        FunctionsDB.OpenConnectionDB();
+
         int NumberUsers = FunctionsDB.ReadUsersInRoom(indexRoom);
         if (NumberUsers == 5)
         {
             Response.Redirect("~/game.aspx");
             Timer1.Enabled = false;
         }
-        
+
         if (!Page.IsPostBack)
         {
-            FunctionsDB.OpenConnectionDB();
             Game.NewGame(Master.resultUser);
             Session["time1"] = 4; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
         }
@@ -44,9 +45,9 @@
                 /*string script = "alert(\"Non ci sono abbastanza giocatori in attesa di iniziare una partita!\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);*/
 
-                 /*List<Cards> listCards = new List<Cards>();
-                listCards = room.GetCardsWhite(Master.resultUser);
-                room.DeleteCards(Master.resultUser, listCards);*/
+                /*List<Cards> listCards = new List<Cards>();
+               listCards = room.GetCardsWhite(Master.resultUser);
+               room.DeleteCards(Master.resultUser, listCards);*/
                 room.DeleteUser(Master.resultUser);
                 FunctionsDB.DeleteRommDB(indexRoom);
                 Response.Redirect("~/index.aspx");

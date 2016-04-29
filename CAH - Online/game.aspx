@@ -369,7 +369,7 @@
                             btnWhite10.Enabled = true;
                         }
                     }
-                   
+
                     Session["time2"] = Convert.ToInt16(Session["time2"]) - 1;
                     if (Convert.ToInt16(Session["time2"]) <= 0)
                     {
@@ -578,7 +578,7 @@
             }
         }
     }
-    
+
     public void ConfirmCardSelect()
     {
         Account user = Master.resultUser;
@@ -594,7 +594,6 @@
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
             btnWhite1.BackColor = System.Drawing.Color.White;
-            btnWhite1.BorderColor = System.Drawing.Color.White;
         }
         if (btnWhite2.BackColor == System.Drawing.Color.LightBlue)
         {
@@ -605,7 +604,6 @@
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
             btnWhite2.BackColor = System.Drawing.Color.White;
-            btnWhite2.BorderColor = System.Drawing.Color.White;
         }
         if (btnWhite3.BackColor == System.Drawing.Color.LightBlue)
         {
@@ -616,7 +614,6 @@
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
             btnWhite3.BackColor = System.Drawing.Color.White;
-            btnWhite3.BorderColor = System.Drawing.Color.White;
         }
         if (btnWhite4.BackColor == System.Drawing.Color.LightBlue)
         {
@@ -627,7 +624,6 @@
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
             btnWhite4.BackColor = System.Drawing.Color.White;
-            btnWhite4.BorderColor = System.Drawing.Color.White;
         }
         if (btnWhite5.BackColor == System.Drawing.Color.LightBlue)
         {
@@ -638,7 +634,6 @@
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
             btnWhite5.BackColor = System.Drawing.Color.White;
-            btnWhite5.BorderColor = System.Drawing.Color.White;
         }
         if (btnWhite6.BackColor == System.Drawing.Color.LightBlue)
         {
@@ -649,7 +644,6 @@
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
             btnWhite6.BackColor = System.Drawing.Color.White;
-            btnWhite6.BorderColor = System.Drawing.Color.White;
         }
         if (btnWhite7.BackColor == System.Drawing.Color.LightBlue)
         {
@@ -660,7 +654,6 @@
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
             btnWhite7.BackColor = System.Drawing.Color.White;
-            btnWhite7.BorderColor = System.Drawing.Color.White;
         }
         if (btnWhite8.BackColor == System.Drawing.Color.LightBlue)
         {
@@ -671,7 +664,6 @@
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
             btnWhite8.BackColor = System.Drawing.Color.White;
-            btnWhite8.BorderColor = System.Drawing.Color.White;
         }
         if (btnWhite9.BackColor == System.Drawing.Color.LightBlue)
         {
@@ -682,7 +674,6 @@
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
             btnWhite9.BackColor = System.Drawing.Color.White;
-            btnWhite9.BorderColor = System.Drawing.Color.White;
         }
         if (btnWhite10.BackColor == System.Drawing.Color.LightBlue)
         {
@@ -693,7 +684,6 @@
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
             btnWhite10.BackColor = System.Drawing.Color.White;
-            btnWhite10.BorderColor = System.Drawing.Color.White;
         }
     }
     
@@ -718,13 +708,7 @@
                 btnConfirmCardSelect.Enabled = false;
 
                 NewCardWhite();
-            }
-            else if (value == 0)
-            {
-                string script = "alert(\"Devi selezionare le carte!\");";
-                ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
-                btnConfirmCardSelect.Enabled = true;
-            }     
+            }       
         }
 
         if (spacesBlackCard == 2)
@@ -929,6 +913,7 @@
                 lblUser12.Visible = true;
             }
         }
+
         NameUsers(spacesBlackCard);
         
         FunctionsDB.WritePointUserWin(indexRoom, CardSelect);
@@ -966,20 +951,8 @@
                 lblUser3.Attributes.Add("value", usernames[2].idAccount.ToString());
                 lblUser3.Text = usernames[2].Username;
 
-                /*lblUser4.Attributes.Add("value", usernames[3].idAccount.ToString());
-                lblUser4.Text = usernames[3].Username;*/
-            }
-
-            if (room.UsersNotMaster(indexRoom) == 2)
-            {
-                lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
-                lblUser1.Text = usernames[0].Username;
-
-                lblUser2.Attributes.Add("value", usernames[1].idAccount.ToString());
-                lblUser2.Text = usernames[1].Username;
-
-                /*lblUser3.Attributes.Add("value", usernames[2].idAccount.ToString());
-                lblUser3.Text = usernames[2].Username;*/
+                lblUser4.Attributes.Add("value", usernames[3].idAccount.ToString());
+                lblUser4.Text = usernames[3].Username;
             }
         }
 
@@ -1005,33 +978,12 @@
                 lblUser6.Attributes.Add("value", usernames[5].idAccount.ToString());
                 lblUser6.Text = usernames[5].Username;
 
-                /* lblUser7.Attributes.Add("value", usernames[6].idAccount.ToString());
+                lblUser7.Attributes.Add("value", usernames[6].idAccount.ToString());
                 lblUser7.Text = usernames[6].Username;
 
                 lblUser8.Attributes.Add("value", usernames[7].idAccount.ToString());
-                lblUser8.Text = usernames[7].Username;*/
-            }
-
-            if (room.UsersNotMaster(indexRoom) == 2)
-            {
-                lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
-                lblUser1.Text = usernames[0].Username;
-
-                lblUser2.Attributes.Add("value", usernames[1].idAccount.ToString());
-                lblUser2.Text = usernames[1].Username;
-
-                lblUser3.Attributes.Add("value", usernames[2].idAccount.ToString());
-                lblUser3.Text = usernames[2].Username;
-
-                lblUser4.Attributes.Add("value", usernames[3].idAccount.ToString());
-                lblUser4.Text = usernames[3].Username;
-
-                /*lblUser5.Attributes.Add("value", usernames[4].idAccount.ToString());
-                lblUser5.Text = usernames[4].Username;
-
-                lblUser6.Attributes.Add("value", usernames[5].idAccount.ToString());
-                lblUser6.Text = usernames[5].Username;*/
-            }
+                lblUser8.Text = usernames[7].Username;
+            } 
         }
 
         if (spacesBlackCard == 3)
@@ -1065,44 +1017,14 @@
                 lblUser9.Attributes.Add("value", usernames[8].idAccount.ToString());
                 lblUser9.Text = usernames[8].Username;
 
-                /*lblUser10.Attributes.Add("value", usernames[9].idAccount.ToString());
+                lblUser10.Attributes.Add("value", usernames[9].idAccount.ToString());
                 lblUser10.Text = usernames[9].Username;
 
                 lblUser11.Attributes.Add("value", usernames[10].idAccount.ToString());
                 lblUser11.Text = usernames[10].Username;
 
                 lblUser12.Attributes.Add("value", usernames[11].idAccount.ToString());
-                lblUser12.Text = usernames[1].Username;*/
-            }
-
-            if (room.UsersNotMaster(indexRoom) == 2)
-            {
-                lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
-                lblUser1.Text = usernames[0].Username;
-
-                lblUser2.Attributes.Add("value", usernames[1].idAccount.ToString());
-                lblUser2.Text = usernames[1].Username;
-
-                lblUser3.Attributes.Add("value", usernames[2].idAccount.ToString());
-                lblUser3.Text = usernames[2].Username;
-
-                lblUser4.Attributes.Add("value", usernames[3].idAccount.ToString());
-                lblUser4.Text = usernames[3].Username;
-
-                lblUser5.Attributes.Add("value", usernames[4].idAccount.ToString());
-                lblUser5.Text = usernames[4].Username;
-
-                lblUser6.Attributes.Add("value", usernames[5].idAccount.ToString());
-                lblUser6.Text = usernames[5].Username;
-
-                /*lblUser7.Attributes.Add("value", usernames[6].idAccount.ToString());
-                lblUser7.Text = usernames[6].Username;
-
-                lblUser8.Attributes.Add("value", usernames[7].idAccount.ToString());
-                lblUser8.Text = usernames[7].Username;
-
-                lblUser9.Attributes.Add("value", usernames[8].idAccount.ToString());
-                lblUser9.Text = usernames[8].Username;*/
+                lblUser12.Text = usernames[1].Username;
             }
         }
 

@@ -218,13 +218,14 @@ namespace CAHOnline
         }
 
         //Scrivo nella tabella Game
-        public static void WriteGame(Account user, int idRoom)
+        public static void WriteGame(Account user, int idRoom, int indexMaster)
         {
             string strcn9 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn9 = new SqlConnection(strcn9);
             cn9.Open();
 
-            String strsql = "INSERT INTO tblGame(points, idAccount, room) VALUES ('0', '" + user.idAccount + "', '" + idRoom + "')";
+            String strsql = @"INSERT INTO tblGame(points, idAccount, room, master) 
+                            VALUES ('0', '" + user.idAccount + "', '" + idRoom + "', '" + indexMaster + "')";
             SqlCommand cmd = new SqlCommand(strsql, cn9);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -346,7 +347,7 @@ namespace CAHOnline
             return value;
         }
         //Questa funzione mi permette di scrivere nella tblGame il punteggio al vincitore
-        public static void WritePointUserWin(int room, Cards cardId)
+        public static void WritePoint(int room, Cards cardId)
         {
             string strcn15 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn15 = new SqlConnection(strcn15);
@@ -486,15 +487,57 @@ namespace CAHOnline
         //Questa funzione permette di eliminare le righe dalla tblGame
         public static void DeleteRommDB(int room)
         {
-            string strcn20 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn20 = new SqlConnection(strcn20);
-            cn20.Open();
+            string strcn22 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn22 = new SqlConnection(strcn22);
+            cn22.Open();
 
             String strsql = @"DELETE FROM tblGame WHERE room = '" + room + "'";
-            SqlCommand cmd = new SqlCommand(strsql, cn20);
+            SqlCommand cmd = new SqlCommand(strsql, cn22);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
-            cn20.Close();
+            cn22.Close();
+        }
+
+        //Questa funzione mi permette di scrivere nella tblGame il master
+        public static void UpdateMaster(int room, int indexMaster, Account user)
+        {
+            string strcn23 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn23 = new SqlConnection(strcn23);
+            cn23.Open();
+
+            String strsql = "UPDATE tblGame SET master = '" + indexMaster + @"'
+                             WHERE idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn23);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn23.Close();
+        }
+
+        //Questa funzione di leggere il master della stanza x
+        public static Master ReadMaster(int room, Account user)
+        {
+            string strcn24 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn24 = new SqlConnection(strcn24);
+            cn24.Open();
+
+            String strsql = "SELECT master, idAccount FROM tblGame WHERE room = '" + room + @"' 
+                             AND idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn24);
+            cmd.ExecuteNonQuery();
+
+            Master value = new Master();
+            var dr20 = cmd.ExecuteReader();
+            if (dr20.HasRows)
+            {
+                dr20.Read();
+                value.indexMaster = Convert.ToInt32(dr20["master"]);
+                value.idAccount = Convert.ToInt32(dr20["idAccount"]);
+            }
+
+            dr20.Close();
+            cmd.Dispose();
+            cn24.Close();
+            return value;
         }
     }
 }

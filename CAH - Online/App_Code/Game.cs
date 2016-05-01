@@ -19,9 +19,10 @@ namespace CAHOnline
             if (Rooms.Count == 0) //Controllo se la lista delle rooms è vuota, se lo è aggiungo una room e lo user alla room
             {
                 Room room = new Room();
-                Rooms.Add(room);
-                room.AddUser(user);
-                FunctionsDB.WriteGame(user, 0);
+                Rooms.Add(room); 
+                FunctionsDB.WriteGame(user, 0, 1);
+                int indexRoom = Convert.ToInt32(Rooms.IndexOf(room));
+                room.AddRoomInListUser(user, indexRoom);
                 room.GenerateCardsForUser(user);
                 return true;
             }
@@ -29,10 +30,11 @@ namespace CAHOnline
             {
                 foreach(Room i in Rooms)
                 {
-                    if(!i.IsFull())
+                    if(!IsFull(i))
                     {
-                        i.AddUser(user);
-                        FunctionsDB.WriteGame(user, Rooms.IndexOf(i));
+                        FunctionsDB.WriteGame(user, Rooms.IndexOf(i), 0);
+                        int indexRoom = Convert.ToInt32(Rooms.IndexOf(i));
+                        i.AddUser(user, indexRoom);
                         i.GenerateCardsForUser(user);
                         return true;
                     }
@@ -40,8 +42,9 @@ namespace CAHOnline
 
                 Room room = new Room(); //altrimenti creo una nuova room e aggiungo lo user alla lista
                 Rooms.Add(room);
-                room.AddUser(user);
-                FunctionsDB.WriteGame(user, Rooms.Count - 1);
+                FunctionsDB.WriteGame(user, Rooms.Count - 1, 1);
+                int idRoom = Convert.ToInt32(Rooms.IndexOf(room));
+                room.AddRoomInListUser(user, idRoom);
                 room.GenerateCardsForUser(user);
                 return true;
             }
@@ -51,6 +54,18 @@ namespace CAHOnline
         public static Room UserEntered(int idRoom)
         {
             return Rooms[idRoom];
+        }
+
+        //Questa funzione permette di verificare la stanza è piena
+        public static bool IsFull(Room r)
+        {
+            int indexRoom = Convert.ToInt32(Rooms.IndexOf(r));
+            int NumberUsers = FunctionsDB.ReadUsersInRoom(indexRoom);
+            if (NumberUsers == 3)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -16,17 +16,10 @@
     {
         FunctionsDB.OpenConnectionDB();
 
-        int NumberUsers = FunctionsDB.ReadUsersInRoom(indexRoom);
-        if (NumberUsers == 5)
-        {
-            Response.Redirect("~/game.aspx");
-            Timer1.Enabled = false;
-        }
-
         if (!Page.IsPostBack)
         {
             Game.NewGame(Master.resultUser);
-            Session["time1"] = 4; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
+            Session["time1"] = 3; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
         }
     }
 
@@ -36,19 +29,19 @@
         if (Convert.ToInt16(Session["time1"]) <= 0)
         {
             int NumberUsers = FunctionsDB.ReadUsersInRoom(indexRoom);
+
             if (NumberUsers == 5)
             {
                 Response.Redirect("~/game.aspx");
             }
-            else if (NumberUsers < 5)
+            else if (NumberUsers == 3)
             {
-                /*string script = "alert(\"Non ci sono abbastanza giocatori in attesa di iniziare una partita!\");";
-                ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);*/
-
-                /*List<Cards> listCards = new List<Cards>();
-               listCards = room.GetCardsWhite(Master.resultUser);
-               room.DeleteCards(Master.resultUser, listCards);*/
-                room.DeleteUser(Master.resultUser);
+                Response.Redirect("~/game.aspx");
+            }
+            else if (NumberUsers < 3)
+            {
+                string script = "alert(\"Non ci sono abbastanza giocatori in attesa di iniziare una partita!\");";
+                ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
                 FunctionsDB.DeleteRommDB(indexRoom);
                 Response.Redirect("~/index.aspx");
             }

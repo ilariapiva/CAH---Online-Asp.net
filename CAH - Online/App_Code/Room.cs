@@ -7,7 +7,7 @@ namespace CAHOnline
 {
     public class Room
     {
-        static List<Account> listUsers = new List<Account>();
+        static Dictionary<int, List<Account>> listUsers;
         static List<Cards> RandomCardBlack, RandomCardsWhite;
         static int indexCardBlack, indexCardWhite, numberCardWhite, indexMaster;
         static Dictionary<int, List<Cards>> listCardsUsers;
@@ -36,61 +36,46 @@ namespace CAHOnline
             RandomCardsWhite = (cardsWhite.OrderBy(x => rndWhiteCards.Next())).ToList();
 
             listCardsUsers = new Dictionary<int, List<Cards>>();
+            listUsers = new Dictionary<int, List<Account>>();
 
         }
 
         //Controllo che nella lista listUsers non ci siano già 5 giocatori
-        public bool AddUser(Account user)
+        public void AddRoomInListUser(Account user, int idRoom)
         {
-            if (listUsers.Count <= 5)
-            {
-                listUsers.Add(user);
-                listCardsUsers.Add(user.idAccount, new List<Cards>());
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            listUsers.Add(idRoom, new List<Account>());
+            listUsers[idRoom].Add(user);
+            listCardsUsers.Add(user.idAccount, new List<Cards>());
         }
 
-        //Elimino i giocatori dalla lista
-        public void DeleteUser(Account user)
+        //Controllo che nella lista listUsers non ci siano già 5 giocatori
+        public void AddUser(Account user, int idRoom)
         {
-            foreach (Account u in listUsers)
-            {
-                if (u.idAccount == user.idAccount)
-                {
-                    listUsers.Remove(u);
-                    break;
-                }
-            }
-        }
-
-        //Controllo che la lista degli utenti non sia piena
-        public bool IsFull()
-        {
-            if (listUsers.Count < 5)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            listUsers[idRoom].Add(user);
+            listCardsUsers.Add(user.idAccount, new List<Cards>());
         }
 
         //Questa verifica se l'utente è il master
-        public bool IsMaster(Account user)
+        public bool IsMaster(Account user, int idRoom)
         {
-            if (listUsers[indexMaster].idAccount == user.idAccount)
+            Master indexUser = FunctionsDB.ReadMaster(idRoom, user);
+            bool ok = false;
+            foreach(Account u in listUsers[idRoom])
             {
-                return true;
+                if (u.idAccount == indexUser.idAccount)
+                {
+                    if(indexUser.indexMaster == 1)
+                    {
+                        ok = true;                    
+                        break;
+                    }
+                    else if (indexUser.indexMaster == 0)
+                    {
+                        ok = false;
+                    }
+                }
             }
-            else
-            {
-                return false;
-            }
+            return ok;
         }
 
         //Questa funzione restituisce le carte bianche dell'utente
@@ -175,7 +160,7 @@ namespace CAHOnline
         public void UsersAndCards(List<Cards> listCardsWhite, int idRoom, Account user)
         {
             //foreach (Account user in listUsers)
-            if (!IsMaster(user))
+            if (!IsMaster(user, idRoom))
             {
                 if (CheckSelectCards(listCardsWhite) == true)
                 {
@@ -198,10 +183,10 @@ namespace CAHOnline
             {
                 return true;
             }
-            /*if (UsersNotMaster(room) == 2)
+            if (UsersNotMaster(room) == 2)
             {
                 return true;
-            }*/
+            }
             return false;
         }
 
@@ -210,9 +195,9 @@ namespace CAHOnline
         {
             int count = 0;
 
-            foreach (Account user in listUsers)
+            foreach (Account user in listUsers[room])
             {
-                if (!IsMaster(user))
+                if (!IsMaster(user, room))
                 {
                     count++;
                 }
@@ -220,19 +205,40 @@ namespace CAHOnline
             return count;
         }
 
-        public int NewRaund(int room)
+        public void NewRaund(int room)
         {
-            foreach (Account user in listUsers)
+            foreach (Account user in listUsers[room])
             {
-                if (IsMaster(user))
+                if (IsMaster(user, room))
                 {
-                    indexMaster++;
-                    indexCardBlack++;
-                    indexMaster = indexMaster % listUsers.Count;
+                    if (indexMaster == 3)
+                    {
+                        indexMaster = 0;
+                        indexCardBlack++;
+                        indexMaster = indexMaster % listUsers[room].Count;
+                        FunctionsDB.UpdateMaster(room, 0, user);
+                        break;
+                    }
+                    else if (indexMaster < 3)
+                    {
+                        indexMaster++;
+                        indexCardBlack++;
+                        indexMaster = indexMaster % listUsers[room].Count;
+                        FunctionsDB.UpdateMaster(room, 0, user);
+                        break;
+                    }
+                }
+            }
+            foreach (Account u in listUsers[room])
+            {
+                int index = listUsers[room].IndexOf(u);
+                if (index == indexMaster)
+                {
+                    FunctionsDB.UpdateMaster(room, 1, u);
                     break;
                 }
             }
-            return indexMaster;
+            //return indexMaster;
         }
     }
 }

@@ -6,7 +6,7 @@
 <script runat="server">
 
     int indexRoom;
-    Room room;
+    //Room room = new Room();
     int totalSeconds = 0;
     int seconds = 0;
     int minutes = 0;
@@ -16,10 +16,28 @@
     {
         FunctionsDB.OpenConnectionDB();
 
+        /*int NumberUsers = FunctionsDB.ReadUsersInRoom(indexRoom);
+
+        if (NumberUsers == 5)
+        {
+            Response.Redirect("~/game.aspx");
+        }
+        else if (NumberUsers == 3)
+        {
+            Response.Redirect("~/game.aspx");
+        }*/
+
         if (!Page.IsPostBack)
         {
-            Game.NewGame(Master.resultUser);
-            Session["time1"] = 3; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
+            /*if (FunctionsDB.CheckUserInARoom(Master.resultUser))
+            {
+                Response.Redirect("~/index.aspx");
+            }
+            else*/
+            
+                Game.NewGame(Master.resultUser);
+                Session["time1"] = 3; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
+            
         }
     }
 

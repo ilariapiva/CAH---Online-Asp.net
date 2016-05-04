@@ -6,7 +6,7 @@
 <script runat="server">
     
     int indexRoom;
-    Room room;
+    Room room = new Room();
     Cards blackCard;
     List<Cards> whiteCards = new List<Cards>();
     bool stateChanged = false;
@@ -23,7 +23,7 @@
         indexRoom = FunctionsDB.GetRoom(Master.resultUser);
             
         //assegno l'idRoom
-        room = Game.UserEntered(indexRoom);
+        //room = Game.UserEntered(indexRoom);
         
         int points = FunctionsDB.ReadPoints(indexRoom, Master.resultUser);
         
@@ -62,6 +62,11 @@
 
         if (stateChanged)
         {
+            int UserExit = FunctionsDB.ReadUserExit(indexRoom);
+            if(UserExit == 1)
+            {
+                Response.Redirect("~/index.aspx"); 
+            }
             //se l'utente è il master visualizzo solo la carta master 
             if (room.IsMaster(Master.resultUser, indexRoom))
             { 
@@ -183,14 +188,11 @@
 
     protected void Timer1_Tick(object sender, EventArgs e)
     {
-        /*Session["time0"] = Convert.ToInt16(Session["time0"]) - 1;
-        if (Convert.ToInt16(Session["time0"]) <= 0)
-        {*/
         if (room.IsMaster(Master.resultUser, indexRoom))
         {
             lblTimerMaster.Visible = true;
             btnConfirmWinner.Visible = true;
-           
+
             Session["time0"] = Convert.ToInt16(Session["time0"]) - 1;
             if (Convert.ToInt16(Session["time0"]) <= 0)
             {
@@ -509,213 +511,210 @@
                     if (Convert.ToInt16(Session["time2"]) <= 0)
                     {
                         lblTimerMaster.Text = "TimeOut!";
-
                         if (btnConfirmWinner.Enabled == true)
                         {
-                            int BlackCardSpaces = room.CheckStringBlackCard();
-
-                            List<Cards> listCards = FunctionsDB.ReadTetxtCardsSelect(indexRoom);
-
-                            if (BlackCardSpaces == 1)
-                            {
-                                int cardCount = RandomCard(listCards);
-                                Cards cardSelect = new Cards();
-                                cardSelect = listCards[cardCount];
-                                NameUsers(BlackCardSpaces);
-                                FunctionsDB.WritePoint(indexRoom, cardSelect);
-                                FunctionsDB.DeleteCardSelectDB(indexRoom);
-                                btnConfirmWinner.Enabled = false;
-                                room.NewRaund(indexRoom);
-                                Timer1.Enabled = false;
-                            }
-
-                            if (BlackCardSpaces == 2)
-                            {
-                                int cardCount = RandomCard(listCards);
-                                Cards cardSelect = new Cards();
-                                cardSelect = listCards[cardCount];
-                                NameUsers(BlackCardSpaces);
-                                FunctionsDB.WritePoint(indexRoom, cardSelect);
-                                FunctionsDB.DeleteCardSelectDB(indexRoom);
-                                btnConfirmWinner.Enabled = false;
-                                room.NewRaund(indexRoom);
-                                Timer1.Enabled = false;
-                            }
-
-                            if (BlackCardSpaces == 3)
-                            {
-                                int cardCount = RandomCard(listCards);
-                                Cards cardSelect = new Cards();
-                                cardSelect = listCards[cardCount];
-                                NameUsers(BlackCardSpaces);
-                                FunctionsDB.WritePoint(indexRoom, cardSelect);
-                                FunctionsDB.DeleteCardSelectDB(indexRoom);
-                                btnConfirmWinner.Enabled = false;
-                                room.NewRaund(indexRoom);
-                                Timer1.Enabled = false;
-                            }
-                        }  
+                            FunctionConfirmWinner();
+                        }
                     }
-                    else
-                    {
-                        totalSeconds = Convert.ToInt16(Session["time2"]);
-                        seconds = totalSeconds % 60;
-                        minutes = totalSeconds / 60;
-                        time = minutes + ":" + seconds;
-                        lblTimerMaster.Text = time;
-                    }
+                }
+
+                else
+                {
+                    totalSeconds = Convert.ToInt16(Session["time2"]);
+                    seconds = totalSeconds % 60;
+                    minutes = totalSeconds / 60;
+                    time = minutes + ":" + seconds;
+                    lblTimer.Text = time;
                 }
             }
 
-            else
+            else if (!room.IsMaster(Master.resultUser, indexRoom))
             {
-                totalSeconds = Convert.ToInt16(Session["time2"]);
-                seconds = totalSeconds % 60;
-                minutes = totalSeconds / 60;
-                time = minutes + ":" + seconds;
-                lblTimer.Text = time;
-            }
-        }
-
-        else if (!room.IsMaster(Master.resultUser, indexRoom))
-        {
-            Session["time1"] = Convert.ToInt16(Session["time1"]) - 1;
-            if (Convert.ToInt16(Session["time1"]) <= 0)
-            {
-                lblTimer.Text = "TimeOut!";
-
-                if (!room.IsMaster(Master.resultUser, indexRoom))
+                Session["time1"] = Convert.ToInt16(Session["time1"]) - 1;
+                if (Convert.ToInt16(Session["time1"]) <= 0)
                 {
+                    lblTimer.Text = "TimeOut!";
                     if (btnConfirmCardSelect.Enabled == true)
                     {
-                        int spacesBlackCard = room.CheckStringBlackCard();
-
-                        List<Cards> listCards = room.GetCardsWhite(Master.resultUser);
-
-                        if (spacesBlackCard == 1)
-                        {
-                            int cardCount = RandomCard(listCards);
-                            List<Cards> cardSelect = new List<Cards>();
-                            cardSelect.Add(listCards[cardCount]);
-                            room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
-                            room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
-                            room.GenerateCardForUser(Master.resultUser);
-                            btnConfirmCardSelect.Enabled = false;
-                            Timer1.Enabled = false;
-                        }
-
-                        if (spacesBlackCard == 2)
-                        {
-                            int value = FunctionsDB.ReadCardsUser(indexRoom, Master.resultUser);
-
-                            if (value == 1)
-                            {
-                                int cardCount = RandomCard(listCards);
-                                List<Cards> cardSelect = new List<Cards>();
-                                cardSelect.Add(listCards[cardCount]);
-                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
-                                room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
-                                room.GenerateCardForUser(Master.resultUser);
-                                btnConfirmCardSelect.Enabled = false;
-                                Timer1.Enabled = false;
-                            }
-                            else if (value == 0)
-                            {                                                                
-                                List<Cards> cardSelect = new List<Cards>();
-                                
-                                int cardCount = RandomCard(listCards);
-                                cardSelect.Add(listCards[cardCount]);
-                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
-
-                                int cardCount2 = RandomCard(listCards);
-                                cardSelect.Add(listCards[cardCount2]);
-                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount2].idCards);
-                                
-                                room.GenerateCardForUser(Master.resultUser);
-                                room.GenerateCardForUser(Master.resultUser);
-
-                                room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
-
-                                btnConfirmCardSelect.Enabled = false;
-                                Timer1.Enabled = false;
-                            }
-                        }
-
-                        if (spacesBlackCard == 3)
-                        {
-                            int value = FunctionsDB.ReadCardsUser(indexRoom, Master.resultUser);
-                            if (value == 1)
-                            {
-                                int cardCount = RandomCard(listCards);
-                                List<Cards> cardSelect = new List<Cards>();
-                                cardSelect.Add(listCards[cardCount]);
-                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
-                                room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
-                                room.GenerateCardForUser(Master.resultUser);
-                                btnConfirmCardSelect.Enabled = false;
-                                Timer1.Enabled = false;
-                            }
-                            else if (value == 2)
-                            {
-                                List<Cards> cardSelect = new List<Cards>();
-
-                                int cardCount = RandomCard(listCards);
-                                cardSelect.Add(listCards[cardCount]);
-                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
-
-                                int cardCount2 = RandomCard(listCards);
-                                cardSelect.Add(listCards[cardCount2]);
-                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount2].idCards);
-
-                                room.GenerateCardForUser(Master.resultUser);
-                                room.GenerateCardForUser(Master.resultUser);
-
-                                room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
-
-                                btnConfirmCardSelect.Enabled = false;
-                                Timer1.Enabled = false;
-                            }
-                            else if (value == 0)
-                            {
-                                List<Cards> cardSelect = new List<Cards>();
-
-                                int cardCount = RandomCard(listCards);
-                                cardSelect.Add(listCards[cardCount]);
-                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
-
-                                int cardCount2 = RandomCard(listCards);
-                                cardSelect.Add(listCards[cardCount2]);
-                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount2].idCards);
-
-                                int cardCount3 = RandomCard(listCards);
-                                cardSelect.Add(listCards[cardCount3]);
-                                room.DeleteCardForUser(Master.resultUser, listCards[cardCount3].idCards);
-
-                                room.GenerateCardForUser(Master.resultUser);
-                                room.GenerateCardForUser(Master.resultUser);
-                                room.GenerateCardForUser(Master.resultUser);
-
-                                room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
-
-                                btnConfirmCardSelect.Enabled = false;
-                                Timer1.Enabled = false;
-                            }
-                        }
+                        FunctionConfirmCardSelect();
                     }
                 }
-            }
-            else
-            {
-                totalSeconds = Convert.ToInt16(Session["time1"]);
-                seconds = totalSeconds % 60;
-                minutes = totalSeconds / 60;
-                time = minutes + ":" + seconds;
-                lblTimer.Text = time;
+                else
+                {
+                    totalSeconds = Convert.ToInt16(Session["time1"]);
+                    seconds = totalSeconds % 60;
+                    minutes = totalSeconds / 60;
+                    time = minutes + ":" + seconds;
+                    lblTimer.Text = time;
+                }
             }
         }
     }
     
-    public void ConfirmCardSelect()
+    protected void FunctionConfirmCardSelect()
+    {
+        int spacesBlackCard = room.CheckStringBlackCard();
+
+        List<Cards> listCards = room.GetCardsWhite(Master.resultUser);
+
+        if (spacesBlackCard == 1)
+        {
+            int cardCount = RandomCard(listCards);
+            List<Cards> cardSelect = new List<Cards>();
+            cardSelect.Add(listCards[cardCount]);
+            room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
+            room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
+            room.GenerateCardForUser(Master.resultUser);
+            btnConfirmCardSelect.Enabled = false;
+            Timer1.Enabled = false;
+        }
+
+        if (spacesBlackCard == 2)
+        {
+            int value = FunctionsDB.ReadCardsUser(indexRoom, Master.resultUser);
+
+            if (value == 1)
+            {
+                int cardCount = RandomCard(listCards);
+                List<Cards> cardSelect = new List<Cards>();
+                cardSelect.Add(listCards[cardCount]);
+                room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
+                room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
+                room.GenerateCardForUser(Master.resultUser);
+                btnConfirmCardSelect.Enabled = false;
+                Timer1.Enabled = false;
+            }
+            else if (value == 0)
+            {
+                List<Cards> cardSelect = new List<Cards>();
+
+                int cardCount = RandomCard(listCards);
+                cardSelect.Add(listCards[cardCount]);
+                room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
+
+                int cardCount2 = RandomCard(listCards);
+                cardSelect.Add(listCards[cardCount2]);
+                room.DeleteCardForUser(Master.resultUser, listCards[cardCount2].idCards);
+
+                room.GenerateCardForUser(Master.resultUser);
+                room.GenerateCardForUser(Master.resultUser);
+
+                room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
+
+                btnConfirmCardSelect.Enabled = false;
+                Timer1.Enabled = false;
+            }
+        }
+
+        if (spacesBlackCard == 3)
+        {
+            int value = FunctionsDB.ReadCardsUser(indexRoom, Master.resultUser);
+            if (value == 1)
+            {
+                int cardCount = RandomCard(listCards);
+                List<Cards> cardSelect = new List<Cards>();
+                cardSelect.Add(listCards[cardCount]);
+                room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
+                room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
+                room.GenerateCardForUser(Master.resultUser);
+                btnConfirmCardSelect.Enabled = false;
+                Timer1.Enabled = false;
+            }
+            else if (value == 2)
+            {
+                List<Cards> cardSelect = new List<Cards>();
+
+                int cardCount = RandomCard(listCards);
+                cardSelect.Add(listCards[cardCount]);
+                room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
+
+                int cardCount2 = RandomCard(listCards);
+                cardSelect.Add(listCards[cardCount2]);
+                room.DeleteCardForUser(Master.resultUser, listCards[cardCount2].idCards);
+
+                room.GenerateCardForUser(Master.resultUser);
+                room.GenerateCardForUser(Master.resultUser);
+
+                room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
+
+                btnConfirmCardSelect.Enabled = false;
+                Timer1.Enabled = false;
+            }
+            else if (value == 0)
+            {
+                List<Cards> cardSelect = new List<Cards>();
+
+                int cardCount = RandomCard(listCards);
+                cardSelect.Add(listCards[cardCount]);
+                room.DeleteCardForUser(Master.resultUser, listCards[cardCount].idCards);
+
+                int cardCount2 = RandomCard(listCards);
+                cardSelect.Add(listCards[cardCount2]);
+                room.DeleteCardForUser(Master.resultUser, listCards[cardCount2].idCards);
+
+                int cardCount3 = RandomCard(listCards);
+                cardSelect.Add(listCards[cardCount3]);
+                room.DeleteCardForUser(Master.resultUser, listCards[cardCount3].idCards);
+
+                room.GenerateCardForUser(Master.resultUser);
+                room.GenerateCardForUser(Master.resultUser);
+                room.GenerateCardForUser(Master.resultUser);
+
+                room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
+
+                btnConfirmCardSelect.Enabled = false;
+                Timer1.Enabled = false;
+            }
+        }
+    }
+
+    protected void FunctionConfirmWinner()
+    {
+
+        int BlackCardSpaces = room.CheckStringBlackCard();
+
+        List<Cards> listCards = FunctionsDB.ReadTetxtCardsSelect(indexRoom);
+
+        if (BlackCardSpaces == 1)
+        {
+            int cardCount = RandomCard(listCards);
+            Cards cardSelect = new Cards();
+            cardSelect = listCards[cardCount];
+            NameUsers(BlackCardSpaces);
+            FunctionsDB.WritePoint(indexRoom, cardSelect);
+            FunctionsDB.DeleteCardSelectDB(indexRoom);
+            btnConfirmWinner.Enabled = false;
+            room.NewRaund(indexRoom);
+            Timer1.Enabled = false;
+        }
+
+        if (BlackCardSpaces == 2)
+        {
+            int cardCount = RandomCard(listCards);
+            Cards cardSelect = new Cards();
+            cardSelect = listCards[cardCount];
+            NameUsers(BlackCardSpaces);
+            FunctionsDB.WritePoint(indexRoom, cardSelect);
+            FunctionsDB.DeleteCardSelectDB(indexRoom);
+            btnConfirmWinner.Enabled = false;
+            room.NewRaund(indexRoom);
+            Timer1.Enabled = false;
+        }
+
+        if (BlackCardSpaces == 3)
+        {
+            int cardCount = RandomCard(listCards);
+            Cards cardSelect = new Cards();
+            cardSelect = listCards[cardCount];
+            NameUsers(BlackCardSpaces);
+            FunctionsDB.WritePoint(indexRoom, cardSelect);
+            FunctionsDB.DeleteCardSelectDB(indexRoom);
+            btnConfirmWinner.Enabled = false;
+            room.NewRaund(indexRoom);
+            Timer1.Enabled = false;
+        }
+    }
+    protected void ConfirmCardSelect()
     {
         Account user = Master.resultUser;
 
@@ -1632,6 +1631,38 @@
             }
         }
     }
+
+    protected void btnExitGame_Click(object sender, EventArgs e)
+    {
+        if (!room.IsMaster(Master.resultUser, indexRoom))
+        {
+            if (btnConfirmCardSelect.Enabled == true)
+            {
+                FunctionConfirmCardSelect();
+                FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
+                Response.Redirect("~/index.aspx"); 
+            }
+            if(btnConfirmCardSelect.Enabled == false)
+            {
+                FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
+                Response.Redirect("~/index.aspx"); 
+            }  
+        }
+        else if (room.IsMaster(Master.resultUser, indexRoom))
+        {
+            if (btnConfirmCardSelect.Enabled == true)
+            {
+                FunctionConfirmWinner();
+                FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
+                Response.Redirect("~/index.aspx");
+            }
+            if (btnConfirmCardSelect.Enabled == false)
+            {
+                FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
+                Response.Redirect("~/index.aspx");
+            }
+        }
+    }
 </script>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
@@ -1737,6 +1768,7 @@
                                 </div>
                             </div>
                             <asp:Button ID="btnConfirmWinner" runat="server" Text="Conferma" OnClick="btnConfirmWinner_Click" />
+                            <asp:Button ID="btnExitGame" runat="server" Text="Exit the game" OnClick="btnExitGame_Click" />
                         </div>
                     </div>
                 </div>

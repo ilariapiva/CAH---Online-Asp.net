@@ -224,8 +224,8 @@ namespace CAHOnline
             SqlConnection cn9 = new SqlConnection(strcn9);
             cn9.Open();
 
-            String strsql = @"INSERT INTO tblGame(points, idAccount, room, master) 
-                            VALUES ('0', '" + user.idAccount + "', '" + idRoom + "', '" + indexMaster + "')";
+            String strsql = @"INSERT INTO tblGame(points, idAccount, room, master, exitGame) 
+                            VALUES ('0', '" + user.idAccount + "', '" + idRoom + "', '" + indexMaster + "', '0')";
             SqlCommand cmd = new SqlCommand(strsql, cn9);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -513,7 +513,7 @@ namespace CAHOnline
             cn23.Close();
         }
 
-        //Questa funzione di leggere il master della stanza x
+        //Questa funzione permette di leggere il master della stanza x
         public static Master ReadMaster(int room, Account user)
         {
             string strcn24 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
@@ -538,6 +538,65 @@ namespace CAHOnline
             cmd.Dispose();
             cn24.Close();
             return value;
+        }
+
+        //Questa funzione permette di leggere se l'utente è già presente in una stanza
+        public static bool CheckUserInARoom(Account user)
+        {
+            string strcn25 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn25 = new SqlConnection(strcn25);
+            cn25.Open();
+
+            String strsql = "SELECT idAccount FROM tblGame WHERE idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn25);
+            cmd.ExecuteNonQuery();
+
+            var dr21 = cmd.ExecuteReader();
+            dr21.Read();
+            bool ok = dr21.HasRows;
+            dr21.Close();
+            cmd.Dispose();
+            cn25.Close();
+            return ok;
+        }
+
+        //Questa funzione permette di leggere il se un utente è uscito della stanza x
+        public static int ReadUserExit(int room)
+        {
+            string strcn26 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn26 = new SqlConnection(strcn26);
+            cn26.Open();
+
+            String strsql = "SELECT exitGame FROM tblGame WHERE exitGame = '1'";
+            SqlCommand cmd = new SqlCommand(strsql, cn26);
+            cmd.ExecuteNonQuery();
+
+            int value = 0;
+            var dr22 = cmd.ExecuteReader();
+            if (dr22.HasRows)
+            {
+                dr22.Read();
+                value = Convert.ToInt32(dr22["exitGame"]);
+            }
+
+            dr22.Close();
+            cmd.Dispose();
+            cn26.Close();
+            return value;
+        }
+
+        //Questa funzione mi permette di scrivere nella tblGame se un utente è uscito
+        public static void UpdateExitGame(int room, Account user)
+        {
+            string strcn23 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn23 = new SqlConnection(strcn23);
+            cn23.Open();
+
+            String strsql = "UPDATE tblGame SET exitGame = '1' WHERE idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn23);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn23.Close();
         }
     }
 }

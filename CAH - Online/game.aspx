@@ -65,10 +65,10 @@
             int UserExit = FunctionsDB.ReadUserExit(indexRoom);
             if (UserExit == 1)
             {
-                Response.Redirect("~/index.aspx");
                 FunctionsDB.DeleteRommDB(indexRoom);
                 room.DeleteCardsAndUser(Master.resultUser);
                 room.DeleteUser(indexRoom);
+                Response.Redirect("~/index.aspx");            
             }
             //se l'utente è il master visualizzo solo la carta master 
             if (room.IsMaster(Master.resultUser, indexRoom))
@@ -1671,6 +1671,7 @@
         {
             if (btnConfirmCardSelect.Enabled == true)
             {
+                
                 FunctionConfirmWinner();
                 FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
                 Response.Redirect("~/index.aspx");

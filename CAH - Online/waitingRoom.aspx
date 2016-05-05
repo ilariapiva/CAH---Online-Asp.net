@@ -6,7 +6,7 @@
 <script runat="server">
 
     int indexRoom;
-    //Room room = new Room();
+    Room room = new Room();
     int totalSeconds = 0;
     int seconds = 0;
     int minutes = 0;
@@ -61,6 +61,8 @@
                 string script = "alert(\"Non ci sono abbastanza giocatori in attesa di iniziare una partita!\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
                 FunctionsDB.DeleteRommDB(indexRoom);
+                room.DeleteCardsAndUser(Master.resultUser);
+                room.DeleteUser(indexRoom);
                 Response.Redirect("~/index.aspx");
             }
         }

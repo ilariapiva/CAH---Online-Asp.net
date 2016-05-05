@@ -7,10 +7,10 @@ namespace CAHOnline
 {
     public class Room
     {
-        static Dictionary<int, List<Account>> listUsers;
+        static Dictionary<int, List<Account>> listUsers = new Dictionary<int, List<Account>>();
         static List<Cards> RandomCardBlack, RandomCardsWhite;
         static int indexCardBlack, indexCardWhite, numberCardWhite, indexMaster;
-        static Dictionary<int, List<Cards>> listCardsUsers;
+        static Dictionary<int, List<Cards>> listCardsUsers = new Dictionary<int, List<Cards>>();
 
         public Room()
         {
@@ -35,8 +35,8 @@ namespace CAHOnline
 
             RandomCardsWhite = (cardsWhite.OrderBy(x => rndWhiteCards.Next())).ToList();
 
-            listCardsUsers = new Dictionary<int, List<Cards>>();
-            listUsers = new Dictionary<int, List<Account>>();
+            /*listCardsUsers = new Dictionary<int, List<Cards>>();
+            listUsers = new Dictionary<int, List<Account>>();*/
 
         }
 
@@ -205,6 +205,7 @@ namespace CAHOnline
             return count;
         }
 
+        //Questa funzione permette di mandare avanti l'index del master
         public void NewRaund(int room)
         {
             foreach (Account user in listUsers[room])
@@ -239,6 +240,18 @@ namespace CAHOnline
                 }
             }
             //return indexMaster;
+        }
+
+        //Questa funzione permette di eliminare le carte di un utente
+        public void DeleteCardsAndUser(Account user)
+        {
+            listCardsUsers.Remove(user.idAccount);
+        }
+
+        //Questa funzione permette di eliminare un utente da una stanza
+        public void DeleteUser(int indexRoom)
+        {
+            listUsers.Remove(indexRoom);
         }
     }
 }

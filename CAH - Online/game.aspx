@@ -6,7 +6,7 @@
 <script runat="server">
     
     int indexRoom;
-    Room room = new Room();
+    Room room;
     Cards blackCard;
     List<Cards> whiteCards = new List<Cards>();
     bool stateChanged = false;
@@ -23,7 +23,7 @@
         indexRoom = FunctionsDB.GetRoom(Master.resultUser);
             
         //assegno l'idRoom
-        //room = Game.UserEntered(indexRoom);
+        room = Game.UserEntered(indexRoom);
         
         int points = FunctionsDB.ReadPoints(indexRoom, Master.resultUser);
         
@@ -63,9 +63,12 @@
         if (stateChanged)
         {
             int UserExit = FunctionsDB.ReadUserExit(indexRoom);
-            if(UserExit == 1)
+            if (UserExit == 1)
             {
-                Response.Redirect("~/index.aspx"); 
+                Response.Redirect("~/index.aspx");
+                FunctionsDB.DeleteRommDB(indexRoom);
+                room.DeleteCardsAndUser(Master.resultUser);
+                room.DeleteUser(indexRoom);
             }
             //se l'utente è il master visualizzo solo la carta master 
             if (room.IsMaster(Master.resultUser, indexRoom))
@@ -188,11 +191,14 @@
 
     protected void Timer1_Tick(object sender, EventArgs e)
     {
+        /*Session["time0"] = Convert.ToInt16(Session["time0"]) - 1;
+        if (Convert.ToInt16(Session["time0"]) <= 0)
+        {*/
         if (room.IsMaster(Master.resultUser, indexRoom))
         {
             lblTimerMaster.Visible = true;
             btnConfirmWinner.Visible = true;
-
+           
             Session["time0"] = Convert.ToInt16(Session["time0"]) - 1;
             if (Convert.ToInt16(Session["time0"]) <= 0)
             {
@@ -511,46 +517,60 @@
                     if (Convert.ToInt16(Session["time2"]) <= 0)
                     {
                         lblTimerMaster.Text = "TimeOut!";
+
                         if (btnConfirmWinner.Enabled == true)
                         {
                             FunctionConfirmWinner();
-                        }
+                        }  
                     }
-                }
-
-                else
-                {
-                    totalSeconds = Convert.ToInt16(Session["time2"]);
-                    seconds = totalSeconds % 60;
-                    minutes = totalSeconds / 60;
-                    time = minutes + ":" + seconds;
-                    lblTimer.Text = time;
+                    else
+                    {
+                        totalSeconds = Convert.ToInt16(Session["time2"]);
+                        seconds = totalSeconds % 60;
+                        minutes = totalSeconds / 60;
+                        time = minutes + ":" + seconds;
+                        lblTimerMaster.Text = time;
+                    }
                 }
             }
 
-            else if (!room.IsMaster(Master.resultUser, indexRoom))
+            else
             {
-                Session["time1"] = Convert.ToInt16(Session["time1"]) - 1;
-                if (Convert.ToInt16(Session["time1"]) <= 0)
+                totalSeconds = Convert.ToInt16(Session["time2"]);
+                seconds = totalSeconds % 60;
+                minutes = totalSeconds / 60;
+                time = minutes + ":" + seconds;
+                lblTimer.Text = time;
+            }
+        }
+
+        else if (!room.IsMaster(Master.resultUser, indexRoom))
+        {
+            Session["time1"] = Convert.ToInt16(Session["time1"]) - 1;
+            if (Convert.ToInt16(Session["time1"]) <= 0)
+            {
+                lblTimer.Text = "TimeOut!";
+
+                if (!room.IsMaster(Master.resultUser, indexRoom))
                 {
-                    lblTimer.Text = "TimeOut!";
                     if (btnConfirmCardSelect.Enabled == true)
                     {
                         FunctionConfirmCardSelect();
                     }
                 }
-                else
-                {
-                    totalSeconds = Convert.ToInt16(Session["time1"]);
-                    seconds = totalSeconds % 60;
-                    minutes = totalSeconds / 60;
-                    time = minutes + ":" + seconds;
-                    lblTimer.Text = time;
-                }
+            }
+            else
+            {
+                totalSeconds = Convert.ToInt16(Session["time1"]);
+                seconds = totalSeconds % 60;
+                minutes = totalSeconds / 60;
+                time = minutes + ":" + seconds;
+                lblTimer.Text = time;
             }
         }
     }
-    
+
+
     protected void FunctionConfirmCardSelect()
     {
         int spacesBlackCard = room.CheckStringBlackCard();
@@ -670,7 +690,6 @@
 
     protected void FunctionConfirmWinner()
     {
-
         int BlackCardSpaces = room.CheckStringBlackCard();
 
         List<Cards> listCards = FunctionsDB.ReadTetxtCardsSelect(indexRoom);
@@ -714,7 +733,7 @@
             Timer1.Enabled = false;
         }
     }
-    protected void ConfirmCardSelect()
+    public void ConfirmCardSelect()
     {
         Account user = Master.resultUser;
 
@@ -1640,13 +1659,13 @@
             {
                 FunctionConfirmCardSelect();
                 FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
-                Response.Redirect("~/index.aspx"); 
+                Response.Redirect("~/index.aspx");
             }
-            if(btnConfirmCardSelect.Enabled == false)
+            if (btnConfirmCardSelect.Enabled == false)
             {
                 FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
-                Response.Redirect("~/index.aspx"); 
-            }  
+                Response.Redirect("~/index.aspx");
+            }
         }
         else if (room.IsMaster(Master.resultUser, indexRoom))
         {
@@ -1768,7 +1787,7 @@
                                 </div>
                             </div>
                             <asp:Button ID="btnConfirmWinner" runat="server" Text="Conferma" OnClick="btnConfirmWinner_Click" />
-                            <asp:Button ID="btnExitGame" runat="server" Text="Exit the game" OnClick="btnExitGame_Click" />
+                            <asp:Button ID="btnExitGame" runat="server" Text="Exit the game" OnClick="btnExitGame_Click"/>
                         </div>
                     </div>
                 </div>

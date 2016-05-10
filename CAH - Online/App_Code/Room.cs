@@ -9,8 +9,9 @@ namespace CAHOnline
     {
         static Dictionary<int, List<Account>> listUsers = new Dictionary<int, List<Account>>();
         static List<Cards> RandomCardBlack, RandomCardsWhite;
-        static int indexCardBlack, indexCardWhite, numberCardWhite, indexMaster;
+        static int indexCardBlack, indexCardWhite, indexMaster; //numberCardWhite, 
         static Dictionary<int, List<Cards>> listCardsUsers = new Dictionary<int, List<Cards>>();
+        static Dictionary<int, List<Cards>> listCardsBlack = new Dictionary<int, List<Cards>>();
 
         public Room()
         {
@@ -25,7 +26,7 @@ namespace CAHOnline
             List<Cards> cardBlack = FunctionsDB.Cards(BlackCard);
 
             RandomCardBlack = (cardBlack.OrderBy(x => rndBlackCard.Next())).ToList();
-            numberCardWhite = CheckStringBlackCard();
+            //numberCardWhite = CheckStringBlackCard();
 
             //prendo tutte le carte dalla tabella WhiteCard e le inserisco in una lista
             Random rndWhiteCards = new Random();
@@ -46,6 +47,7 @@ namespace CAHOnline
             listUsers.Add(idRoom, new List<Account>());
             listUsers[idRoom].Add(user);
             listCardsUsers.Add(user.idAccount, new List<Cards>());
+            listCardsBlack.Add(idRoom, new List<Cards>());
         }
 
         //Controllo che nella lista listUsers non ci siano già 5 giocatori
@@ -126,27 +128,45 @@ namespace CAHOnline
             }
         }
 
-        //Questa funzione restituisce la carta nera del turno a tutti i giocatori
-        public Cards GetCardBlack()
+        //Questa funzione genera la carta nera del turno a tutti i giocatori
+        public void GenerateCardBlack(int idRoom)
         {
-            Cards card = new Cards();
-            card = RandomCardBlack[indexCardBlack];
-            return card;
+            Cards c = new Cards();
+            //indexCardBlack++;
+            c = RandomCardBlack[indexCardBlack];
+            listCardsBlack[idRoom].Add(c);
+           // return listCardsBlack[idRoom];
         }
 
-        //Questa funzione restituisce il numero di spazi presenti nella blackCard selezionata
-        public int CheckStringBlackCard()
+        //Questa funzione genera la carta nera del turno a tutti i giocatori
+        public void GenerateNewCardBlack(int idRoom)
         {
-            String str = GetCardBlack().Text;
+            Cards c = new Cards();
+            c = RandomCardBlack[indexCardBlack];
+            listCardsBlack[idRoom].Add(c);
+            // return listCardsBlack[idRoom];
+        }
+
+        //Questa funzione restituisce la carta nera del turno a tutti i giocatori
+        public Cards GetCardBlack(int idRoom)
+        {
+            return listCardsBlack[idRoom][listCardsBlack[idRoom].Count - 1];
+        }
+
+
+        //Questa funzione restituisce il numero di spazi presenti nella blackCard selezionata
+        public int CheckStringBlackCard(int idRoom)
+        {
+            String str = GetCardBlack(idRoom).Text;
             String[] toFind = str.Split('_');
             return toFind.Length - 1;
         }
 
         /*Questa funzione controlla che il numero di carte selezionate corrispondana 
         al numero di spazi che ci sono nella blackCard*/
-        public bool CheckSelectCards(List<Cards> listCards)
+        public bool CheckSelectCards(List<Cards> listCards, int idRoom)
         {
-            if (CheckStringBlackCard() == listCards.Count)
+            if (CheckStringBlackCard(idRoom) == listCards.Count)
             {
                 return true;
             }
@@ -162,7 +182,7 @@ namespace CAHOnline
             //foreach (Account user in listUsers)
             if (!IsMaster(user, idRoom))
             {
-                if (CheckSelectCards(listCardsWhite) == true)
+                if (CheckSelectCards(listCardsWhite, idRoom) == true)
                 {
                     if (listCardsWhite.Count != 0)
                     {
@@ -216,6 +236,7 @@ namespace CAHOnline
                     {
                         indexMaster = 0;
                         indexCardBlack++;
+                        GetCardBlack(room);
                         indexMaster = indexMaster % listUsers[room].Count;
                         FunctionsDB.UpdateMaster(room, 0, user);
                         break;
@@ -224,6 +245,7 @@ namespace CAHOnline
                     {
                         indexMaster++;
                         indexCardBlack++;
+                        GenerateCardBlack(room);
                         indexMaster = indexMaster % listUsers[room].Count;
                         FunctionsDB.UpdateMaster(room, 0, user);
                         break;
@@ -252,6 +274,12 @@ namespace CAHOnline
         public void DeleteUser(int indexRoom)
         {
             listUsers.Remove(indexRoom);
+        }
+
+        //Questa funzione permette di eliminare un utente da una stanza
+        public void DeleteCardBlack(int indexRoom)
+        {
+            listCardsBlack.Remove(indexRoom);
         }
     }
 }

@@ -24,6 +24,7 @@ namespace CAHOnline
                 int indexRoom = Convert.ToInt32(Rooms.IndexOf(room));
                 room.AddRoomInListUser(user, indexRoom);
                 room.GenerateCardsForUser(user);
+                room.GenerateCardBlack(indexRoom);
                 return true;
             }
             else //Se la lista rooms non è vuota allora controllo nelle rooms se c'è spazio, e se ce nè allora aggiungo lo user nella prima room non piena
@@ -36,6 +37,7 @@ namespace CAHOnline
                         int indexRoom = Convert.ToInt32(Rooms.IndexOf(i));
                         i.AddUser(user, indexRoom);
                         i.GenerateCardsForUser(user);
+                        //i.GenerateCardBlack(indexRoom);
                         return true;
                     }
                 }
@@ -46,6 +48,7 @@ namespace CAHOnline
                 int idRoom = Convert.ToInt32(Rooms.IndexOf(room));
                 room.AddRoomInListUser(user, idRoom);
                 room.GenerateCardsForUser(user);
+                room.GenerateCardBlack(idRoom);
                 return true;
             }
         }

@@ -16,28 +16,22 @@
     {
         FunctionsDB.OpenConnectionDB();
 
-        /*int NumberUsers = FunctionsDB.ReadUsersInRoom(indexRoom);
+        int NumberUsers = FunctionsDB.ReadUsersInRoom(indexRoom);
 
-        if (NumberUsers == 5)
+        /*if (NumberUsers == 5)
         {
             Response.Redirect("~/game.aspx");
         }
-        else if (NumberUsers == 3)
+        else */
+        /*if (NumberUsers == 3)
         {
             Response.Redirect("~/game.aspx");
         }*/
 
         if (!Page.IsPostBack)
         {
-            /*if (FunctionsDB.CheckUserInARoom(Master.resultUser))
-            {
-                Response.Redirect("~/index.aspx");
-            }
-            else*/
-            
-                Game.NewGame(Master.resultUser);
-                Session["time1"] = 3; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
-            
+            Game.NewGame(Master.resultUser);
+            Session["time1"] = 3; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
         }
     }
 
@@ -48,11 +42,11 @@
         {
             int NumberUsers = FunctionsDB.ReadUsersInRoom(indexRoom);
 
-            if (NumberUsers == 5)
+            /*if (NumberUsers == 5)
             {
                 Response.Redirect("~/game.aspx");
             }
-            else if (NumberUsers == 3)
+            else */if (NumberUsers == 3)
             {
                 Response.Redirect("~/game.aspx");
             }
@@ -63,6 +57,7 @@
                 FunctionsDB.DeleteRommDB(indexRoom);
                 room.DeleteCardsAndUser(Master.resultUser);
                 room.DeleteUser(indexRoom);
+                room.DeleteCardBlack(indexRoom);
                 Response.Redirect("~/index.aspx");
             }
         }

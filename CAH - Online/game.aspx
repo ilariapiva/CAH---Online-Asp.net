@@ -65,24 +65,27 @@
             int UserExit = FunctionsDB.ReadUserExit(indexRoom);
             if (UserExit == 1)
             {
+                string script = "alert(\"Un utente è uscito dal gioco, quindi la partita è finita e il vinciotore finale è:\");";
+                ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
                 FunctionsDB.DeleteRommDB(indexRoom);
                 room.DeleteCardsAndUser(Master.resultUser);
                 room.DeleteUser(indexRoom);
+                room.DeleteCardBlack(indexRoom);
                 Response.Redirect("~/index.aspx");            
             }
             //se l'utente è il master visualizzo solo la carta master 
             if (room.IsMaster(Master.resultUser, indexRoom))
-            { 
+            {
                 lblTimer.Visible = false;
 
                 btnConfirmWinner.Visible = false;
                 btnConfirmCardSelect.Visible = false;
 
-                blackCard = room.GetCardBlack();
+                blackCard = room.GetCardBlack(indexRoom);
                 lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
                 lblBlack.Text = blackCard.Text;
 
-                int spacesBlackCard = room.CheckStringBlackCard();
+                int spacesBlackCard = room.CheckStringBlackCard(indexRoom);
 
                 if (spacesBlackCard == 1)
                 {
@@ -141,7 +144,7 @@
 
                 btnConfirmWinner.Visible = false;
 
-                blackCard = room.GetCardBlack();
+                blackCard = room.GetCardBlack(indexRoom);
                 lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
                 lblBlack.Text = blackCard.Text;
 
@@ -208,7 +211,7 @@
                 {
                     List<Cards> textCardSelect = FunctionsDB.ReadTetxtCardsSelect(indexRoom);
 
-                    int spacesBlackCard = room.CheckStringBlackCard();
+                    int spacesBlackCard = room.CheckStringBlackCard(indexRoom);
 
                     if (room.UsersNotMaster(indexRoom) == 4)
                     {
@@ -573,7 +576,7 @@
 
     protected void FunctionConfirmCardSelect()
     {
-        int spacesBlackCard = room.CheckStringBlackCard();
+        int spacesBlackCard = room.CheckStringBlackCard(indexRoom);
 
         List<Cards> listCards = room.GetCardsWhite(Master.resultUser);
 
@@ -690,7 +693,7 @@
 
     protected void FunctionConfirmWinner()
     {
-        int BlackCardSpaces = room.CheckStringBlackCard();
+        int BlackCardSpaces = room.CheckStringBlackCard(indexRoom);
 
         List<Cards> listCards = FunctionsDB.ReadTetxtCardsSelect(indexRoom);
 
@@ -849,7 +852,7 @@
        
         ConfirmCardSelect();
 
-        int spacesBlackCard = room.CheckStringBlackCard();
+        int spacesBlackCard = room.CheckStringBlackCard(indexRoom);
        
         if (spacesBlackCard == 1)
         {
@@ -937,7 +940,7 @@
     {
         Cards CardSelect = new Cards();
 
-        int spacesBlackCard = room.CheckStringBlackCard();
+        int spacesBlackCard = room.CheckStringBlackCard(indexRoom);
 
         if (room.UsersNotMaster(indexRoom) == 4)
         {

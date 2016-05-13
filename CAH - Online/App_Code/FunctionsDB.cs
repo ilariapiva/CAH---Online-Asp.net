@@ -33,6 +33,7 @@ namespace CAHOnline
             }
             return false;
         }
+
         //Questa funzione risponde l'email memorizzata nei cookies
         public static void CookiesRequest()
         {
@@ -53,14 +54,16 @@ namespace CAHOnline
 
         public static void DeleteCookies(Account userEmail)
         {
-            HttpCookie aCookie;
-            int limit = HttpContext.Current.Request.Cookies.Count;
-            for (int i = 0; i < limit; i++)
+            HttpCookieCollection cookieCols = new HttpCookieCollection();
+            cookieCols = HttpContext.Current.Request.Cookies;
+            foreach (String str in cookieCols)
             {
-                userEmail.Email = HttpContext.Current.Request.Cookies[i].Name;
-                aCookie = new HttpCookie(userEmail.Email);
-                aCookie.Expires = DateTime.Now.AddDays(-1);
-                HttpContext.Current.Response.Cookies.Add(aCookie);
+                if (userEmail.Email == str)
+                {
+                    HttpContext.Current.Request.Cookies.Remove("userEmail");
+                    HttpContext.Current.Session["userEmail"] = null;
+                    break;
+                }
             }
         }
         //Questa funzione controlla che l'email e la pwd siano inseriti nel DB
@@ -485,7 +488,7 @@ namespace CAHOnline
         }
 
         //Questa funzione permette di eliminare le righe dalla tblGame
-        public static void DeleteRommDB(int room)
+        public static void DeleteRoomDB(int room)
         {
             string strcn22 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn22 = new SqlConnection(strcn22);

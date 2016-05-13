@@ -27,10 +27,11 @@
         {
             userEmail.Email = txtEmail.Text;
 
+            //FunctionsDB.WriteCookie(userEmail);
             FunctionsDB.CookiesResponse(userEmail);//Memorizzo l'email nei cookies
 
             FormsAuthentication.RedirectFromLoginPage(userEmail.Email, CheckBoxRemember.Checked);
-            Response.Redirect("~/index.aspx");
+            Response.Redirect("~/index1.aspx");
         }
         else
         {

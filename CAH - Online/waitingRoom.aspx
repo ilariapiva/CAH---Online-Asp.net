@@ -11,6 +11,7 @@
     int seconds = 0;
     int minutes = 0;
     string time = "";
+    //bool ok = false;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -54,12 +55,18 @@
             {
                 string script = "alert(\"Non ci sono abbastanza giocatori in attesa di iniziare una partita!\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
-                FunctionsDB.DeleteRommDB(indexRoom);
+                FunctionsDB.DeleteRoomDB(indexRoom);
                 room.DeleteCardsAndUser(Master.resultUser);
                 room.DeleteUser(indexRoom);
                 room.DeleteCardBlack(indexRoom);
-                Response.Redirect("~/index.aspx");
+                //ok = true;
+                Response.Redirect("~/index1.aspx");
             }
+            
+            /*if(ok == true)
+            {
+                Response.Redirect("~/index.aspx");
+            }*/
         }
         else
         {

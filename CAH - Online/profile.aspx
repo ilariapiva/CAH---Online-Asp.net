@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" %>
 
-<%@ Import Namespace="System.Data" %>
+<%@ MasterType VirtualPath="~/MasterPage.master" %>
 <%@ Import Namespace="CAHOnline" %>
 
  <script runat="server">
@@ -10,7 +10,6 @@
      protected void Page_Load(object sender, EventArgs e)
      {
          FunctionsDB.OpenConnectionDB();
-
          //Leggo dalla tabella account lo username, partite vinte, partite perse e partite giocate
          result = FunctionsDB.ReadValuesProfileDB();
          lblMatchesPlayed.Text = Convert.ToString(result.MatchesPlayed);

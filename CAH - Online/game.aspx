@@ -10,13 +10,14 @@
     Cards blackCard;
     List<Cards> whiteCards = new List<Cards>();
     bool stateChanged = false;
+    bool userIsExit = false;
     int totalSeconds = 0;
     int seconds = 0;
     int minutes = 0;
     string time = "";
     
     protected void Page_Load(object sender, EventArgs e)
-    {
+    {           
         FunctionsDB.OpenConnectionDB();
 
         //recupero l'id della room
@@ -57,21 +58,20 @@
              * 50 = 50 sec
              */
         }
-        
         //room.GenerateCardsForUser(Master.resultUser);
 
         if (stateChanged)
         {
             int UserExit = FunctionsDB.ReadUserExit(indexRoom);
-            if (UserExit == 1)
+            if (UserExit == 1 || UserExit == 2 || UserExit == 3 || UserExit == 4 || UserExit == 5)
             {
                 string script = "alert(\"Un utente è uscito dal gioco, quindi la partita è finita e il vinciotore finale è:\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
-                FunctionsDB.DeleteRommDB(indexRoom);
+                FunctionsDB.DeleteRoomDB(indexRoom);
                 room.DeleteCardsAndUser(Master.resultUser);
                 room.DeleteUser(indexRoom);
                 room.DeleteCardBlack(indexRoom);
-                Response.Redirect("~/index.aspx");            
+                Response.Redirect("~/index1.aspx");            
             }
             //se l'utente è il master visualizzo solo la carta master 
             if (room.IsMaster(Master.resultUser, indexRoom))
@@ -201,8 +201,12 @@
         {
             lblTimerMaster.Visible = true;
             btnConfirmWinner.Visible = true;
-           
+            
             Session["time0"] = Convert.ToInt16(Session["time0"]) - 1;
+            /*if(stateChanged == false)
+            {
+                FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
+            }*/
             if (Convert.ToInt16(Session["time0"]) <= 0)
             {
                 lblTimer.Text = "TimeOut!";
@@ -550,6 +554,14 @@
         else if (!room.IsMaster(Master.resultUser, indexRoom))
         {
             Session["time1"] = Convert.ToInt16(Session["time1"]) - 1;
+            /*if (stateChanged == false)
+            {
+                if (btnConfirmCardSelect.Enabled == true)
+                {
+                    FunctionConfirmCardSelect();
+                }
+                FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
+            }*/
             if (Convert.ToInt16(Session["time1"]) <= 0)
             {
                 lblTimer.Text = "TimeOut!";

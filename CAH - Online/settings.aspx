@@ -35,20 +35,20 @@
         if (FunctionsDB.CeckUsername(user) == false & UserPass.Text == "")//Se il nome utente non è già stato utilizzato e la texPwd è vuota eseguo la funzione ChangeUsername
         {
             FunctionsDB.ChangeUsername(user);
-            Response.Redirect("~/index1.aspx");
+            Response.Redirect("~/index.aspx");
         }
 
         if(UserName.Text == "")//Se la textUsername è vuota eseguo il ChangePwd
         {
             FunctionsDB.ChangePwd(pwd);
-            Response.Redirect("~/index1.aspx");
+            Response.Redirect("~/index.aspx");
         }
 
         if (FunctionsDB.CeckUsername(user) == false)//Se il nome utente non è già stato utilizzato e la textUsername non è vuota eseguo la funzione ChangeUsername e ChangePwd 
         {
             FunctionsDB.ChangeUsername(user);
             FunctionsDB.ChangePwd(pwd);
-            Response.Redirect("~/index1.aspx");
+            Response.Redirect("~/index.aspx");
         }
     }
 </script>

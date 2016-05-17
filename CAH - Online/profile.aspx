@@ -15,6 +15,7 @@
          lblMatchesPlayed.Text = Convert.ToString(result.MatchesPlayed);
          lblMatchesWon.Text = Convert.ToString(result.MatchesWon);
          lblMatchesMissed.Text = Convert.ToString(result.MatchesMissed);
+         lblMatchesEqualized.Text = Convert.ToString(result.MatchesEqualized);
          lblUsername.Text = result.Username;
          lblEmail.Text = Session["userEmail"].ToString();
      }
@@ -52,6 +53,10 @@
                         </li>
                         <li class="form-control-static p4">Matches missed:
                             <asp:Label class="control-label label-form" ID="lblMatchesMissed" runat="server"></asp:Label>
+                            &nbsp;
+                        </li>
+                        <li class="form-control-static p4">Matches equalized:
+                            <asp:Label class="control-label label-form" ID="lblMatchesEqualized" runat="server"></asp:Label>
                             &nbsp;
                         </li>
                     </ul>

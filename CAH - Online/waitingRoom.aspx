@@ -60,7 +60,7 @@
                 room.DeleteUser(indexRoom);
                 room.DeleteCardBlack(indexRoom);
                 //ok = true;
-                Response.Redirect("~/index1.aspx");
+                Response.Redirect("~/index.aspx");
             }
             
             /*if(ok == true)

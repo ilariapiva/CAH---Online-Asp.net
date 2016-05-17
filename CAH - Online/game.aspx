@@ -49,6 +49,7 @@
         if (!Page.IsPostBack)
         {
             stateChanged = true;
+            FunctionsDB.UpdateMatchesPlayed(Master.resultUser);
             Session["time0"] = 50; 
             Session["time1"] = 40; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
             Session["time2"] = 40;
@@ -71,7 +72,8 @@
                 room.DeleteCardsAndUser(Master.resultUser);
                 room.DeleteUser(indexRoom);
                 room.DeleteCardBlack(indexRoom);
-                Response.Redirect("~/index1.aspx");            
+                UpdateMatches();
+                Response.Redirect("~/index.aspx");            
             }
             //se l'utente è il master visualizzo solo la carta master 
             if (room.IsMaster(Master.resultUser, indexRoom))
@@ -1666,6 +1668,52 @@
         }
     }
 
+    protected void UpdateMatches()
+    {
+        Account numberIdAccount = new Account();
+        numberIdAccount.idAccount = FunctionsDB.CountAccountMaxPoint(indexRoom);
+        if (numberIdAccount.idAccount == 1)
+        {
+            List<Account> listUser = new List<Account>();
+
+            listUser = FunctionsDB.GetIdAccount(indexRoom);
+
+            foreach (Account user in listUser)
+            {
+                if (listUser[user.idAccount] == Master.resultUser)
+                {
+                    FunctionsDB.UpdateMatchesWon(Master.resultUser);
+                    break;
+                }
+                else
+                {
+                    FunctionsDB.UpdateMatchesMissed(Master.resultUser);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            List<Account> listUser = new List<Account>();
+
+            listUser = FunctionsDB.GetIdAccount(indexRoom);
+
+            foreach (Account user in listUser)
+            {
+                if (listUser[user.idAccount] == Master.resultUser)
+                {
+                    FunctionsDB.UpdateMatchesEqualizedd(Master.resultUser);
+                    break;
+                }
+                else
+                {
+                    FunctionsDB.UpdateMatchesMissed(Master.resultUser);
+                    break;
+                }
+            }
+        }
+    }
+    
     protected void btnExitGame_Click(object sender, EventArgs e)
     {
         if (!room.IsMaster(Master.resultUser, indexRoom))
@@ -1686,14 +1734,15 @@
         {
             if (btnConfirmCardSelect.Enabled == true)
             {
-                
                 FunctionConfirmWinner();
                 FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
+                UpdateMatches();
                 Response.Redirect("~/index.aspx");
             }
             if (btnConfirmCardSelect.Enabled == false)
             {
                 FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
+                UpdateMatches();
                 Response.Redirect("~/index.aspx");
             }
         }

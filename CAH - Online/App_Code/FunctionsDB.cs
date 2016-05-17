@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -76,7 +77,17 @@ namespace CAHOnline
             String strsql = "SELECT email FROM tblAccount WHERE email = '" + email.Email + "' and pwd = HASHBYTES('SHA1', '" + pwd + "')";
             SqlCommand cmd = new SqlCommand(strsql, cn1);
             cmd.ExecuteNonQuery();
-            var dr1 = cmd.ExecuteReader();
+
+            /*SqlParameter p1 = new SqlParameter(email.Email, SqlDbType.VarChar, 50);
+            SqlParameter p2 = new SqlParameter(pwd, SqlDbType.VarChar, 50);
+
+            p1.Value = email.Email;
+            p2.Value = pwd;
+
+            cmd.Parameters.Add(p1);
+            cmd.Parameters.Add(p2);*/
+      
+            SqlDataReader dr1 = cmd.ExecuteReader();
             dr1.Read();
             bool ok = dr1.HasRows;
             dr1.Close();
@@ -130,8 +141,8 @@ namespace CAHOnline
             SqlConnection cn4 = new SqlConnection(strcn4);
             cn4.Open();
 
-            String strsql = @"INSERT INTO tblAccount(email, username, pwd, matchesPlayed, matchesWon, matchesMissed) 
-                              VALUES ('" + email.Email + "', '" + user.Username + "', HASHBYTES('SHA1', '" + pwd + "'), '0', '0', '0')";
+            String strsql = @"INSERT INTO tblAccount(email, username, pwd, matchesPlayed, matchesWon, matchesMissed, matchesEqualized) 
+                              VALUES ('" + email.Email + "', '" + user.Username + "', HASHBYTES('SHA1', '" + pwd + "'), '0', '0', '0', '0')";
             SqlCommand cmd = new SqlCommand(strsql, cn4);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -173,7 +184,7 @@ namespace CAHOnline
             SqlConnection cn7 = new SqlConnection(strcn7);
             cn7.Open();
 
-            String strsql = @"SELECT idAccount, email, username, matchesPlayed, matchesWon, matchesMissed FROM tblAccount 
+            String strsql = @"SELECT idAccount, email, username, matchesPlayed, matchesWon, matchesMissed, matchesEqualized FROM tblAccount 
                             WHERE email = '" + HttpContext.Current.Session["userEmail"] + "' ";
             Account value = new Account();
             SqlCommand cmd = new SqlCommand(strsql, cn7);
@@ -184,6 +195,7 @@ namespace CAHOnline
                 value.MatchesPlayed = Convert.ToInt32(dr7["matchesPlayed"]);
                 value.MatchesWon = Convert.ToInt32(dr7["matchesWon"]);
                 value.MatchesMissed = Convert.ToInt32(dr7["matchesMissed"]);
+                value.MatchesEqualized = Convert.ToInt32(dr7["matchesEqualized"]);
                 value.Username = dr7["username"].ToString();
                 value.idAccount = Convert.ToInt32(dr7["idAccount"]);
                 value.Email = dr7["email"].ToString();
@@ -600,6 +612,186 @@ namespace CAHOnline
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             cn23.Close();
+        }
+
+        //Questa funzione mi permette di aggiornare la pwd 
+        public static void ResetPwd(Account email, String pwd)
+        {
+            string strcn24 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn24 = new SqlConnection(strcn24);
+            cn24.Open();
+
+            String strsql = "UPDATE tblAccount SET pwd = HASHBYTES('SHA1', '" + pwd + "') WHERE email = '" + email.Email + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn24);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn24.Close();
+        }
+
+        //Questa funzione mi permette di aggiornare la il numero di partite giocate 
+        public static void UpdateMatchesPlayed(Account user)
+        {
+            string strcn25 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn25 = new SqlConnection(strcn25);
+            cn25.Open();
+
+            Account matchesPlayed = GetValueMatches(user);
+            String strsql = "UPDATE tblAccount SET matchesPlayed = '" + (matchesPlayed.MatchesPlayed + 1) + "' WHERE idAccount= '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn25);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn25.Close();
+        }
+
+        //Questa funzione mi permette di aggiornare la il numero di partite vinte 
+        public static void UpdateMatchesWon(Account user)
+        {
+            string strcn26 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn26 = new SqlConnection(strcn26);
+            cn26.Open();
+
+            Account matchesWon = GetValueMatches(user);
+            String strsql = "UPDATE tblAccount SET matchesWon = '" + (matchesWon.MatchesWon + 1) + "' WHERE idAccount= '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn26);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn26.Close();
+        }
+
+        //Questa funzione mi permette di aggiornare la il numero di partite perse 
+        public static void UpdateMatchesMissed(Account user)
+        {
+            string strcn27 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn27 = new SqlConnection(strcn27);
+            cn27.Open();
+
+            Account matchesMissed = GetValueMatches(user);
+            String strsql = "UPDATE tblAccount SET matchesMissed = '" + (matchesMissed.MatchesMissed + 1) + "' WHERE idAccount= '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn27);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn27.Close();
+        }
+
+        //Questa funzione mi permette di aggiornare la il numero di partite pareggiate 
+        public static void UpdateMatchesEqualizedd(Account user)
+        {
+            string strcn27 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn27 = new SqlConnection(strcn27);
+            cn27.Open();
+
+            Account matchesEqualized = GetValueMatches(user);
+            String strsql = "UPDATE tblAccount SET matchesEqualized = '" + (matchesEqualized.MatchesEqualized + 1) + "' WHERE idAccount= '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn27);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn27.Close();
+        }
+
+        //Questa funzione permette di leggere i valori delle partite 
+        public static Account GetValueMatches(Account user)
+        {
+            string strcn28 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn28 = new SqlConnection(strcn28);
+            cn28.Open();
+
+            String strsql = @"SELECT matchesPlayed, matchesWon, matchesMissed, matchesEqualized FROM tblAccount 
+                            WHERE idAccount= '" + user.idAccount + "'";
+            Account value = new Account();
+            SqlCommand cmd = new SqlCommand(strsql, cn28);
+            var dr23 = cmd.ExecuteReader();
+            if (dr23.HasRows)
+            {
+                dr23.Read();
+                value.MatchesPlayed = Convert.ToInt32(dr23["matchesPlayed"]);
+                value.MatchesWon = Convert.ToInt32(dr23["matchesWon"]);
+                value.MatchesMissed = Convert.ToInt32(dr23["matchesMissed"]);
+                value.MatchesEqualized = Convert.ToInt32(dr23["matchesEqualized"]);
+            }
+            dr23.Close();
+            cmd.Dispose();
+            cn28.Close();
+            return value;
+        }
+
+        //Questa funzione permette di trovare il punteggio massimo 
+        public static int GetMaxPoint(int room)
+        {
+            string strcn29 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn29 = new SqlConnection(strcn29);
+            cn29.Open();
+
+            String strsql = "SELECT MAX(points) AS maxPoints FROM tblGame WHERE room = '" + room + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn29);
+
+            int points = 0;
+
+            var dr24 = cmd.ExecuteReader();
+            if (dr24.HasRows)
+            {
+                dr24.Read();
+                points = Convert.ToInt32(dr24["maxPoints"]);
+            }
+            dr24.Close();
+            cmd.Dispose();
+            cn29.Close();
+            return points;
+        }
+
+        //Questa funzione permette di leggere quanti utenti hanno preso un determinato punteggio durante la partita
+        public static int CountAccountMaxPoint(int room)
+        {
+            string strcn30 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn30 = new SqlConnection(strcn30);
+            cn30.Open();
+
+            int point = GetMaxPoint(room);
+
+            String strsql = "SELECT COUNT(idAccount) AS countIdAccount FROM tblGame WHERE points = '" + point + "' and room = '" + room + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn30);
+
+            int countIdAccount = 0;
+            var dr25 = cmd.ExecuteReader();
+            if (dr25.HasRows)
+            {
+                dr25.Read();
+                countIdAccount = Convert.ToInt32(dr25["countIdAccount"]);
+            }
+            dr25.Close();
+            cmd.Dispose();
+            cn30.Close();
+            return countIdAccount;
+        }
+
+        //Questa funzione restituisce l'idAccount
+        public static List<Account> GetIdAccount(int room)
+        {
+            string strcn31 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn31 = new SqlConnection(strcn31);
+            cn31.Open();
+
+            int point = GetMaxPoint(room);
+
+            String strsql = "SELECT a.username FROM tblGame as g INNER JOIN tblAccount as a ON g.idAccount = a.idAccount WHERE points = '" + point + "' and room = '" + room + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn31);
+
+            List<Account> listIdAccount = new List<Account>();
+   
+            var dr26 = cmd.ExecuteReader();
+
+            while (dr26.Read())
+            {
+                if (dr26.HasRows)
+                {
+                    Account value = new Account();
+                    value.Username = dr26["username"].ToString();
+                    listIdAccount.Add(value);
+                }
+            }
+            dr26.Close();
+            cmd.Dispose();
+            cn31.Close();
+            return listIdAccount;
         }
     }
 }

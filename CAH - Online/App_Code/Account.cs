@@ -8,7 +8,7 @@ namespace CAHOnline
     public class Account
     {
         private String _email, _username;
-        private int _idAccount, _matchesPlayed, _matchesWon, _matchesMissed;
+        private int _idAccount, _matchesPlayed, _matchesWon, _matchesMissed, _matchesEqualized;
 
         public Account()
         {
@@ -18,6 +18,7 @@ namespace CAHOnline
             _matchesPlayed = 0; 
             _matchesWon = 0;
             _matchesMissed = 0;
+            _matchesEqualized = 0;
         }
        
         public int idAccount
@@ -54,6 +55,12 @@ namespace CAHOnline
         {
             get { return _matchesMissed; }
             set { _matchesMissed = value; }
+        }
+
+        public int MatchesEqualized
+        {
+            get { return _matchesEqualized; }
+            set { _matchesEqualized = value; }
         }
     }
 }

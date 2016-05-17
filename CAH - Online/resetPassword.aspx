@@ -5,7 +5,7 @@
 
 <script runat="server">
 
-    Account userEmail, email;
+    Account email = new Account();
     String pwd;
 
     protected void Page_Load(object sender, EventArgs e)
@@ -13,30 +13,13 @@
         FunctionsDB.OpenConnectionDB();
     }
 
-    void btnLogin_Click(object sender, EventArgs e)
+    protected void btnReset_Click(object sender, EventArgs e)
     {
-        userEmail = new Account();
-        email = new Account();
-        pwd = "";
-        
         email.Email = txtEmail.Text;
         pwd = txtPassword.Text;
 
-        //Controllo che l'email e la pwd corrispondano ad uno user registrato e poi memorizzo tramite i cookies l'email e accedo alla pagina principale
-        if (FunctionsDB.Login(email, pwd))
-        {
-            userEmail.Email = txtEmail.Text;
-
-            //FunctionsDB.WriteCookie(userEmail);
-            FunctionsDB.CookiesResponse(userEmail);//Memorizzo l'email nei cookies
-
-            FormsAuthentication.RedirectFromLoginPage(userEmail.Email, CheckBoxRemember.Checked);
-            Response.Redirect("~/index.aspx");
-        }
-        else
-        {
-            lblMsg.Text = "Invalid credentials. Please try again.";
-        }
+        FunctionsDB.ResetPwd(email, pwd);
+        Response.Redirect("~/login.aspx");
     }
 </script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -71,7 +54,7 @@
                         <ul>
                             <li>E-mail address:
                                 <asp:TextBox ID="txtEmail" placeholder="Email" runat="server" />
-                                <!--<asp:RegularExpressionValidator class="info-error" ID="revEmail" runat="server" ErrorMessage="Sintassi email non valida" ValidationExpression=".*@.*\..*" ControlToValidate="txtEmail"/>-->
+                                <asp:RegularExpressionValidator class="info-error" ID="revEmail" runat="server" ErrorMessage="Sintassi email non valida" ValidationExpression=".*@.*\..*" ControlToValidate="txtEmail"/>
                             </li>
                         </ul>
                         <ul>
@@ -80,19 +63,10 @@
                                 <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator2" ControlToValidate="txtPassword" ErrorMessage="Cannot be empty." runat="server" />
                             </li>
                         </ul>
-                        <ul>
-                            <li>Remember me?
-                                <asp:CheckBox ID="CheckBoxRemember" runat="server" />
-                            </li>
-                        </ul>
                     </div>
-                    <asp:Button ID="btnLogin" class="button" OnClick="btnLogin_Click" Text="Login" runat="server" />
+                    <asp:Button ID="btnReset" class="button" Text="Reset password" runat="server" OnClick="btnReset_Click" Width="114px" />
                     <p>
-                        <asp:Label ID="lblMsg" ForeColor="Red" runat="server" />
-                    </p>
-                    <p>
-                        <asp:Label ID="lblConnessione" runat="server"></asp:Label>
-                    </p>
+                        &nbsp;</p>
                 </div>
             </div>
         </div>

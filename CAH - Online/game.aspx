@@ -49,10 +49,9 @@
         if (!Page.IsPostBack)
         {
             stateChanged = true;
-            FunctionsDB.UpdateMatchesPlayed(Master.resultUser);
-            Session["time0"] = 50; 
-            Session["time1"] = 40; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
-            Session["time2"] = 40;
+            Session["time0"] = 140;//50; 
+            Session["time1"] = 130;//40; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
+            Session["time2"] = 130;//40;
             Session["time3"] = 3;       
             /* 100 = 1 min e 40 sec
              * 90 = 1 min 30 sec

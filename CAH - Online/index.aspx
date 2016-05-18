@@ -19,7 +19,6 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
-       FunctionsDB.OpenConnectionDB();
     }
 </script>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">

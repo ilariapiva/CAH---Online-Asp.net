@@ -32,7 +32,7 @@
         if (!Page.IsPostBack)
         {
             Game.NewGame(Master.resultUser);
-            Session["time1"] = 3; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
+            Session["time1"] = 50; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
         }
     }
 
@@ -49,6 +49,7 @@
             }
             else */if (NumberUsers == 3)
             {
+                FunctionsDB.UpdateMatchesPlayed(Master.resultUser);
                 Response.Redirect("~/game.aspx");
             }
             else if (NumberUsers < 3)

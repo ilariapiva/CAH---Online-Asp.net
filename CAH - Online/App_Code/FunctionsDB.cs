@@ -36,11 +36,28 @@ namespace CAHOnline
         }
 
         //Questa funzione risponde l'email memorizzata nei cookies
-        public static void CookiesRequest()
+        public static String CookiesRequest()
         {
+            String email = "";
             if (HttpContext.Current.Request.Cookies["userEmail"] != null)
             {
                 HttpContext.Current.Session["userEmail"] = HttpContext.Current.Server.HtmlEncode(HttpContext.Current.Request.Cookies["userEmail"].Value);
+                email = Convert.ToString(HttpContext.Current.Session["userEmail"]);
+            }
+            return email;
+        }
+
+        //Questa funzione controlla se il cookies esiste
+        public static bool ExistCookies()
+        {
+            String existEmailCookies = CookiesRequest();
+            if(existEmailCookies != "")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -53,18 +70,26 @@ namespace CAHOnline
             HttpContext.Current.Session["userEmail"] = userEmail.Email;
         }
 
+        //Questa funzione elimina il coockies
         public static void DeleteCookies(Account userEmail)
         {
-            HttpCookieCollection cookieCols = new HttpCookieCollection();
-            cookieCols = HttpContext.Current.Request.Cookies;
-            foreach (String str in cookieCols)
+            /*String email = CookiesRequest();
+         
+            if (userEmail.Email == email)
             {
-                if (userEmail.Email == str)
-                {
-                    HttpContext.Current.Request.Cookies.Remove("userEmail");
-                    HttpContext.Current.Session["userEmail"] = null;
-                    break;
-                }
+                HttpContext.Current.Request.Cookies["userEmail"].Value.Remove(userEmail.idAccount);
+                HttpContext.Current.Session["userEmail"] = null;
+            }*/
+
+            HttpCookie aCookie;
+            string cookieName;
+            int limit = HttpContext.Current.Request.Cookies.Count;
+            for (int i = 0; i < limit; i++)
+            {
+                cookieName = HttpContext.Current.Request.Cookies[i].Name;
+                aCookie = new HttpCookie(cookieName);
+                aCookie.Expires = DateTime.Now.AddDays(-1);
+                HttpContext.Current.Response.Cookies.Add(aCookie);
             }
         }
         //Questa funzione controlla che l'email e la pwd siano inseriti nel DB
@@ -156,7 +181,8 @@ namespace CAHOnline
             SqlConnection cn5 = new SqlConnection(strcn5);
             cn5.Open();
 
-            String strsqlUser = "UPDATE tblAccount SET username = '" + user.Username + "' WHERE email = '" + HttpContext.Current.Session["userEmail"] + "' ";
+            String email = CookiesRequest();
+            String strsqlUser = "UPDATE tblAccount SET username = '" + user.Username + "' WHERE email = '" + email + "' ";
             SqlCommand cmd = new SqlCommand(strsqlUser, cn5);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -170,7 +196,8 @@ namespace CAHOnline
             SqlConnection cn6 = new SqlConnection(strcn6);
             cn6.Open();
 
-            String strsqlPwd = "UPDATE tblAccount SET pwd = HASHBYTES('SHA1', '" + pwd + "') WHERE email = '" + HttpContext.Current.Session["userEmail"] + "' ";
+            String email = CookiesRequest();
+            String strsqlPwd = "UPDATE tblAccount SET pwd = HASHBYTES('SHA1', '" + pwd + "') WHERE email = '" + email + "' ";
             SqlCommand cmd = new SqlCommand(strsqlPwd, cn6);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -184,8 +211,9 @@ namespace CAHOnline
             SqlConnection cn7 = new SqlConnection(strcn7);
             cn7.Open();
 
+            String email = CookiesRequest();
             String strsql = @"SELECT idAccount, email, username, matchesPlayed, matchesWon, matchesMissed, matchesEqualized FROM tblAccount 
-                            WHERE email = '" + HttpContext.Current.Session["userEmail"] + "' ";
+                            WHERE email = '" + email + "' ";
             Account value = new Account();
             SqlCommand cmd = new SqlCommand(strsql, cn7);
             var dr7 = cmd.ExecuteReader();

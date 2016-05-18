@@ -11,22 +11,25 @@
     //Memorizzo tramite i cookies l'email e tramite l'email faccio un controllo nel db e ricavo lo username
     protected void Page_Init(object sender, EventArgs e)
     {
+        
+    }
+    
+    protected void Page_Load(object sender, EventArgs e)
+    {
         FunctionsDB.OpenConnectionDB();
 
-        resultUser = FunctionsDB.ReadValuesProfileDB();
+        if (FunctionsDB.ExistCookies())
+        {
+            resultUser = FunctionsDB.ReadValuesProfileDB();
 
-        lblUser.Text = resultUser.Username;
+            lblUser.Text = resultUser.Username;
+        }
     }
 
     protected void btnLogout_Click(object sender, EventArgs e)
     {
         FunctionsDB.DeleteCookies(resultUser);
         Response.Redirect("~/index.aspx");
-    }
-
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        FunctionsDB.CookiesRequest();
     }
 </script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -58,12 +61,12 @@
                     </div>
                     <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav navbar-right">
-                        <% if(lblUser.Text != "") { %>
+                        <% if(FunctionsDB.ExistCookies()) { %>
                             <li>
                                 <a href="index.aspx" class="nav-text">Home</a>
                             </li>
                             <li>
-                                <a href="rules.aspx" class="nav-text">Rules></a>
+                                <a href="rules.aspx" class="nav-text">Rules</a>
                             </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle nav-text" data-toggle="dropdown">
@@ -76,8 +79,7 @@
                                     </li>
                                     <li>
                                         <a href="settings.aspx" class="nav-text nav-border">Settings</a>
-                                    </li>
-                                    <li>&nbsp;&nbsp;&nbsp;<asp:Button ID="btnLogout" runat="server" Text="Logout" OnClick="btnLogout_Click" CssClass="btn-nav-bar" />
+ &nbsp;&nbsp;&nbsp;<asp:Button ID="btnLogout" runat="server" Text="Logout" CssClass="btn-nav-bar" OnClick="btnLogout_Click" />
                                     </li>
                                 </ul>
                             </li>

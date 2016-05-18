@@ -15,7 +15,7 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        FunctionsDB.OpenConnectionDB();
+        //FunctionsDB.OpenConnectionDB();
 
         int NumberUsers = FunctionsDB.ReadUsersInRoom(indexRoom);
 
@@ -32,7 +32,7 @@
         if (!Page.IsPostBack)
         {
             Game.NewGame(Master.resultUser);
-            Session["time1"] = 50; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
+            Session["time1"] = 3; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
         }
     }
 
@@ -57,9 +57,10 @@
                 string script = "alert(\"Non ci sono abbastanza giocatori in attesa di iniziare una partita!\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
                 FunctionsDB.DeleteRoomDB(indexRoom);
-                room.DeleteCardsAndUser(Master.resultUser);
+                room.DeleteCardsUser(Master.resultUser);
                 room.DeleteUser(indexRoom);
                 room.DeleteCardBlack(indexRoom);
+                Game.DeleteRoom(indexRoom);
                 //ok = true;
                 Response.Redirect("~/index.aspx");
             }

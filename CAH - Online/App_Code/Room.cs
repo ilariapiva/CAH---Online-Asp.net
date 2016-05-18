@@ -23,7 +23,7 @@ namespace CAHOnline
             Random rndBlackCard = new Random();
 
             String BlackCard = "SELECT * FROM tblBlackCard";
-            List<Cards> cardBlack = FunctionsDB.Cards(BlackCard);
+            List<Cards> cardBlack = FunctionsDB.CardsBlack(BlackCard);
 
             RandomCardBlack = (cardBlack.OrderBy(x => rndBlackCard.Next())).ToList();
             //numberCardWhite = CheckStringBlackCard();
@@ -32,7 +32,7 @@ namespace CAHOnline
             Random rndWhiteCards = new Random();
 
             String WhiteCards = "SELECT * FROM tblWhiteCard";
-            List<Cards> cardsWhite = FunctionsDB.Cards(WhiteCards);
+            List<Cards> cardsWhite = FunctionsDB.CardsWhite(WhiteCards);
 
             RandomCardsWhite = (cardsWhite.OrderBy(x => rndWhiteCards.Next())).ToList();
 
@@ -41,16 +41,14 @@ namespace CAHOnline
 
         }
 
-        //Controllo che nella lista listUsers non ci siano già 5 giocatori
-        public void AddRoomInListUser(Account user, int idRoom)
+        //Creo una nuova lista di utenti e di carte nere in base ad una stanza
+        public void CreateNewListInDictionary(int idRoom)
         {
             listUsers.Add(idRoom, new List<Account>());
-            listUsers[idRoom].Add(user);
-            listCardsUsers.Add(user.idAccount, new List<Cards>());
             listCardsBlack.Add(idRoom, new List<Cards>());
         }
 
-        //Controllo che nella lista listUsers non ci siano già 5 giocatori
+        //Aggiungo utenti ad una lista in base alla stanza e creo la lista delle carte
         public void AddUser(Account user, int idRoom)
         {
             listUsers[idRoom].Add(user);
@@ -265,7 +263,7 @@ namespace CAHOnline
         }
 
         //Questa funzione permette di eliminare le carte di un utente
-        public void DeleteCardsAndUser(Account user)
+        public void DeleteCardsUser(Account user)
         {
             listCardsUsers.Remove(user.idAccount);
         }
@@ -276,7 +274,7 @@ namespace CAHOnline
             listUsers.Remove(indexRoom);
         }
 
-        //Questa funzione permette di eliminare un utente da una stanza
+        //Questa funzione permette di eliminare le carte nere di una stanza
         public void DeleteCardBlack(int indexRoom)
         {
             listCardsBlack.Remove(indexRoom);

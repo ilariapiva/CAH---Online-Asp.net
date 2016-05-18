@@ -11,12 +11,7 @@
     //Memorizzo tramite i cookies l'email e tramite l'email faccio un controllo nel db e ricavo lo username
     protected void Page_Init(object sender, EventArgs e)
     {
-        
-    }
-    
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        FunctionsDB.OpenConnectionDB();
+        //FunctionsDB.OpenConnectionDB();
 
         if (FunctionsDB.ExistCookies())
         {
@@ -24,6 +19,10 @@
 
             lblUser.Text = resultUser.Username;
         }
+    }
+    
+    protected void Page_Load(object sender, EventArgs e)
+    {
     }
 
     protected void btnLogout_Click(object sender, EventArgs e)
@@ -79,7 +78,7 @@
                                     </li>
                                     <li>
                                         <a href="settings.aspx" class="nav-text nav-border">Settings</a>
- &nbsp;&nbsp;&nbsp;<asp:Button ID="btnLogout" runat="server" Text="Logout" CssClass="btn-nav-bar" OnClick="btnLogout_Click" />
+                                        &nbsp;&nbsp;&nbsp;<asp:Button ID="btnLogout" runat="server" Text="Logout" CssClass="btn-nav-bar" OnClick="btnLogout_Click" />
                                     </li>
                                 </ul>
                             </li>

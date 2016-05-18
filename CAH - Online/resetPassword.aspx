@@ -10,7 +10,7 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        FunctionsDB.OpenConnectionDB();
+        //FunctionsDB.OpenConnectionDB();
     }
 
     protected void btnReset_Click(object sender, EventArgs e)

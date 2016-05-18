@@ -18,7 +18,7 @@
     
     protected void Page_Load(object sender, EventArgs e)
     {           
-        FunctionsDB.OpenConnectionDB();
+        //FunctionsDB.OpenConnectionDB();
 
         //recupero l'id della room
         indexRoom = FunctionsDB.GetRoom(Master.resultUser);
@@ -49,10 +49,10 @@
         if (!Page.IsPostBack)
         {
             stateChanged = true;
-            Session["time0"] = 140;//50; 
-            Session["time1"] = 130;//40; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
-            Session["time2"] = 130;//40;
-            Session["time3"] = 3;       
+            Session["time0"] = 50; 
+            Session["time1"] = 40; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
+            Session["time2"] = 40;
+            Session["time3"] = 5;       
             /* 100 = 1 min e 40 sec
              * 90 = 1 min 30 sec
              * 50 = 50 sec
@@ -63,15 +63,16 @@
         if (stateChanged)
         {
             int UserExit = FunctionsDB.ReadUserExit(indexRoom);
-            if (UserExit == 1 || UserExit == 2 || UserExit == 3 || UserExit == 4 || UserExit == 5)
+            if (UserExit > 0 )
             {
-                string script = "alert(\"Un utente è uscito dal gioco, quindi la partita è finita e il vinciotore finale è:\");";
-                ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                /*string script = "alert(\"Un utente è uscito dal gioco, quindi la partita è finita e il vinciotore finale è:\");";
+                ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);*/
                 FunctionsDB.DeleteRoomDB(indexRoom);
-                room.DeleteCardsAndUser(Master.resultUser);
+                room.DeleteCardsUser(Master.resultUser);
                 room.DeleteUser(indexRoom);
                 room.DeleteCardBlack(indexRoom);
                 UpdateMatches();
+                Game.DeleteRoom(indexRoom);
                 Response.Redirect("~/index.aspx");            
             }
             //se l'utente è il master visualizzo solo la carta master 
@@ -1667,49 +1668,41 @@
         }
     }
 
+    //Questa funzione permette di aggiornare i dati relativi alle partite vinte, perse e pareggiate
     protected void UpdateMatches()
     {
-        Account numberIdAccount = new Account();
-        numberIdAccount.idAccount = FunctionsDB.CountAccountMaxPoint(indexRoom);
-        if (numberIdAccount.idAccount == 1)
+        int numberUserPointsMax = FunctionsDB.GetNUserPointsMax(indexRoom);
+
+        List<Account> listUser = new List<Account>();
+        listUser = FunctionsDB.GetUsername(indexRoom);
+        
+        if (numberUserPointsMax == 1)
         {
-            List<Account> listUser = new List<Account>();
-
-            listUser = FunctionsDB.GetIdAccount(indexRoom);
-
-            foreach (Account user in listUser)
+            for(int i = 0; i < listUser.Count; i++)
             {
-                if (listUser[user.idAccount] == Master.resultUser)
-                {
-                    FunctionsDB.UpdateMatchesWon(Master.resultUser);
-                    break;
-                }
-                else
-                {
-                    FunctionsDB.UpdateMatchesMissed(Master.resultUser);
-                    break;
-                }
+                Account user = new Account();
+                user.Username = listUser[i].Username;
+                FunctionsDB.UpdateMatchesWon(user);
             }
-        }
+        }  
         else
         {
-            List<Account> listUser = new List<Account>();
-
-            listUser = FunctionsDB.GetIdAccount(indexRoom);
-
-            foreach (Account user in listUser)
+            for (int i = 0; i < listUser.Count; i++)
             {
-                if (listUser[user.idAccount] == Master.resultUser)
-                {
-                    FunctionsDB.UpdateMatchesEqualizedd(Master.resultUser);
-                    break;
-                }
-                else
-                {
-                    FunctionsDB.UpdateMatchesMissed(Master.resultUser);
-                    break;
-                }
+                Account user = new Account();
+                user.Username = listUser[i].Username;
+                FunctionsDB.UpdateMatchesEqualizedd(user);
             }
+        }
+
+        List<Account> listUserLose = new List<Account>();
+        listUserLose = FunctionsDB.GetUserLose(indexRoom);
+        
+        for (int i = 0; i < listUser.Count; i++)
+        {
+            Account user = new Account();
+            user.Username = listUserLose[i].Username;
+            FunctionsDB.UpdateMatchesMissed(user);
         }
     }
     
@@ -1721,11 +1714,15 @@
             {
                 FunctionConfirmCardSelect();
                 FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
+                room.DeleteCardsUser(Master.resultUser);
+                room.DeleteUser(indexRoom);
                 Response.Redirect("~/index.aspx");
             }
             if (btnConfirmCardSelect.Enabled == false)
             {
                 FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
+                room.DeleteCardsUser(Master.resultUser);
+                room.DeleteUser(indexRoom);
                 Response.Redirect("~/index.aspx");
             }
         }
@@ -1735,13 +1732,15 @@
             {
                 FunctionConfirmWinner();
                 FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
-                UpdateMatches();
+                room.DeleteCardsUser(Master.resultUser);
+                room.DeleteUser(indexRoom);
                 Response.Redirect("~/index.aspx");
             }
             if (btnConfirmCardSelect.Enabled == false)
             {
                 FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
-                UpdateMatches();
+                room.DeleteCardsUser(Master.resultUser);
+                room.DeleteUser(indexRoom);
                 Response.Redirect("~/index.aspx");
             }
         }

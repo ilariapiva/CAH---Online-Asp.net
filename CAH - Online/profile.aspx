@@ -9,7 +9,7 @@
 
      protected void Page_Load(object sender, EventArgs e)
      {
-         FunctionsDB.OpenConnectionDB();
+         //FunctionsDB.OpenConnectionDB();
          //Leggo dalla tabella account lo username, partite vinte, partite perse e partite giocate
          result = FunctionsDB.ReadValuesProfileDB();
          lblMatchesPlayed.Text = Convert.ToString(result.MatchesPlayed);

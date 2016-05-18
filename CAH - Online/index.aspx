@@ -7,18 +7,15 @@
 
     protected void SelectButton_Click(object sender, EventArgs e)
     {
-        if(Master.resultUser.Username == "")
-        {
-            SelectButton.Enabled = false;
-        }
-        else
-        {
-           Response.Redirect("~/waitingRoom.aspx"); 
-        } 
+        Response.Redirect("~/waitingRoom.aspx");
     }
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (!FunctionsDB.ExistCookies())
+        {
+            SelectButton.Enabled = false;
+        }
     }
 </script>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">

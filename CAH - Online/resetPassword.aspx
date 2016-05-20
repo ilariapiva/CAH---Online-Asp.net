@@ -5,8 +5,7 @@
 
 <script runat="server">
 
-    Account email = new Account();
-    String pwd;
+    String pwd, email;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -15,7 +14,7 @@
 
     protected void btnReset_Click(object sender, EventArgs e)
     {
-        email.Email = txtEmail.Text;
+        email = txtEmail.Text;
         pwd = txtPassword.Text;
 
         FunctionsDB.ResetPwd(email, pwd);
@@ -54,7 +53,7 @@
                         <ul>
                             <li>E-mail address:
                                 <asp:TextBox ID="txtEmail" placeholder="Email" runat="server" />
-                                <asp:RegularExpressionValidator class="info-error" ID="revEmail" runat="server" ErrorMessage="Sintassi email non valida" ValidationExpression=".*@.*\..*" ControlToValidate="txtEmail"/>
+                                <%--<asp:RegularExpressionValidator class="info-error" ID="revEmail" runat="server" ErrorMessage="Sintassi email non valida" ValidationExpression=".*@.*\..*" ControlToValidate="txtEmail"/>--%>
                             </li>
                         </ul>
                         <ul>

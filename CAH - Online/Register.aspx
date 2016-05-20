@@ -5,9 +5,8 @@
 
 <script runat="server">
 
-    Account email, user;
-    String pwd;
-   
+    String email, user, pwd;
+
     protected void Page_Load(object sender, EventArgs e)
     {
         //FunctionsDB.OpenConnectionDB();
@@ -18,19 +17,19 @@
         lblEmail.Text = "";
         lblUser.Text = "";
 
-        email = new Account();
-        user = new Account();
+        email = "";
+        user = "";
         pwd = "";
-        
-        email.Email = txtEmail.Text;
+
+        email = txtEmail.Text;
         pwd = txtPassword.Text;
-        user.Username = txtUsername.Text;
+        user = txtUsername.Text;
 
         if (FunctionsDB.CeckEmail(email))//Controllo che l'email inserita non sia già utilizzata da altri utenti 
         {
             lblEmail.Text = "Questo indirizzo email è già utilizzato.";
         }
-       
+
         if (FunctionsDB.CeckUsername(user))//Controllo che lo username inserito non sia già utilizzata da altri utenti 
         {
             lblUser.Text = "Questo username è già utilizzato.";
@@ -60,13 +59,16 @@
     <title>CAH - Online</title>
 </head>
 <body>
-<form id="form2" runat="server">
+    <form id="form2" runat="server">
         <div class="container">
             <div class="flat-form">
                 <ul class="tabs">
-                    <li><asp:HyperLink runat="server" NavigateUrl="~/login.aspx" CssClass="active">Login</asp:HyperLink></li>
-                    <li><asp:HyperLink runat="server" NavigateUrl="~/register.aspx">Register</asp:HyperLink></li>
-                    <li><asp:HyperLink runat="server" NavigateUrl="~/resetPassword.aspx">Reset password</asp:HyperLink></li>
+                    <li>
+                        <asp:HyperLink runat="server" NavigateUrl="~/login.aspx" CssClass="active">Login</asp:HyperLink></li>
+                    <li>
+                        <asp:HyperLink runat="server" NavigateUrl="~/register.aspx">Register</asp:HyperLink></li>
+                    <li>
+                        <asp:HyperLink runat="server" NavigateUrl="~/resetPassword.aspx">Reset password</asp:HyperLink></li>
                 </ul>
                 <div class="form-action show">
                     <h1>Register</h1>
@@ -74,20 +76,23 @@
                     <div>
                         <ul>
                             <li>E-mail address:
+                               
                                 <asp:TextBox ID="txtEmail" placeholder="Email" runat="server" />
-                                <asp:RegularExpressionValidator class="info-error" ID="revEmail" runat="server" ErrorMessage="Sintassi email non valida" ValidationExpression=".*@.*\..*" ControlToValidate="txtEmail"/>
+                                <%--<asp:RegularExpressionValidator class="info-error" ID="revEmail" runat="server" ErrorMessage="Sintassi email non valida" ValidationExpression=".*@.*\..*" ControlToValidate="txtEmail" />--%>
                                 <asp:Label ID="lblEmail" runat="server" class="info-error"></asp:Label>
                             </li>
                         </ul>
                         <ul>
                             <li>Username&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <asp:TextBox ID="txtUsername" placeholder="Username" runat="server"/>
+                               
+                                <asp:TextBox ID="txtUsername" placeholder="Username" runat="server" />
                                 <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator3" ControlToValidate="txtUsername" Display="Dynamic" ErrorMessage="Cannot be empty." runat="server" />
                                 <asp:Label ID="lblUser" runat="server" class="info-error"></asp:Label>
                             </li>
                         </ul>
                         <ul>
                             <li>Password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                               
                                 <asp:TextBox ID="txtPassword" TextMode="Password" placeholder="Password" runat="server" />
                                 <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator5" ControlToValidate="txtPassword" ErrorMessage="Cannot be empty." runat="server" />
                             </li>

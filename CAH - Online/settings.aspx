@@ -7,8 +7,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 <script runat="server">
         
-    String pwd;
-    Account user;
+    String pwd, user;
     
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -22,10 +21,10 @@
         lblUser.Text = "";
 
         pwd = "";
-        user = new Account();
+        user = "";
         
         pwd = UserPass.Text;
-        user.Username = UserName.Text;
+        user = UserName.Text;
 
         if (FunctionsDB.CeckUsername(user))//Controllo che il username scelto non sia già utilizzato da altri utenti
         {

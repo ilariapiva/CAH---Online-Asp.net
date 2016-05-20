@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace CAHOnline
@@ -73,14 +74,6 @@ namespace CAHOnline
         //Questa funzione elimina il coockies
         public static void DeleteCookies(Account userEmail)
         {
-            /*String email = CookiesRequest();
-         
-            if (userEmail.Email == email)
-            {
-                HttpContext.Current.Request.Cookies["userEmail"].Value.Remove(userEmail.idAccount);
-                HttpContext.Current.Session["userEmail"] = null;
-            }*/
-
             HttpCookie aCookie;
             string cookieName;
             int limit = HttpContext.Current.Request.Cookies.Count;
@@ -92,45 +85,58 @@ namespace CAHOnline
                 HttpContext.Current.Response.Cookies.Add(aCookie);
             }
         }
-        //Questa funzione controlla che l'email e la pwd siano inseriti nel DB
-        public static bool Login(Account email, String pwd)
+
+        private static String SelectPwd(String email)
         {
             string strcn1 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn1 = new SqlConnection(strcn1);
             cn1.Open();
 
-            String strsql = "SELECT email FROM tblAccount WHERE email = '" + email.Email + "' and pwd = HASHBYTES('SHA1', '" + pwd + "')";
+            String strsql = "SELECT pwd FROM tblAccount WHERE email = @email";
             SqlCommand cmd = new SqlCommand(strsql, cn1);
-            cmd.ExecuteNonQuery();
+            cmd.Parameters.AddWithValue("email", email);
 
-            /*SqlParameter p1 = new SqlParameter(email.Email, SqlDbType.VarChar, 50);
-            SqlParameter p2 = new SqlParameter(pwd, SqlDbType.VarChar, 50);
+            String value = "";
+            var dr1 = cmd.ExecuteReader();
+            if (dr1.HasRows)
+            {
+                dr1.Read();
+                value = dr1["pwd"].ToString();
+            }
 
-            p1.Value = email.Email;
-            p2.Value = pwd;
-
-            cmd.Parameters.Add(p1);
-            cmd.Parameters.Add(p2);*/
-      
-            SqlDataReader dr1 = cmd.ExecuteReader();
-            dr1.Read();
-            bool ok = dr1.HasRows;
             dr1.Close();
             cmd.Dispose();
             cn1.Close();
-            return ok;
+            return value;
+        }
+
+        //Questa funzione controlla che l'email e la pwd siano inseriti nel DB
+        public static bool Login(String email, String pwd)
+        {
+            String pass = SelectPwd(email);
+
+            if (Hashing.ValidatePassword(pwd, pass))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }               
         }
 
         //Questa funzione controlla che l'email non sia già stata inserita nel DB
-        public static bool CeckEmail(Account email)
+        public static bool CeckEmail(String email)
         {
             string strcn2 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn2 = new SqlConnection(strcn2);
             cn2.Open();
 
-            String strsql = "SELECT email FROM tblAccount WHERE email = '" + email.Email + "'";
+            String strsql = "SELECT email FROM tblAccount WHERE email = @email";
             SqlCommand cmd = new SqlCommand(strsql, cn2);
+            cmd.Parameters.AddWithValue("email", email);
             cmd.ExecuteNonQuery();
+
             var dr2 = cmd.ExecuteReader();
             dr2.Read();
             bool ok = dr2.HasRows;
@@ -141,15 +147,17 @@ namespace CAHOnline
         }
 
         //Questa funzione controlla che lo username non sia già stato inserito nel DB
-        public static bool CeckUsername(Account user)
+        public static bool CeckUsername(String user)
         {
             string strcn3 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn3 = new SqlConnection(strcn3);
             cn3.Open();
 
-            String strsql = "SELECT username FROM tblAccount WHERE username = '" + user.Username + "'";
+            String strsql = "SELECT username FROM tblAccount WHERE username = @username";
             SqlCommand cmd = new SqlCommand(strsql, cn3);
+            cmd.Parameters.AddWithValue("username", user);
             cmd.ExecuteNonQuery();
+
             var dr3 = cmd.ExecuteReader();
             dr3.Read();
             bool ok = dr3.HasRows;
@@ -160,30 +168,37 @@ namespace CAHOnline
         }
 
         //Questa funzione registra il nuovo utente e lo inserisce nella tabella Account
-        public static void RegisterUser(Account email, Account user, String pwd)
+        public static void RegisterUser(String email, String user, String pwd)
         {
             string strcn4 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn4 = new SqlConnection(strcn4);
             cn4.Open();
 
+            String pass = Hashing.HashPassword(pwd);
+
             String strsql = @"INSERT INTO tblAccount(email, username, pwd, matchesPlayed, matchesWon, matchesMissed, matchesEqualized) 
-                              VALUES ('" + email.Email + "', '" + user.Username + "', HASHBYTES('SHA1', '" + pwd + "'), '0', '0', '0', '0')";
+                              VALUES (@email, @username, @pwd, '0', '0', '0', '0')";
             SqlCommand cmd = new SqlCommand(strsql, cn4);
+            cmd.Parameters.AddWithValue("email", email);
+            cmd.Parameters.AddWithValue("username", user);
+            cmd.Parameters.AddWithValue("pwd", pass);
+
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             cn4.Close();
         }
 
-        //Questa funzione modifica lo username e la e la password di un utente
-        public static void ChangeUsername(Account user)
+        //Questa funzione modifica lo username di un utente
+        public static void ChangeUsername(String user)
         {
             string strcn5 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn5 = new SqlConnection(strcn5);
             cn5.Open();
 
             String email = CookiesRequest();
-            String strsqlUser = "UPDATE tblAccount SET username = '" + user.Username + "' WHERE email = '" + email + "' ";
+            String strsqlUser = "UPDATE tblAccount SET username = @username WHERE email = '" + email + "' ";
             SqlCommand cmd = new SqlCommand(strsqlUser, cn5);
+            cmd.Parameters.AddWithValue("username", user);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             cn5.Close();
@@ -195,10 +210,13 @@ namespace CAHOnline
             string strcn6 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn6 = new SqlConnection(strcn6);
             cn6.Open();
-
+            
+            String pass = Hashing.HashPassword(pwd);
             String email = CookiesRequest();
-            String strsqlPwd = "UPDATE tblAccount SET pwd = HASHBYTES('SHA1', '" + pwd + "') WHERE email = '" + email + "' ";
+
+            String strsqlPwd = "UPDATE tblAccount SET pwd = @pwd WHERE email = '" + email + "' ";
             SqlCommand cmd = new SqlCommand(strsqlPwd, cn6);
+            cmd.Parameters.AddWithValue("pwd", pass);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             cn6.Close();
@@ -669,17 +687,25 @@ namespace CAHOnline
         }
 
         //Questa funzione mi permette di aggiornare la pwd 
-        public static void ResetPwd(Account email, String pwd)
+        public static void ResetPwd(String email, String pwd)
         {
             string strcn24 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn24 = new SqlConnection(strcn24);
             cn24.Open();
 
-            String strsql = "UPDATE tblAccount SET pwd = HASHBYTES('SHA1', '" + pwd + "') WHERE email = '" + email.Email + "'";
+            String pass = Hashing.HashPassword(pwd);
+
+            String strsql = "UPDATE tblAccount SET pwd = @pwd WHERE email = @email";
             SqlCommand cmd = new SqlCommand(strsql, cn24);
+
+            cmd.Parameters.AddWithValue("email", email);
+            cmd.Parameters.AddWithValue("pwd", pass);
+
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             cn24.Close();
+
+            
         }
 
         //Questa funzione mi permette di aggiornare la il numero di partite giocate 

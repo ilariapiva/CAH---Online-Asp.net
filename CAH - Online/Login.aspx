@@ -5,8 +5,8 @@
 
 <script runat="server">
 
-    Account userEmail, email;
-    String pwd;
+    Account userEmail;
+    String pwd, email;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -16,10 +16,10 @@
     void btnLogin_Click(object sender, EventArgs e)
     {
         userEmail = new Account();
-        email = new Account();
+        email = "";
         pwd = "";
         
-        email.Email = txtEmail.Text;
+        email = txtEmail.Text;
         pwd = txtPassword.Text;
 
         //Controllo che l'email e la pwd corrispondano ad uno user registrato e poi memorizzo tramite i cookies l'email e accedo alla pagina principale

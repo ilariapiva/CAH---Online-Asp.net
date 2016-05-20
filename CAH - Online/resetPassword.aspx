@@ -17,8 +17,14 @@
         email = txtEmail.Text;
         pwd = txtPassword.Text;
 
-        FunctionsDB.ResetPwd(email, pwd);
-        Response.Redirect("~/login.aspx");
+        if(FunctionsDB.ResetPwd(email, pwd))
+        {
+             Response.Redirect("~/login.aspx");
+        }
+        else
+        {
+            lblMsg.Text = "Invalid credentials. Please try again.";
+        }
     }
 </script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -62,10 +68,12 @@
                                 <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator2" ControlToValidate="txtPassword" ErrorMessage="Cannot be empty." runat="server" />
                             </li>
                         </ul>
+                        
                     </div>
                     <asp:Button ID="btnReset" class="button" Text="Reset password" runat="server" OnClick="btnReset_Click" Width="114px" />
                     <p>
-                        &nbsp;</p>
+                        <asp:Label ID="lblMsg" ForeColor="Red" runat="server" />
+                    </p>
                 </div>
             </div>
         </div>

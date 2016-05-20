@@ -26,16 +26,7 @@ namespace CAHOnline
         //Questa funzione serve per controllare che la pwd immessa sia corretta
         public static bool ValidatePassword(String password, String correctHash)
         {
-            String pass = HashPassword(password);
-            if(pass == correctHash)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-            //return BCrypt.Net.BCrypt.Verify(password, correctHash);
+            return BCrypt.Net.BCrypt.Verify(password, correctHash);
         }
         
     }

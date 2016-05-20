@@ -1,5 +1,4 @@
-﻿
-<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" %>
 
 <%@ Import Namespace="System.Data" %>
 <%@ Import Namespace="CAHOnline" %>

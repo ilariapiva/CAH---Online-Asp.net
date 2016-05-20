@@ -86,6 +86,7 @@ namespace CAHOnline
             }
         }
 
+        //Questa funzione permette di selezionare la pwd criptata in base all'email
         private static String SelectPwd(String email)
         {
             string strcn1 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
@@ -115,14 +116,19 @@ namespace CAHOnline
         {
             String pass = SelectPwd(email);
 
-            if (Hashing.ValidatePassword(pwd, pass))
+            if(pass == "")
+            {
+                return false;
+            }
+
+            if (Hashing.ValidatePassword(pwd, pass) == true)
             {
                 return true;
-            }
+            } 
             else
             {
                 return false;
-            }               
+            }
         }
 
         //Questa funzione controlla che l'email non sia già stata inserita nel DB
@@ -687,25 +693,44 @@ namespace CAHOnline
         }
 
         //Questa funzione mi permette di aggiornare la pwd 
-        public static void ResetPwd(String email, String pwd)
+        public static bool ResetPwd(String email, String pwd)
         {
             string strcn24 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn24 = new SqlConnection(strcn24);
             cn24.Open();
 
-            String pass = Hashing.HashPassword(pwd);
+            String strsql1 = "Select email FROM tblAccount WHERE email = @email";
+            SqlCommand cmd1 = new SqlCommand(strsql1, cn24);
 
-            String strsql = "UPDATE tblAccount SET pwd = @pwd WHERE email = @email";
-            SqlCommand cmd = new SqlCommand(strsql, cn24);
+            cmd1.Parameters.AddWithValue("email", email);
+            cmd1.ExecuteNonQuery();
 
-            cmd.Parameters.AddWithValue("email", email);
-            cmd.Parameters.AddWithValue("pwd", pass);
+            var dr23 = cmd1.ExecuteReader();
+            dr23.Read();
+            bool ok = dr23.HasRows;
+            dr23.Close();
+            cmd1.Dispose();
 
-            cmd.ExecuteNonQuery();
-            cmd.Dispose();
-            cn24.Close();
+            if (ok == true)
+            {
+                String pass = Hashing.HashPassword(pwd);
 
-            
+                String strsql = "UPDATE tblAccount SET pwd = @pwd WHERE email = @email";
+                SqlCommand cmd = new SqlCommand(strsql, cn24);
+
+                cmd.Parameters.AddWithValue("email", email);
+                cmd.Parameters.AddWithValue("pwd", pass);
+
+                cmd.ExecuteNonQuery();
+                cmd.Dispose();
+                cn24.Close();   
+                return true;
+            }
+            else
+            {
+                cn24.Close();   
+                return false;
+            }      
         }
 
         //Questa funzione mi permette di aggiornare la il numero di partite giocate 
@@ -792,13 +817,13 @@ namespace CAHOnline
 
             int points = 0;
 
-            var dr23 = cmd.ExecuteReader();
-            if (dr23.HasRows)
+            var dr24 = cmd.ExecuteReader();
+            if (dr24.HasRows)
             {
-                dr23.Read();
-                points = Convert.ToInt32(dr23["maxPoints"]);
+                dr24.Read();
+                points = Convert.ToInt32(dr24["maxPoints"]);
             }
-            dr23.Close();
+            dr24.Close();
             cmd.Dispose();
             cn30.Close();
             return points;
@@ -818,18 +843,18 @@ namespace CAHOnline
 
             List<Account> listUsername = new List<Account>();
 
-            var dr24 = cmd.ExecuteReader();
+            var dr25 = cmd.ExecuteReader();
 
-            while (dr24.Read())
+            while (dr25.Read())
             {
-                if (dr24.HasRows)
+                if (dr25.HasRows)
                 {
                     Account value = new Account();
-                    value.Username = dr24["idAccount"].ToString();
+                    value.Username = dr25["idAccount"].ToString();
                     listUsername.Add(value);
                 }
             }
-            dr24.Close();
+            dr25.Close();
             cmd.Dispose();
             cn31.Close();
             return listUsername;
@@ -848,13 +873,13 @@ namespace CAHOnline
             SqlCommand cmd = new SqlCommand(strsql, cn32);
 
             int numberUserWon = 0;
-            var dr25 = cmd.ExecuteReader();
-            if (dr25.HasRows)
+            var dr26 = cmd.ExecuteReader();
+            if (dr26.HasRows)
             {
-                dr25.Read();
-                numberUserWon = Convert.ToInt32(dr25["nUserWon"]);
+                dr26.Read();
+                numberUserWon = Convert.ToInt32(dr26["nUserWon"]);
             }
-            dr25.Close();
+            dr26.Close();
             cmd.Dispose();
             cn32.Close();
             return numberUserWon;
@@ -874,18 +899,18 @@ namespace CAHOnline
 
             List<Account> listUsername = new List<Account>();
    
-            var dr26 = cmd.ExecuteReader();
+            var dr27 = cmd.ExecuteReader();
 
-            while (dr26.Read())
+            while (dr27.Read())
             {
-                if (dr26.HasRows)
+                if (dr27.HasRows)
                 {
                     Account value = new Account();
-                    value.Username = dr26["username"].ToString();
+                    value.Username = dr27["username"].ToString();
                     listUsername.Add(value);
                 }
             }
-            dr26.Close();
+            dr27.Close();
             cmd.Dispose();
             cn31.Close();
             return listUsername;

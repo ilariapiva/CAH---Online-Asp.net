@@ -56,11 +56,27 @@
             {
                 string script = "alert(\"Non ci sono abbastanza giocatori in attesa di iniziare una partita!\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
-                FunctionsDB.DeleteRoomDB(indexRoom);
+                
                 room.DeleteCardsUser(Master.resultUser);
-                room.DeleteUser(indexRoom);
-                room.DeleteCardBlack(indexRoom);
-                Game.DeleteRoom(indexRoom);
+
+                if (!room.CheckDeleteCardsBlcak(indexRoom))
+                {
+                    room.DeleteCardBlack(indexRoom);
+                }
+                if (!room.CheckDeleteKeyRoom(indexRoom))
+                {
+                    room.DeleteRoomInListUsers(indexRoom);
+                }
+                if (!Game.CheckDeleteRoom(indexRoom))
+                {
+                    Game.DeleteRoom(indexRoom);
+                }
+                if (FunctionsDB.CheckRoom(indexRoom))
+                {
+                    FunctionsDB.DeleteRoomDB(indexRoom);
+                }
+
+
                 //ok = true;
                 Response.Redirect("~/index.aspx");
             }

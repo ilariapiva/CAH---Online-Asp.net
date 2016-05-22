@@ -5,8 +5,33 @@
 
 <script runat="server">
 
+    Room room = new Room();
+    int indexRoom = 0;
+    
     protected void SelectButton_Click(object sender, EventArgs e)
     {
+        if(room.CheckDeleteCardsUser(Master.resultUser))
+        {
+            indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
+            room.DeleteCardsUser(Master.resultUser);
+            if (!room.CheckDeleteCardsBlcak(indexRoom))
+            {
+                room.DeleteCardBlack(indexRoom);
+            }
+            if (!room.CheckDeleteKeyRoom(indexRoom))
+            {
+                room.DeleteRoomInListUsers(indexRoom);
+            }
+            if (!Game.CheckDeleteRoom(indexRoom))
+            {
+                Game.DeleteRoom(indexRoom);
+            }
+            if (FunctionsDB.CheckRoom(indexRoom))
+            {
+                FunctionsDB.DeleteRoomDB(indexRoom);
+            }
+        }
+        
         Response.Redirect("~/waitingRoom.aspx");
     }
 

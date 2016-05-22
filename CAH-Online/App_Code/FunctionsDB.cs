@@ -838,7 +838,7 @@ namespace CAHOnline
 
             int maxPoint = GetMaxPoint(room);
 
-            String strsql = "SELECT a.username FROM tblGame as g INNER JOIN tblAccount as a ON g.idAccount = a.idAccount WHERE room = '" + room + "' and points <> '" + maxPoint + "'";
+            String strsql = "SELECT a.username AS user FROM tblGame as g INNER JOIN tblAccount as a ON g.idAccount = a.idAccount WHERE room = '" + room + "' and points <> '" + maxPoint + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn31);
 
             List<Account> listUsername = new List<Account>();
@@ -850,7 +850,7 @@ namespace CAHOnline
                 if (dr25.HasRows)
                 {
                     Account value = new Account();
-                    value.Username = dr25["idAccount"].ToString();
+                    value.Username = dr25["user"].ToString();
                     listUsername.Add(value);
                 }
             }
@@ -894,7 +894,7 @@ namespace CAHOnline
 
             int point = GetMaxPoint(room);
 
-            String strsql = "SELECT a.username FROM tblGame as g INNER JOIN tblAccount as a ON g.idAccount = a.idAccount WHERE points = '" + point + "' and room = '" + room + "'";
+            String strsql = "SELECT a.username AS user FROM tblGame as g INNER JOIN tblAccount as a ON g.idAccount = a.idAccount WHERE points = '" + point + "' and room = '" + room + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn31);
 
             List<Account> listUsername = new List<Account>();
@@ -906,7 +906,7 @@ namespace CAHOnline
                 if (dr27.HasRows)
                 {
                     Account value = new Account();
-                    value.Username = dr27["username"].ToString();
+                    value.Username = dr27["user"].ToString();
                     listUsername.Add(value);
                 }
             }
@@ -915,5 +915,26 @@ namespace CAHOnline
             cn31.Close();
             return listUsername;
         }
+
+        //Questa funzione mi permette di controllare se nel db esiste la room
+        public static bool CheckRoom(int room)
+        {
+            string strcn32 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn32 = new SqlConnection(strcn32);
+            cn32.Open();
+
+            String strsql = "SELECT room FROM tblGame WHERE room = '" + room + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn32);
+            cmd.ExecuteNonQuery();
+
+            var dr28 = cmd.ExecuteReader();
+            dr28.Read();
+            bool ok = dr28.HasRows;
+            dr28.Close();
+            cmd.Dispose();
+            cn32.Close();
+            return ok; 
+        }
+
     }
 }

@@ -63,17 +63,31 @@
         if (stateChanged)
         {
             int UserExit = FunctionsDB.ReadUserExit(indexRoom);
-            if (UserExit > 0 )
+            if (UserExit > 0)
             {
                 /*string script = "alert(\"Un utente è uscito dal gioco, quindi la partita è finita e il vinciotore finale è:\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);*/
-                FunctionsDB.DeleteRoomDB(indexRoom);
-                room.DeleteCardsUser(Master.resultUser);
-                room.DeleteUser(indexRoom);
-                room.DeleteCardBlack(indexRoom);
                 UpdateMatches();
-                Game.DeleteRoom(indexRoom);
-                Response.Redirect("~/index.aspx");            
+                room.DeleteCardsUser(Master.resultUser);
+
+                if (!room.CheckDeleteCardsBlcak(indexRoom))
+                {
+                    room.DeleteCardBlack(indexRoom);
+                }
+                if (!room.CheckDeleteKeyRoom(indexRoom))
+                {
+                    room.DeleteRoomInListUsers(indexRoom);
+                }
+                if (!Game.CheckDeleteRoom(indexRoom))
+                {
+                    Game.DeleteRoom(indexRoom);
+                }
+                if (FunctionsDB.CheckRoom(indexRoom))
+                {
+                    FunctionsDB.DeleteRoomDB(indexRoom);
+                }
+
+                Response.Redirect("~/index.aspx");
             }
             //se l'utente è il master visualizzo solo la carta master 
             if (room.IsMaster(Master.resultUser, indexRoom))
@@ -143,7 +157,8 @@
             if (!room.IsMaster(Master.resultUser, indexRoom))
             {
                 lblTimerMaster.Visible = false;
-
+                lblTimer2.Visible = false;
+                lblTimer2Text.Visible = false;
                 btnConfirmWinner.Visible = false;
 
                 blackCard = room.GetCardBlack(indexRoom);
@@ -179,7 +194,7 @@
                 btnWhite9.Attributes.Add("value", whiteCards[8].idCards.ToString());
                 btnWhite9.Text = whiteCards[8].Text;
 
-                ////btnWhite10.Attributes.Add("value", whiteCards[9].idCards.ToString());
+                btnWhite10.Attributes.Add("value", whiteCards[9].idCards.ToString());
                 btnWhite10.Text = whiteCards[9].Text;
             }
              
@@ -196,19 +211,12 @@
 
     protected void Timer1_Tick(object sender, EventArgs e)
     {
-        /*Session["time0"] = Convert.ToInt16(Session["time0"]) - 1;
-        if (Convert.ToInt16(Session["time0"]) <= 0)
-        {*/
         if (room.IsMaster(Master.resultUser, indexRoom))
         {
             lblTimerMaster.Visible = true;
             btnConfirmWinner.Visible = true;
             
             Session["time0"] = Convert.ToInt16(Session["time0"]) - 1;
-            /*if(stateChanged == false)
-            {
-                FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
-            }*/
             if (Convert.ToInt16(Session["time0"]) <= 0)
             {
                 lblTimer.Text = "TimeOut!";
@@ -250,7 +258,7 @@
                             btnWhite1.Enabled = true;
                             btnWhite2.Enabled = true;
                             btnWhite3.Enabled = true;
-                            btnWhite4.Enabled = true;
+                            //btnWhite4.Enabled = true;
                         }
 
                         if (spacesBlackCard == 2)
@@ -437,7 +445,7 @@
                              lblUser6.Visible = true;
                              lblUser6.Text = "User 3";*/
 
-                            //btnWhite1.Attributes.Add("value", textCardSelect[0].idCards.ToString());
+                            btnWhite1.Attributes.Add("value", textCardSelect[0].idCards.ToString());
                             btnWhite1.Text = textCardSelect[0].Text;
 
                             btnWhite2.Attributes.Add("value", textCardSelect[1].idCards.ToString());
@@ -545,7 +553,7 @@
 
             else
             {
-                totalSeconds = Convert.ToInt16(Session["time2"]);
+                totalSeconds = Convert.ToInt16(Session["time0"]);
                 seconds = totalSeconds % 60;
                 minutes = totalSeconds / 60;
                 time = minutes + ":" + seconds;
@@ -556,14 +564,6 @@
         else if (!room.IsMaster(Master.resultUser, indexRoom))
         {
             Session["time1"] = Convert.ToInt16(Session["time1"]) - 1;
-            /*if (stateChanged == false)
-            {
-                if (btnConfirmCardSelect.Enabled == true)
-                {
-                    FunctionConfirmCardSelect();
-                }
-                FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
-            }*/
             if (Convert.ToInt16(Session["time1"]) <= 0)
             {
                 lblTimer.Text = "TimeOut!";
@@ -856,8 +856,6 @@
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
             btnWhite10.BackColor = System.Drawing.Color.White;
         }
-
-       // FunctionsDB.WriteCardsSelect(user, c, indexRoom);
     }
     
     protected void btnConfirmCardSelect_Click(object sender, EventArgs e)
@@ -1715,14 +1713,14 @@
                 FunctionConfirmCardSelect();
                 FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
                 room.DeleteCardsUser(Master.resultUser);
-                room.DeleteUser(indexRoom);
+                room.DeleteUser(indexRoom, Master.resultUser);
                 Response.Redirect("~/index.aspx");
             }
             if (btnConfirmCardSelect.Enabled == false)
             {
                 FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
                 room.DeleteCardsUser(Master.resultUser);
-                room.DeleteUser(indexRoom);
+                room.DeleteUser(indexRoom, Master.resultUser);
                 Response.Redirect("~/index.aspx");
             }
         }
@@ -1733,14 +1731,14 @@
                 FunctionConfirmWinner();
                 FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
                 room.DeleteCardsUser(Master.resultUser);
-                room.DeleteUser(indexRoom);
+                room.DeleteUser(indexRoom, Master.resultUser);
                 Response.Redirect("~/index.aspx");
             }
             if (btnConfirmCardSelect.Enabled == false)
             {
                 FunctionsDB.UpdateExitGame(indexRoom, Master.resultUser);
                 room.DeleteCardsUser(Master.resultUser);
-                room.DeleteUser(indexRoom);
+                room.DeleteUser(indexRoom, Master.resultUser);
                 Response.Redirect("~/index.aspx");
             }
         }
@@ -1762,6 +1760,8 @@
         <asp:UpdatePanel ID="Pannello" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
                 <asp:Label ID="lblTimer" runat="server"></asp:Label>
+                <asp:Label ID="lblTimer2Text" runat="server" Text="Tempo di attesa: "></asp:Label>
+                <asp:Label ID="lblTimer2" runat="server"></asp:Label>
                 <asp:Label ID="lblTimerMaster" runat="server"></asp:Label>
                 <br />
                 <br />

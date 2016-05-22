@@ -35,10 +35,6 @@ namespace CAHOnline
             List<Cards> cardsWhite = FunctionsDB.CardsWhite(WhiteCards);
 
             RandomCardsWhite = (cardsWhite.OrderBy(x => rndWhiteCards.Next())).ToList();
-
-            /*listCardsUsers = new Dictionary<int, List<Cards>>();
-            listUsers = new Dictionary<int, List<Account>>();*/
-
         }
 
         //Creo una nuova lista di utenti e di carte nere in base ad una stanza
@@ -269,7 +265,13 @@ namespace CAHOnline
         }
 
         //Questa funzione permette di eliminare un utente da una stanza
-        public void DeleteUser(int indexRoom)
+        public void DeleteUser(int indexRoom, Account user)
+        {
+            listUsers[indexRoom].Remove(user);
+        }
+
+        //Questa funzione permette di eliminare una stanza dalla lista degli utenti
+        public void DeleteRoomInListUsers(int indexRoom)
         {
             listUsers.Remove(indexRoom);
         }
@@ -278,6 +280,76 @@ namespace CAHOnline
         public void DeleteCardBlack(int indexRoom)
         {
             listCardsBlack.Remove(indexRoom);
+        }
+
+        /*Questa funzione permette di controllare se la lista delle carte degli users sia stata eliminata*/
+        public bool CheckDeleteCardsUser(Account user)
+        {
+            bool ok = false;
+            for (Account i = new Account(); i.idAccount < listCardsUsers.Count; i.idAccount++)
+            {
+                if (listCardsUsers.ElementAt(i.idAccount).Key == user.idAccount)
+                {
+                    ok = true;
+                    break;
+                }
+            }
+            return ok;
+        }
+
+        /*Questa funzione permette di controllare se la lista delle room ,o dove si trovi la room come indice nelle 
+          altre liste, sia stata eliminata*/
+        public bool CheckDeleteKeyRoom(int indexRoom)
+        {
+            bool ok = false;
+            for(int i = 0; i < listUsers.Count; i++)
+            {
+                if(listUsers.ElementAt(i).Key == indexRoom)
+                {
+                    ok = true;
+                    break;
+                }
+            }
+
+            return ok;
+        }
+
+        /*Questa funzione permette di controllare se la lista delle carte nere sia stata eliminata la chiave
+         la quale corrisponde all'id della room*/
+        public bool CheckDeleteCardsBlcak(int indexRoom)
+        {
+            bool ok = false;
+            for (int i = 0; i < listCardsBlack.Count; i++)
+            {
+                if (listCardsBlack.ElementAt(i).Key == indexRoom)
+                {
+                    ok = true;
+                    break;
+                }
+            }
+
+            return ok;
+        }
+
+        //Questa funzione resituisce la idRoom 
+        public int ReturnKeyRoomUser(Account user)
+        {
+            int idRoom = 0;
+            int indexRoom = 0;
+
+            foreach(Account u in listUsers[idRoom])
+            {
+                if(u == user)
+                {
+                    indexRoom = listUsers.ElementAt(idRoom).Key;
+                    break;
+                }
+                else
+                {
+                    idRoom++;
+                }
+            }
+            return indexRoom;
         }
     }
 }

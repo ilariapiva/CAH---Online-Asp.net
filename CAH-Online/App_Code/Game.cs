@@ -61,12 +61,13 @@ namespace CAHOnline
             return listRooms[idRoom];
         }
 
+        //Questa funzione permette di eliminare l'id di una stanza dalla lista delle stanze
         public static void DeleteRoom(int idRoom)
         {
-            foreach(Room i in listRooms)
+            foreach (Room i in listRooms)
             {
                 int indexRoom = Convert.ToInt32(listRooms.IndexOf(i));
-                if(indexRoom == idRoom)
+                if (indexRoom == idRoom)
                 {
                     listRooms.RemoveAt(idRoom);
                     break;
@@ -84,6 +85,23 @@ namespace CAHOnline
                 return true;
             }
             return false;
+        }
+
+        //Questa funzione permette di eliminare l'id di una stanza dalla lista delle stanze
+        public static bool CheckDeleteRoom(int idRoom)
+        {
+            bool ok = false;
+
+            foreach (Room i in listRooms)
+            {
+                int indexRoom = Convert.ToInt32(listRooms.IndexOf(i));
+                if (indexRoom == idRoom)
+                {
+                    ok = true;
+                    break;
+                }
+            }
+            return ok;
         }
     }
 }

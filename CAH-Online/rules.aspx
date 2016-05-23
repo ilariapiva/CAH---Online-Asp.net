@@ -1,4 +1,48 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" %>
+<%@ MasterType  virtualPath="~/MasterPage.master"%>
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="CAHOnline" %>
+
+<script runat="server">
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!FunctionsDB.ExistCookies())
+        {
+            Room room = new Room();
+            if (room.ExistUserInRoom(Master.resultUser))
+            {
+                int indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
+
+                if (room.CheckDeleteCardsUser(Master.resultUser))
+                {
+                    room.DeleteCardsUser(Master.resultUser);
+                }
+                if (room.CheckDeleteUser(indexRoom, Master.resultUser))
+                {
+                    room.DeleteUser(indexRoom, Master.resultUser);
+                }
+                if (room.CheckDeleteCardsBlcak(indexRoom))
+                {
+                    room.DeleteCardBlack(indexRoom);
+                }
+                if (room.CheckDeleteKeyRoom(indexRoom))
+                {
+                    room.DeleteRoomInListUsers(indexRoom);
+                }
+                if (Game.CheckDeleteRoom(indexRoom))
+                {
+                    Game.DeleteRoom(indexRoom);
+                }
+                if (FunctionsDB.CheckRoom(indexRoom))
+                {
+                    FunctionsDB.DeleteRoomDB(indexRoom);
+                }
+            }
+        }
+    }
+</script>
+
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 

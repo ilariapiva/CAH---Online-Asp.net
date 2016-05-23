@@ -52,7 +52,7 @@
             Session["time0"] = 50; 
             Session["time1"] = 40; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
             Session["time2"] = 40;
-            Session["time3"] = 5;       
+            Session["time3"] = 1;       
             /* 100 = 1 min e 40 sec
              * 90 = 1 min 30 sec
              * 50 = 50 sec
@@ -68,17 +68,19 @@
                 /*string script = "alert(\"Un utente è uscito dal gioco, quindi la partita è finita e il vinciotore finale è:\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);*/
                 UpdateMatches();
-                room.DeleteCardsUser(Master.resultUser);
 
-                if (!room.CheckDeleteCardsBlcak(indexRoom))
+                room.DeleteCardsUser(Master.resultUser);
+                room.DeleteUser(indexRoom, Master.resultUser);
+
+                if (room.CheckDeleteCardsBlcak(indexRoom))
                 {
                     room.DeleteCardBlack(indexRoom);
                 }
-                if (!room.CheckDeleteKeyRoom(indexRoom))
+                if (room.CheckDeleteKeyRoom(indexRoom))
                 {
                     room.DeleteRoomInListUsers(indexRoom);
                 }
-                if (!Game.CheckDeleteRoom(indexRoom))
+                if (Game.CheckDeleteRoom(indexRoom))
                 {
                     Game.DeleteRoom(indexRoom);
                 }

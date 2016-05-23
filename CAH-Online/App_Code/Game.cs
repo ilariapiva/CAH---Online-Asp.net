@@ -103,5 +103,11 @@ namespace CAHOnline
             }
             return ok;
         }
+
+        //Questa funzione restituisce la lista delle rooms
+        public List<Room> rooms()
+        {
+            return listRooms;
+        }
     }
 }

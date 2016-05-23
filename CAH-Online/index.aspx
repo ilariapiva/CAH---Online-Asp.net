@@ -10,19 +10,27 @@
     
     protected void SelectButton_Click(object sender, EventArgs e)
     {
-        if(room.CheckDeleteCardsUser(Master.resultUser))
-        {
+        if (room.ExistUserInRoom(Master.resultUser))
+        { 
             indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
-            room.DeleteCardsUser(Master.resultUser);
-            if (!room.CheckDeleteCardsBlcak(indexRoom))
+
+            if (room.CheckDeleteCardsUser(Master.resultUser))
+            {
+                room.DeleteCardsUser(Master.resultUser);
+            }    
+            if(room.CheckDeleteUser(indexRoom, Master.resultUser))
+            {
+                room.DeleteUser(indexRoom, Master.resultUser);
+            }
+            if (room.CheckDeleteCardsBlcak(indexRoom))
             {
                 room.DeleteCardBlack(indexRoom);
             }
-            if (!room.CheckDeleteKeyRoom(indexRoom))
+            if (room.CheckDeleteKeyRoom(indexRoom))
             {
                 room.DeleteRoomInListUsers(indexRoom);
             }
-            if (!Game.CheckDeleteRoom(indexRoom))
+            if (Game.CheckDeleteRoom(indexRoom))
             {
                 Game.DeleteRoom(indexRoom);
             }
@@ -31,7 +39,7 @@
                 FunctionsDB.DeleteRoomDB(indexRoom);
             }
         }
-        
+
         Response.Redirect("~/waitingRoom.aspx");
     }
 

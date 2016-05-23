@@ -11,6 +11,7 @@
     int seconds = 0;
     int minutes = 0;
     string time = "";
+    bool stateChanged = false;
     //bool ok = false;
 
     protected void Page_Load(object sender, EventArgs e)
@@ -31,8 +32,14 @@
 
         if (!Page.IsPostBack)
         {
-            Game.NewGame(Master.resultUser);
+            stateChanged = true;
             Session["time1"] = 3; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
+        }
+        
+        if(stateChanged)
+        {
+            Game.NewGame(Master.resultUser);
+            stateChanged = false;
         }
     }
 
@@ -57,26 +64,35 @@
                 string script = "alert(\"Non ci sono abbastanza giocatori in attesa di iniziare una partita!\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
                 
-                room.DeleteCardsUser(Master.resultUser);
+                if (room.ExistUserInRoom(Master.resultUser))
+                {
+                    indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
 
-                if (!room.CheckDeleteCardsBlcak(indexRoom))
-                {
-                    room.DeleteCardBlack(indexRoom);
+                    if (room.CheckDeleteCardsUser(Master.resultUser))
+                    {
+                        room.DeleteCardsUser(Master.resultUser);
+                    }
+                    if (room.CheckDeleteUser(indexRoom, Master.resultUser))
+                    {
+                        room.DeleteUser(indexRoom, Master.resultUser);
+                    }
+                    if (room.CheckDeleteCardsBlcak(indexRoom))
+                    {
+                        room.DeleteCardBlack(indexRoom);
+                    }
+                    if (room.CheckDeleteKeyRoom(indexRoom))
+                    {
+                        room.DeleteRoomInListUsers(indexRoom);
+                    }
+                    if (Game.CheckDeleteRoom(indexRoom))
+                    {
+                        Game.DeleteRoom(indexRoom);
+                    }
+                    if (FunctionsDB.CheckRoom(indexRoom))
+                    {
+                        FunctionsDB.DeleteRoomDB(indexRoom);
+                    }
                 }
-                if (!room.CheckDeleteKeyRoom(indexRoom))
-                {
-                    room.DeleteRoomInListUsers(indexRoom);
-                }
-                if (!Game.CheckDeleteRoom(indexRoom))
-                {
-                    Game.DeleteRoom(indexRoom);
-                }
-                if (FunctionsDB.CheckRoom(indexRoom))
-                {
-                    FunctionsDB.DeleteRoomDB(indexRoom);
-                }
-
-
                 //ok = true;
                 Response.Redirect("~/index.aspx");
             }

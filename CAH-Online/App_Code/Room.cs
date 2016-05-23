@@ -286,13 +286,10 @@ namespace CAHOnline
         public bool CheckDeleteCardsUser(Account user)
         {
             bool ok = false;
-            for (Account i = new Account(); i.idAccount < listCardsUsers.Count; i.idAccount++)
+            if (listCardsUsers.ContainsKey(user.idAccount))
             {
-                if (listCardsUsers.ElementAt(i.idAccount).Key == user.idAccount)
-                {
-                    ok = true;
-                    break;
-                }
+                ok = true;
+
             }
             return ok;
         }
@@ -302,15 +299,10 @@ namespace CAHOnline
         public bool CheckDeleteKeyRoom(int indexRoom)
         {
             bool ok = false;
-            for(int i = 0; i < listUsers.Count; i++)
+            if (listUsers.ContainsKey(indexRoom))
             {
-                if(listUsers.ElementAt(i).Key == indexRoom)
-                {
-                    ok = true;
-                    break;
-                }
+                ok = true;
             }
-
             return ok;
         }
 
@@ -319,25 +311,41 @@ namespace CAHOnline
         public bool CheckDeleteCardsBlcak(int indexRoom)
         {
             bool ok = false;
-            for (int i = 0; i < listCardsBlack.Count; i++)
+            if (listCardsBlack.ContainsKey(indexRoom))
             {
-                if (listCardsBlack.ElementAt(i).Key == indexRoom)
+                ok = true;
+            }
+            return ok;
+        }
+
+        //Questa funzione permette di controllare se nella lista degli user l'utente è stato eliminato
+        public bool CheckDeleteUser(int indexRoom, Account user)
+        {
+            bool ok = false;
+            if (listUsers.ContainsKey(indexRoom))
+            {
+                foreach (Account u in listUsers[indexRoom])
                 {
-                    ok = true;
-                    break;
+                    if (u == user)
+                    {
+                        ok = true;
+                        break;
+                    }
                 }
             }
-
             return ok;
         }
 
         //Questa funzione resituisce la idRoom 
         public int ReturnKeyRoomUser(Account user)
         {
-            int idRoom = 0;
+            Game g = new Game();
+            List<Room> listRooms = g.rooms();
+
+            //int idRoom = 0;
             int indexRoom = 0;
 
-            foreach(Account u in listUsers[idRoom])
+            /*foreach(Account u in listUsers[idRoom])
             {
                 if(u == user)
                 {
@@ -349,7 +357,46 @@ namespace CAHOnline
                     idRoom++;
                 }
             }
+            return indexRoom;*/
+
+            for(int i = 0; i < listRooms.Count; i++)
+            {
+                foreach (Account u in listUsers[i])
+                {
+                    if (u == user)
+                    {
+                        indexRoom = listUsers.ElementAt(i).Key;
+                        break;
+                    }
+                }
+            }
+
             return indexRoom;
+        }
+
+        //Questa funzione controlla se nelle stanze esiste l'utente
+        public bool ExistUserInRoom(Account user)
+        {
+            Game g = new Game();
+            List<Room> listRooms = g.rooms();
+            bool ok = false;
+
+            for (int i = 0; i < listRooms.Count; i++)
+            {
+                foreach (Account u in listUsers[i])
+                {
+                    if (u.idAccount == user.idAccount)
+                    {
+                        ok = true;
+                        break;
+                    }
+                }
+                if(ok == true)
+                {
+                    break;
+                }
+            }
+            return ok;
         }
     }
 }

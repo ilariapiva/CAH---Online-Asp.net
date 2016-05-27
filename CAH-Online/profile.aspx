@@ -66,7 +66,7 @@
                     Qui puoi vedere i tuoi risultati.
                 </p>
                 <div class="form-horizontal form-text">
-                    <ul>
+                    <ul class="ul-style">
                         <li class="form-control-static p4">E-mail:
                             <asp:Label class="control-label label-form" ID="lblEmail" runat="server"></asp:Label>
                             &nbsp;

@@ -74,7 +74,7 @@
                     <h1>Register</h1>
                     <p>Per iniziare a giocare a CAH - Online devi registrarti.</p>
                     <div>
-                        <ul>
+                        <ul class="ul-style">
                             <li>E-mail address:
                                
                                 <asp:TextBox ID="txtEmail" placeholder="Email" runat="server" />
@@ -82,7 +82,7 @@
                                 <asp:Label ID="lblEmail" runat="server" class="info-error"></asp:Label>
                             </li>
                         </ul>
-                        <ul>
+                        <ul class="ul-style">
                             <li>Username&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                
                                 <asp:TextBox ID="txtUsername" placeholder="Username" runat="server" />
@@ -90,7 +90,7 @@
                                 <asp:Label ID="lblUser" runat="server" class="info-error"></asp:Label>
                             </li>
                         </ul>
-                        <ul>
+                        <ul class="ul-style">
                             <li>Password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                
                                 <asp:TextBox ID="txtPassword" TextMode="Password" placeholder="Password" runat="server" />
@@ -98,7 +98,9 @@
                             </li>
                         </ul>
                     </div>
-                    <asp:Button ID="btnRegister" class="button" runat="server" OnClick="btnRegister_Click" Text="Sign Up" />
+                    <div class="div-btn">
+                        <asp:Button ID="btnRegister" class="button" runat="server" OnClick="btnRegister_Click" Text="Sign Up" />
+                    </div>  
                 </div>
             </div>
         </div>

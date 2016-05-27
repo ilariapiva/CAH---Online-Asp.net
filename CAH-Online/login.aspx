@@ -68,25 +68,27 @@
                     <h1>CAH - Online</h1>
                     <p>Il famoso gioco di carte Cards Against Humanity in versione Online.</p>
                     <div>
-                        <ul>
+                        <ul class="ul-style">
                             <li>E-mail address:
                                 <asp:TextBox ID="txtEmail" placeholder="Email" runat="server" />
                                 <!--<asp:RegularExpressionValidator class="info-error" ID="revEmail" runat="server" ErrorMessage="Sintassi email non valida" ValidationExpression=".*@.*\..*" ControlToValidate="txtEmail"/>-->
                             </li>
                         </ul>
-                        <ul>
+                        <ul class="ul-style">
                             <li>Password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <asp:TextBox ID="txtPassword" TextMode="Password" placeholder="Password" runat="server" />
                                 <asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator2" ControlToValidate="txtPassword" ErrorMessage="Cannot be empty." runat="server" />
                             </li>
                         </ul>
-                        <ul>
+                        <ul class="ul-style">
                             <li>Remember me?
                                 <asp:CheckBox ID="CheckBoxRemember" runat="server" />
                             </li>
                         </ul>
                     </div>
-                    <asp:Button ID="btnLogin" class="button" OnClick="btnLogin_Click" Text="Login" runat="server" />
+                    <div class="div-btn">
+                        <asp:Button ID="btnLogin" class="button" OnClick="btnLogin_Click" Text="Login" runat="server" />
+                    </div>
                     <p>
                         <asp:Label ID="lblMsg" ForeColor="Red" runat="server" />
                     </p>

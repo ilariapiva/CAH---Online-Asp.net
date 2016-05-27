@@ -32,7 +32,7 @@
         Response.Redirect("~/index.aspx");
     }
 </script>
-<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -41,10 +41,11 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <link href="css/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/bootstrap.css.map" rel="stylesheet" />
+    <link href="js/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="js/bootstrap.css.map" type="text/plain" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="css/Style.css" />
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <%--<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />--%>
     <title>CAH - Online</title>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>

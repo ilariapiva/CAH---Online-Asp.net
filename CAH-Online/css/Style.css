@@ -1,5 +1,5 @@
-﻿@import url(http://fonts.googleapis.com/css?family=Comic%20Sans%20MS);
-@import url(http://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css);
+﻿@import url("css/fonts_googleapis.css");
+@import url("css/reset.css");
 
 html{
   height: 100%;
@@ -405,4 +405,16 @@ ul.tabs li.active{
     background: white;
     border: 0px;
    // text-align: left;
+}
+
+.ul-style
+{
+    list-style:none;
+}
+
+.div-btn
+{
+    float:right;
+    margin: 50px;
+    padding: 0px;
 }

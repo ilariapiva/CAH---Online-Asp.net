@@ -25,15 +25,16 @@
             Response.Redirect("~/game.aspx");
         }
         else */
-        /*if (NumberUsers == 3)
+        if (NumberUsers == 3)
         {
+            FunctionsDB.UpdateMatchesPlayed(Master.resultUser);
             Response.Redirect("~/game.aspx");
-        }*/
+        }
 
         if (!Page.IsPostBack)
         {
             stateChanged = true;
-            Session["time1"] = 3; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
+            Session["time1"] = 15; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
         }
         
         if(stateChanged)
@@ -117,7 +118,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div>
         <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
-        <asp:Timer ID="Timer1" runat="server" Interval="10000" OnTick="Timer1_Tick"></asp:Timer>
+        <asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="Timer1_Tick"></asp:Timer>
     </div>
     <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
@@ -127,6 +128,9 @@
                 </div>
             </div>
         </ContentTemplate>
+        <Triggers>
+                <asp:AsyncPostBackTrigger ControlID="Timer1" EventName="Tick" />
+            </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
 

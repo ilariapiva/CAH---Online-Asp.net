@@ -96,27 +96,26 @@
                     <br />
                 </p>
                 <div>
-                    <ul>
+                    <ul class="ul-style">
                         <li>E-mail address:
                             <asp:Label ID="lblEmail" class="label-form" runat="server"></asp:Label>
                         </li>
                     </ul>
-                    <ul>
+                    <ul class="ul-style">
                         <li>Username:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <asp:TextBox ID="UserName" placeholder="Username" runat="server" />
                             <!--<asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator3" ControlToValidate="UserName" Display="Dynamic" ErrorMessage="Cannot be empty." runat="server" />-->
                             <asp:Label ID="lblUser" runat="server" class="info-error"></asp:Label>
                         </li>
                     </ul>
-                    <ul>
+                    <ul class="ul-style">
                         <li>Password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <asp:TextBox ID="UserPass" TextMode="Password" placeholder="Password" runat="server" />
                             <!--<asp:RequiredFieldValidator class="info-error" ID="RequiredFieldValidator5" ControlToValidate="UserPass" ErrorMessage="Cannot be empty." runat="server" />-->
                         </li>
-                        <li></li>
                     </ul>
                 </div>
-                <div>
+                <div class="div-btn">
                     <asp:Button ID="btnSalva" class="button" Text="Salva" OnClick="btnSalva_Click" runat="server" />
                 </div>
             </div>

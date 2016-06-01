@@ -240,19 +240,19 @@ namespace CAHOnline
                             WHERE email = '" + email + "' ";
             Account value = new Account();
             SqlCommand cmd = new SqlCommand(strsql, cn7);
-            var dr7 = cmd.ExecuteReader();
-            if (dr7.HasRows)
+            var dr4 = cmd.ExecuteReader();
+            if (dr4.HasRows)
             {
-                dr7.Read();
-                value.MatchesPlayed = Convert.ToInt32(dr7["matchesPlayed"]);
-                value.MatchesWon = Convert.ToInt32(dr7["matchesWon"]);
-                value.MatchesMissed = Convert.ToInt32(dr7["matchesMissed"]);
-                value.MatchesEqualized = Convert.ToInt32(dr7["matchesEqualized"]);
-                value.Username = dr7["username"].ToString();
-                value.idAccount = Convert.ToInt32(dr7["idAccount"]);
-                value.Email = dr7["email"].ToString();
+                dr4.Read();
+                value.MatchesPlayed = Convert.ToInt32(dr4["matchesPlayed"]);
+                value.MatchesWon = Convert.ToInt32(dr4["matchesWon"]);
+                value.MatchesMissed = Convert.ToInt32(dr4["matchesMissed"]);
+                value.MatchesEqualized = Convert.ToInt32(dr4["matchesEqualized"]);
+                value.Username = dr4["username"].ToString();
+                value.idAccount = Convert.ToInt32(dr4["idAccount"]);
+                value.Email = dr4["email"].ToString();
             }
-            dr7.Close();
+            dr4.Close();
             cmd.Dispose();
             cn7.Close();
             return value;
@@ -268,17 +268,17 @@ namespace CAHOnline
             List<Cards> value = new List<Cards>();
 
             SqlCommand cmd = new SqlCommand(strsql, cn8);
-            var dr8 = cmd.ExecuteReader();
+            var dr5 = cmd.ExecuteReader();
 
-            while (dr8.Read())
+            while (dr5.Read())
             {
                 Cards cards = new Cards();
-                cards.idCards = Convert.ToInt32(dr8["idCardBlack"]);
-                cards.Text = dr8["textBlack"].ToString();
+                cards.idCards = Convert.ToInt32(dr5["idCardBlack"]);
+                cards.Text = dr5["textBlack"].ToString();
                 value.Add(cards);
             }
 
-            dr8.Close();
+            dr5.Close();
             cmd.Dispose();
             cn8.Close();
             return value;
@@ -287,59 +287,59 @@ namespace CAHOnline
         //Questa funzione legge tutti gli ID delle carte inserite nel DB e le inserisce in una lista
         public static List<Cards> CardsWhite(String strsql)
         {
-            string strcn8 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn8 = new SqlConnection(strcn8);
-            cn8.Open();
+            string strcn9 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn9 = new SqlConnection(strcn9);
+            cn9.Open();
 
             List<Cards> value = new List<Cards>();
 
-            SqlCommand cmd = new SqlCommand(strsql, cn8);
-            var dr8 = cmd.ExecuteReader();
+            SqlCommand cmd = new SqlCommand(strsql, cn9);
+            var dr6 = cmd.ExecuteReader();
 
-            while (dr8.Read())
+            while (dr6.Read())
             {
                 Cards cards = new Cards();
-                cards.idCards = Convert.ToInt32(dr8["idCardWhite"]);
-                cards.Text = dr8["textWhite"].ToString();
+                cards.idCards = Convert.ToInt32(dr6["idCardWhite"]);
+                cards.Text = dr6["textWhite"].ToString();
                 value.Add(cards);
             }
 
-            dr8.Close();
+            dr6.Close();
             cmd.Dispose();
-            cn8.Close();
+            cn9.Close();
             return value;
         }
 
         //Scrivo nella tabella Game
         public static void WriteGame(Account user, int idRoom, int indexMaster)
         {
-            string strcn9 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn9 = new SqlConnection(strcn9);
-            cn9.Open();
+            string strcn10 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn10 = new SqlConnection(strcn10);
+            cn10.Open();
 
-            String strsql = @"INSERT INTO tblGame(points, idAccount, room, master, exitGame) 
-                            VALUES ('0', '" + user.idAccount + "', '" + idRoom + "', '" + indexMaster + "', '0')";
-            SqlCommand cmd = new SqlCommand(strsql, cn9);
+            String strsql = @"INSERT INTO tblGame(points, idAccount, room, master) 
+                            VALUES ('0', '" + user.idAccount + "', '" + idRoom + "', '" + indexMaster + "')";
+            SqlCommand cmd = new SqlCommand(strsql, cn10);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
-            cn9.Close();
+            cn10.Close();
         }
 
         //Recupero l'id della room in base all'idAccount dalla tabella Game
         public static int GetRoom(Account user)
         {
-            string strcn10 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn10 = new SqlConnection(strcn10);
-            cn10.Open();
+            string strcn11 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn11 = new SqlConnection(strcn11);
+            cn11.Open();
 
             String strsql = "SELECT room FROM tblGame WHERE idAccount = '" + user.idAccount + "'";
-            SqlCommand cmd = new SqlCommand(strsql, cn10);
+            SqlCommand cmd = new SqlCommand(strsql, cn11);
             cmd.ExecuteNonQuery();
-            var dr10 = cmd.ExecuteReader();
-            dr10.Read();
-            int idRoom = Convert.ToInt32(dr10["room"]);
+            var dr7 = cmd.ExecuteReader();
+            dr7.Read();
+            int idRoom = Convert.ToInt32(dr7["room"]);
             cmd.Dispose();
-            cn10.Close();
+            cn11.Close();
             return idRoom;
         }
 
@@ -347,142 +347,142 @@ namespace CAHOnline
         stanza in cui si trova e la/e carta/e che ha selezionato*/
         public static void WriteCardsSelect(Account user, Cards card, int idRoom)
         {
-            string strcn11 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn11 = new SqlConnection(strcn11);
-            cn11.Open();
+            string strcn12 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn12 = new SqlConnection(strcn12);
+            cn12.Open();
 
             String strsql = "INSERT INTO tblCardsSelect(idAccount, idCardWhite, room) VALUES ('" + user.idAccount + "', '" + card.idCards + "', '" + idRoom + "')";
-            SqlCommand cmd = new SqlCommand(strsql, cn11);
+            SqlCommand cmd = new SqlCommand(strsql, cn12);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
-            cn11.Close();
+            cn12.Close();
         }
 
         /*Questa funzione permette di leggere tutti gli id degli utenti (tranne il master)  
           che sono in una stanza e inserirli in una lista*/
         public static List<Account> ReadUsernames(int room)
         {
-            string strcn12 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn12 = new SqlConnection(strcn12);
-            cn12.Open();
+            string strcn13 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn13 = new SqlConnection(strcn13);
+            cn13.Open();
 
             List<Account> ListUsers = new List<Account>();
 
             String strsql = @"SELECT a.idAccount, a.username FROM tblAccount AS a INNER JOIN tblCardsSelect as cs
                               ON a.idAccount = cs.idAccount WHERE cs.room = '" + room + "' ORDER BY cs.idAccount ASC";
 
-            SqlCommand cmd = new SqlCommand(strsql, cn12);
-            var dr12 = cmd.ExecuteReader();
+            SqlCommand cmd = new SqlCommand(strsql, cn13);
+            var dr8 = cmd.ExecuteReader();
 
-            while (dr12.Read())
+            while (dr8.Read())
             {
                 Account value = new Account();
-                value.idAccount = Convert.ToInt32(dr12["idAccount"]);
-                value.Username = dr12["username"].ToString();
+                value.idAccount = Convert.ToInt32(dr8["idAccount"]);
+                value.Username = dr8["username"].ToString();
                 ListUsers.Add(value);
             }
-            dr12.Close();
+            dr8.Close();
             cmd.Dispose();
-            cn12.Close();
+            cn13.Close();
             return ListUsers;
         }
 
         //Questa funzione permette di leggere l'id e lo username del vincitore del turno
         public static Account ReadUserWin(int room, Cards cardId)
         {
-            string strcn13 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn13 = new SqlConnection(strcn13);
-            cn13.Open();
+            string strcn14 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn14 = new SqlConnection(strcn14);
+            cn14.Open();
 
             String strsql = @"SELECT a.idAccount, a.username FROM tblAccount AS a INNER JOIN tblCardsSelect as cs
                             ON a.idAccount = cs.idAccount WHERE cs.room = '" + room + @"' 
                             AND idCardWhite = '" + cardId.idCards + "'";
 
-            SqlCommand cmd = new SqlCommand(strsql, cn13);
+            SqlCommand cmd = new SqlCommand(strsql, cn14);
             cmd.ExecuteNonQuery();
-            var dr13 = cmd.ExecuteReader();
+            var dr9 = cmd.ExecuteReader();
             Account value = new Account();
 
-            while (dr13.Read())
+            while (dr9.Read())
             {
-                value.idAccount = Convert.ToInt32(dr13["idAccount"]);
-                value.Username = dr13["username"].ToString();
+                value.idAccount = Convert.ToInt32(dr9["idAccount"]);
+                value.Username = dr9["username"].ToString();
             }
-            dr13.Close();
+            dr9.Close();
             cmd.Dispose();
-            cn13.Close();
+            cn14.Close();
             return value;
         }
 
         //QUesta funzione di scrivere nella tblGame e quindi permette di assegnare il punteggio al vincitore
         public static Winner PointUserWin(int room, Cards cardId)
         {
-            string strcn14 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn14 = new SqlConnection(strcn14);
-            cn14.Open();
+            string strcn15 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn15 = new SqlConnection(strcn15);
+            cn15.Open();
 
             Account user = ReadUserWin(room, cardId);
 
             String strsql = "SELECT idAccount, points FROM tblGame WHERE idAccount = '" + user.idAccount + "'";
-            SqlCommand cmd = new SqlCommand(strsql, cn14);
+            SqlCommand cmd = new SqlCommand(strsql, cn15);
             Winner value = new Winner();
-            var dr14 = cmd.ExecuteReader();
-            if (dr14.HasRows)
+            var dr10 = cmd.ExecuteReader();
+            if (dr10.HasRows)
             {
-                dr14.Read();
-                value.idAccount = Convert.ToInt32(dr14["idAccount"]);
-                value.Point = Convert.ToInt32(dr14["points"]); ;
+                dr10.Read();
+                value.idAccount = Convert.ToInt32(dr10["idAccount"]);
+                value.Point = Convert.ToInt32(dr10["points"]); ;
             }
 
-            dr14.Close();
+            dr10.Close();
             cmd.Dispose();
-            cn14.Close();
+            cn15.Close();
             return value;
         }
         //Questa funzione mi permette di scrivere nella tblGame il punteggio al vincitore
         public static void WritePoint(int room, Cards cardId)
         {
-            string strcn15 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn15 = new SqlConnection(strcn15);
-            cn15.Open();
+            string strcn16 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn16 = new SqlConnection(strcn16);
+            cn16.Open();
 
             Winner point = PointUserWin(room, cardId);
             String strsql = "UPDATE tblGame SET points = '" + (point.Point + 1) + "' WHERE idAccount = '" + point.idAccount + "'";
-            SqlCommand cmd = new SqlCommand(strsql, cn15);
+            SqlCommand cmd = new SqlCommand(strsql, cn16);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
-            cn15.Close();
+            cn16.Close();
         }
 
         /*Questa funzione permette di leggere tutti gli id delle carte selezionate e i testi e 
         inserirli in una lista*/
         public static List<Cards> ReadTetxtCardsSelect(int room)
         {
-            string strcn16 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn16 = new SqlConnection(strcn16);
-            cn16.Open();
+            string strcn17 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn17 = new SqlConnection(strcn17);
+            cn17.Open();
 
             List<Cards> ListIdCards = new List<Cards>();
 
             String strsql = @"SELECT cs.idCardWhite, wc.textWhite FROM tblCardsSelect as cs INNER JOIN tblWhiteCard as wc 
                                 ON cs.idCardWhite = wc.idCardWhite WHERE room = '" + room + "' ORDER BY cs.idAccount";
-            SqlCommand cmd = new SqlCommand(strsql, cn16);
-            var dr16 = cmd.ExecuteReader();
+            SqlCommand cmd = new SqlCommand(strsql, cn17);
+            var dr11 = cmd.ExecuteReader();
 
-            while (dr16.Read())
+            while (dr11.Read())
             {
-                if (dr16.HasRows)
+                if (dr11.HasRows)
                 {
                     //dr.Read();
                     Cards value = new Cards();
-                    value.idCards = Convert.ToInt32(dr16["idCardWhite"]);
-                    value.Text = dr16["textWhite"].ToString();
+                    value.idCards = Convert.ToInt32(dr11["idCardWhite"]);
+                    value.Text = dr11["textWhite"].ToString();
                     ListIdCards.Add(value);
                 }
             }
-            dr16.Close();
+            dr11.Close();
             cmd.Dispose();
-            cn16.Close();
+            cn17.Close();
             return ListIdCards;
         }
 
@@ -512,14 +512,14 @@ namespace CAHOnline
             cmd.ExecuteNonQuery();
 
             int value = 0;
-            var dr17 = cmd.ExecuteReader();
-            if (dr17.HasRows)
+            var dr12 = cmd.ExecuteReader();
+            if (dr12.HasRows)
             {
-                dr17.Read();
-                value = Convert.ToInt32(dr17["points"]);
+                dr12.Read();
+                value = Convert.ToInt32(dr12["points"]);
             }
 
-            dr17.Close();
+            dr12.Close();
             cmd.Dispose();
             cn19.Close();
             return value;
@@ -537,160 +537,94 @@ namespace CAHOnline
             cmd.ExecuteNonQuery();
 
             int value = 0;
-            var dr18 = cmd.ExecuteReader();
-            if (dr18.HasRows)
+            var dr13 = cmd.ExecuteReader();
+            if (dr13.HasRows)
             {
-                dr18.Read();
-                value = Convert.ToInt32(dr18["C"]);
+                dr13.Read();
+                value = Convert.ToInt32(dr13["C"]);
             }
 
-            dr18.Close();
+            dr13.Close();
             cmd.Dispose();
             cn20.Close();
-            return value;
-        }
-
-        //Questa funzione permette di leggere qaunte carte ha selezionato l'utente
-        public static int ReadCardsUser(int room, Account user)
-        {
-            string strcn21 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn21 = new SqlConnection(strcn21);
-            cn21.Open();
-
-            String strsql = "SELECT COUNT(idAccount) as C FROM tblCardsSelect WHERE room = '" + room + @"' 
-                             AND idAccount = '" + user.idAccount + "'";
-
-            SqlCommand cmd = new SqlCommand(strsql, cn21);
-            cmd.ExecuteNonQuery();
-
-            int value = 0;
-            var dr19 = cmd.ExecuteReader();
-            if (dr19.HasRows)
-            {
-                dr19.Read();
-                value = Convert.ToInt32(dr19["C"]);
-            }
-
-            dr19.Close();
-            cmd.Dispose();
-            cn21.Close();
             return value;
         }
 
         //Questa funzione permette di eliminare le righe dalla tblGame
         public static void DeleteRoomDB(int room)
         {
+            string strcn21 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn21 = new SqlConnection(strcn21);
+            cn21.Open();
+
+            String strsql = @"DELETE FROM tblGame WHERE room = '" + room + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn21);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn21.Close();
+        }
+
+        //Questa funzione mi permette di scrivere nella tblGame il master
+        public static void UpdateMaster(int room, int indexMaster, Account user)
+        {
             string strcn22 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn22 = new SqlConnection(strcn22);
             cn22.Open();
 
-            String strsql = @"DELETE FROM tblGame WHERE room = '" + room + "'";
+            String strsql = "UPDATE tblGame SET master = '" + indexMaster + @"'
+                             WHERE idAccount = '" + user.idAccount + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn22);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             cn22.Close();
         }
 
-        //Questa funzione mi permette di scrivere nella tblGame il master
-        public static void UpdateMaster(int room, int indexMaster, Account user)
-        {
-            string strcn23 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn23 = new SqlConnection(strcn23);
-            cn23.Open();
-
-            String strsql = "UPDATE tblGame SET master = '" + indexMaster + @"'
-                             WHERE idAccount = '" + user.idAccount + "'";
-            SqlCommand cmd = new SqlCommand(strsql, cn23);
-            cmd.ExecuteNonQuery();
-            cmd.Dispose();
-            cn23.Close();
-        }
-
         //Questa funzione permette di leggere il master della stanza x
         public static Master ReadMaster(int room, Account user)
         {
-            string strcn24 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn24 = new SqlConnection(strcn24);
-            cn24.Open();
-
-            String strsql = "SELECT master, idAccount FROM tblGame WHERE room = '" + room + @"' 
-                             AND idAccount = '" + user.idAccount + "'";
-            SqlCommand cmd = new SqlCommand(strsql, cn24);
-            cmd.ExecuteNonQuery();
-
-            Master value = new Master();
-            var dr20 = cmd.ExecuteReader();
-            if (dr20.HasRows)
-            {
-                dr20.Read();
-                value.indexMaster = Convert.ToInt32(dr20["master"]);
-                value.idAccount = Convert.ToInt32(dr20["idAccount"]);
-            }
-
-            dr20.Close();
-            cmd.Dispose();
-            cn24.Close();
-            return value;
-        }
-
-        //Questa funzione permette di leggere se l'utente è già presente in una stanza
-        public static bool CheckUserInARoom(Account user)
-        {
-            string strcn25 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn25 = new SqlConnection(strcn25);
-            cn25.Open();
-
-            String strsql = "SELECT idAccount FROM tblGame WHERE idAccount = '" + user.idAccount + "'";
-            SqlCommand cmd = new SqlCommand(strsql, cn25);
-            cmd.ExecuteNonQuery();
-
-            var dr21 = cmd.ExecuteReader();
-            dr21.Read();
-            bool ok = dr21.HasRows;
-            dr21.Close();
-            cmd.Dispose();
-            cn25.Close();
-            return ok;
-        }
-
-        //Questa funzione permette di leggere il se un utente è uscito della stanza x
-        public static int ReadUserExit(int room)
-        {
-            string strcn26 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn26 = new SqlConnection(strcn26);
-            cn26.Open();
-
-            String strsql = "SELECT exitGame FROM tblGame WHERE exitGame = '1'";
-            SqlCommand cmd = new SqlCommand(strsql, cn26);
-            cmd.ExecuteNonQuery();
-
-            int value = 0;
-            var dr22 = cmd.ExecuteReader();
-            if (dr22.HasRows)
-            {
-                dr22.Read();
-                value = Convert.ToInt32(dr22["exitGame"]);
-            }
-
-            dr22.Close();
-            cmd.Dispose();
-            cn26.Close();
-            return value;
-        }
-
-        //Questa funzione mi permette di scrivere nella tblGame se un utente è uscito
-        public static void UpdateExitGame(int room, Account user)
-        {
             string strcn23 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn23 = new SqlConnection(strcn23);
             cn23.Open();
 
-            String strsql = "UPDATE tblGame SET exitGame = '1' WHERE idAccount = '" + user.idAccount + "'";
+            String strsql = "SELECT master, idAccount FROM tblGame WHERE room = '" + room + @"' 
+                             AND idAccount = '" + user.idAccount + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn23);
             cmd.ExecuteNonQuery();
+
+            Master value = new Master();
+            var dr14 = cmd.ExecuteReader();
+            if (dr14.HasRows)
+            {
+                dr14.Read();
+                value.indexMaster = Convert.ToInt32(dr14["master"]);
+                value.idAccount = Convert.ToInt32(dr14["idAccount"]);
+            }
+
+            dr14.Close();
             cmd.Dispose();
             cn23.Close();
+            return value;
         }
+
+        ////Questa funzione permette di leggere se l'utente è già presente in una stanza
+        //public static bool CheckUserInARoom(Account user)
+        //{
+        //    string strcn25 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+        //    SqlConnection cn25 = new SqlConnection(strcn25);
+        //    cn25.Open();
+
+        //    String strsql = "SELECT idAccount FROM tblGame WHERE idAccount = '" + user.idAccount + "'";
+        //    SqlCommand cmd = new SqlCommand(strsql, cn25);
+        //    cmd.ExecuteNonQuery();
+
+        //    var dr21 = cmd.ExecuteReader();
+        //    dr21.Read();
+        //    bool ok = dr21.HasRows;
+        //    dr21.Close();
+        //    cmd.Dispose();
+        //    cn25.Close();
+        //    return ok;
+        //}
 
         //Questa funzione mi permette di aggiornare la pwd 
         public static bool ResetPwd(String email, String pwd)
@@ -705,10 +639,10 @@ namespace CAHOnline
             cmd1.Parameters.AddWithValue("email", email);
             cmd1.ExecuteNonQuery();
 
-            var dr23 = cmd1.ExecuteReader();
-            dr23.Read();
-            bool ok = dr23.HasRows;
-            dr23.Close();
+            var dr15 = cmd1.ExecuteReader();
+            dr15.Read();
+            bool ok = dr15.HasRows;
+            dr15.Close();
             cmd1.Dispose();
 
             if (ok == true)
@@ -808,132 +742,395 @@ namespace CAHOnline
         //Questa funzione permette di trovare il punteggio massimo 
         public static int GetMaxPoint(int room)
         {
-            string strcn30 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn30 = new SqlConnection(strcn30);
-            cn30.Open();
+            string strcn29 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn29 = new SqlConnection(strcn29);
+            cn29.Open();
 
             String strsql = "SELECT MAX(points) AS maxPoints FROM tblGame WHERE room = '" + room + "'";
-            SqlCommand cmd = new SqlCommand(strsql, cn30);
+            SqlCommand cmd = new SqlCommand(strsql, cn29);
 
             int points = 0;
 
-            var dr24 = cmd.ExecuteReader();
-            if (dr24.HasRows)
+            var dr16 = cmd.ExecuteReader();
+            if (dr16.HasRows)
             {
-                dr24.Read();
-                points = Convert.ToInt32(dr24["maxPoints"]);
+                dr16.Read();
+                points = Convert.ToInt32(dr16["maxPoints"]);
             }
-            dr24.Close();
+            dr16.Close();
             cmd.Dispose();
-            cn30.Close();
+            cn29.Close();
             return points;
         }
 
         //Questa funzione permette di trovare il numero di giocatori con il punteggio più basso rispetto al massimo punteggio 
-        public static List<Account> GetUserLose(int room)
+        public static List<Account> GetUserLose(int room, int maxPoint)
         {
-            string strcn31 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn31 = new SqlConnection(strcn31);
-            cn31.Open();
+            string strcn30 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn30 = new SqlConnection(strcn30);
+            cn30.Open();
 
-            int maxPoint = GetMaxPoint(room);
-
-            String strsql = "SELECT a.username AS user FROM tblGame as g INNER JOIN tblAccount as a ON g.idAccount = a.idAccount WHERE room = '" + room + "' and points <> '" + maxPoint + "'";
-            SqlCommand cmd = new SqlCommand(strsql, cn31);
+            String strsql = "SELECT a.username AS u FROM tblGame as g INNER JOIN tblAccount as a ON g.idAccount = a.idAccount WHERE room = '" + room + "' and points <> '" + maxPoint + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn30);
 
             List<Account> listUsername = new List<Account>();
 
-            var dr25 = cmd.ExecuteReader();
+            var dr17 = cmd.ExecuteReader();
 
-            while (dr25.Read())
+            while (dr17.Read())
             {
-                if (dr25.HasRows)
+                if (dr17.HasRows)
                 {
                     Account value = new Account();
-                    value.Username = dr25["user"].ToString();
+                    value.Username = dr17["u"].ToString();
                     listUsername.Add(value);
                 }
             }
-            dr25.Close();
+            dr17.Close();
             cmd.Dispose();
-            cn31.Close();
+            cn30.Close();
             return listUsername;
         }
 
         //Questa funzione permette di trovare quanti giocatori hanno il punteggio massimo
         public static int GetNUserPointsMax(int room)
         {
-            string strcn32 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn32 = new SqlConnection(strcn32);
-            cn32.Open();
-
-            int point = GetMaxPoint(room);
-
-            String strsql = "SELECT COUNT(idAccount) AS nUserWon FROM tblGame WHERE points = '" + point + "' and room = '" + room + "'";
-            SqlCommand cmd = new SqlCommand(strsql, cn32);
-
-            int numberUserWon = 0;
-            var dr26 = cmd.ExecuteReader();
-            if (dr26.HasRows)
-            {
-                dr26.Read();
-                numberUserWon = Convert.ToInt32(dr26["nUserWon"]);
-            }
-            dr26.Close();
-            cmd.Dispose();
-            cn32.Close();
-            return numberUserWon;
-        }
-
-        //Questa funzione restituisce lo username in base all'idAccount e il punteggio
-        public static List<Account> GetUsername(int room)
-        {
             string strcn31 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn31 = new SqlConnection(strcn31);
             cn31.Open();
 
             int point = GetMaxPoint(room);
 
-            String strsql = "SELECT a.username AS user FROM tblGame as g INNER JOIN tblAccount as a ON g.idAccount = a.idAccount WHERE points = '" + point + "' and room = '" + room + "'";
+            String strsql = "SELECT COUNT(idAccount) AS nUserWon FROM tblGame WHERE points = '" + point + "' and room = '" + room + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn31);
 
-            List<Account> listUsername = new List<Account>();
-   
-            var dr27 = cmd.ExecuteReader();
-
-            while (dr27.Read())
+            int numberUserWon = 0;
+            var dr18 = cmd.ExecuteReader();
+            if (dr18.HasRows)
             {
-                if (dr27.HasRows)
-                {
-                    Account value = new Account();
-                    value.Username = dr27["user"].ToString();
-                    listUsername.Add(value);
-                }
+                dr18.Read();
+                numberUserWon = Convert.ToInt32(dr18["nUserWon"]);
             }
-            dr27.Close();
+            dr18.Close();
             cmd.Dispose();
             cn31.Close();
-            return listUsername;
+            return numberUserWon;
         }
 
-        //Questa funzione mi permette di controllare se nel db esiste la room
-        public static bool CheckRoom(int room)
+        //Questa funzione restituisce lo username in base all'idAccount e il punteggio
+        public static List<Account> GetUsername(int room, int point)
         {
             string strcn32 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn32 = new SqlConnection(strcn32);
             cn32.Open();
 
-            String strsql = "SELECT room FROM tblGame WHERE room = '" + room + "'";
+            String strsql = "SELECT a.username AS u FROM tblGame as g INNER JOIN tblAccount as a ON g.idAccount = a.idAccount WHERE points = '" + point + "' and room = '" + room + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn32);
-            cmd.ExecuteNonQuery();
 
-            var dr28 = cmd.ExecuteReader();
-            dr28.Read();
-            bool ok = dr28.HasRows;
-            dr28.Close();
+            List<Account> listUsername = new List<Account>();
+   
+            var dr19 = cmd.ExecuteReader();
+
+            while (dr19.Read())
+            {
+                if (dr19.HasRows)
+                {
+                    Account value = new Account();
+                    value.Username = dr19["u"].ToString();
+                    listUsername.Add(value);
+                }
+            }
+            dr19.Close();
             cmd.Dispose();
             cn32.Close();
+            return listUsername;
+        }
+
+        //Questa funzione mi permette di controllare se nella tblGame c'è già il giocatore
+        public static bool CheckUserInGame(Account user)
+        {
+            string strcn33 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn33 = new SqlConnection(strcn33);
+            cn33.Open();
+
+            String strsql = "SELECT idAccount FROM tblGame WHERE idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn33);
+            cmd.ExecuteNonQuery();
+
+            var dr20 = cmd.ExecuteReader();
+            dr20.Read();
+            bool ok = dr20.HasRows;
+            dr20.Close();
+            cmd.Dispose();
+            cn33.Close();
             return ok; 
+        }
+
+        //Questa funzione mi permette di aggiornare il numero dei rounds 
+        public static void UpdateRounds(int indexRoom)
+        {
+            string strcn34 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn34 = new SqlConnection(strcn34);
+            cn34.Open();
+
+            Round value = ReadRounds(indexRoom);
+
+            String strsql = "UPDATE tblRounds SET numberRound = '" + (value.numberRound + 1) + "' WHERE idRoom = '" + indexRoom + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn34);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn34.Close();
+        }
+
+        //Questa funzione permette di leggere il numero dei rounds 
+        public static Round ReadRounds(int indexRoom)
+        {
+            string strcn35 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn35 = new SqlConnection(strcn35);
+            cn35.Open();
+
+            String strsql = "SELECT numberRound, newRound FROM tblRounds WHERE idRoom = '" + indexRoom + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn35);
+            cmd.ExecuteNonQuery();
+
+            Round value = new Round();
+            var dr21 = cmd.ExecuteReader();
+            if (dr21.HasRows)
+            {
+                dr21.Read();
+                value.numberRound = Convert.ToInt32(dr21["numberRound"]);
+                value.newRound = Convert.ToInt32(dr21["newRound"]);    
+            }
+
+            dr21.Close();
+            cmd.Dispose();
+
+            dr21.Close();
+            cmd.Dispose();
+            cn35.Close();
+            return value;
+        }
+
+        //Questa funzione permette di leggere il numero di carte selezionate da un utente
+        public static int ReadNCardSelect(int indexRoom, Account user)
+        {
+            string strcn36 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn36 = new SqlConnection(strcn36);
+            cn36.Open();
+
+            String strsql = "SELECT COUNT(idAccount) as c FROM tblCardsSelect WHERE idAccount = '" + user.idAccount + "' and room = '" + indexRoom + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn36);
+            cmd.ExecuteNonQuery();
+
+            int value = 0;
+            var dr22 = cmd.ExecuteReader();
+            if (dr22.HasRows)
+            {
+                dr22.Read();
+                value = Convert.ToInt32(dr22["c"]);
+            }
+
+            dr22.Close();
+            cmd.Dispose();
+            cn36.Close();
+            return value;
+        }
+
+        ////Questa funzione mi permette di controllare se nella tblCardsSelect ci sono delle carte già selezionate
+        //public static bool CheckCardsSelect(int indexRoom)
+        //{
+        //    string strcn38 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+        //    SqlConnection cn38 = new SqlConnection(strcn38);
+        //    cn38.Open();
+
+        //    String strsql = "SELECT * FROM tblCardsSelect WHERE room = '" + indexRoom + "'";
+        //    SqlCommand cmd = new SqlCommand(strsql, cn38);
+        //    cmd.ExecuteNonQuery();
+
+        //    var dr32 = cmd.ExecuteReader();
+        //    dr32.Read();
+        //    bool ok = dr32.HasRows;
+        //    dr32.Close();
+        //    cmd.Dispose();
+        //    cn38.Close();
+        //    return ok;
+        //}
+
+        //Questa funzione mi permette di scrivere il numero dei rounds 
+        public static void WriteRounds(int indexRoom)
+        {
+            string strcn37 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn37 = new SqlConnection(strcn37);
+            cn37.Open();
+
+            Round value = ReadRounds(indexRoom);
+
+            String strsql = "INSERT INTO tblRounds(idRoom, numberRound, newRound) VALUES ('" + indexRoom + "', 1, 0)";
+            SqlCommand cmd = new SqlCommand(strsql, cn37);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn37.Close();
+        }
+
+        //Questa funzione mi permette di aggiornare il newRound
+        public static void ResetRounds(int indexRoom)
+        {
+            string strcn38 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn38 = new SqlConnection(strcn38);
+            cn38.Open();
+
+            String strsql = "UPDATE tblRounds SET numberRound = 0 WHERE idRoom = '" + indexRoom + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn38);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn38.Close();
+        }
+
+        ////Questa funzione permette di eliminare le righe dalla tblRounds
+        //public static void DeleteRounds(int room)
+        //{
+        //    string strcn41 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+        //    SqlConnection cn41 = new SqlConnection(strcn41);
+        //    cn41.Open();
+
+        //    String strsql = "DELETE FROM tblRounds WHERE idRoom = '" + room + "'";
+        //    SqlCommand cmd = new SqlCommand(strsql, cn41);
+        //    cmd.ExecuteNonQuery();
+        //    cmd.Dispose();
+        //    cn41.Close();
+        //}
+
+        //Questa funzione mi permette di controllare se nella tblRounds è già presente la stanza con i round
+        public static bool CheckRounds(int indexRoom)
+        {
+            string strcn39 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn39 = new SqlConnection(strcn39);
+            cn39.Open();
+
+            String strsql = "SELECT idRoom FROM tblRounds WHERE idRoom = '" + indexRoom + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn39);
+            cmd.ExecuteNonQuery();
+
+            var dr23 = cmd.ExecuteReader();
+            dr23.Read();
+            bool ok = dr23.HasRows;
+            dr23.Close();
+            cmd.Dispose();
+            cn39.Close();
+            return ok;
+        }
+
+        //Questa funzione mi permette di controllare se nella tblCardsSelect sono state selezionate il numero giusto di carte
+        public static int CheckNCardsSelect(int indexRoom)
+        {
+            string strcn40 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn40 = new SqlConnection(strcn40);
+            cn40.Open();
+
+            String strsql = "SELECT COUNT(room) as c FROM tblCardsSelect WHERE room = '" + indexRoom + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn40);
+            cmd.ExecuteNonQuery();
+
+            int value = 0;
+            var dr24 = cmd.ExecuteReader();
+            if (dr24.HasRows)
+            {
+                dr24.Read();
+                value = Convert.ToInt32(dr24["c"]);
+            }
+
+            dr24.Close();
+            cmd.Dispose();
+            cn40.Close();
+            return value;
+        }
+
+        //Questa funzione permette di eliminare le carte che un utente ha selezionato dalla tblCardsSelect 
+        public static void DeleteCardSelectUser(int room, Account user)
+        {
+            string strcn41 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn41 = new SqlConnection(strcn41);
+            cn41.Open();
+
+            String strsql = "DELETE FROM tblCardsSelect WHERE room = '" + room + "' and idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn41);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn41.Close();
+        }
+
+        //Questa funzione permette di eliminare un utente dalla tblGame
+        public static void DeleteUserInGame(int room, Account user)
+        {
+            string strcn42 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn42 = new SqlConnection(strcn42);
+            cn42.Open();
+
+            String strsql = "DELETE FROM tblGame WHERE room = '" + room + "' and idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn42);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn42.Close();
+        }
+
+        //Questa funzione mi permette di controllare se nella tblGame esiste l'utente
+        public static bool CheckUserInGame(int room, Account user)
+        {
+            string strcn43 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn43 = new SqlConnection(strcn43);
+            cn43.Open();
+
+            String strsql = "SELECT * FROM tblGame WHERE room = '" + room + "' and idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn43);
+            cmd.ExecuteNonQuery();
+
+            var dr25 = cmd.ExecuteReader();
+            dr25.Read();
+            bool ok = dr25.HasRows;
+            dr25.Close();
+            cmd.Dispose();
+            cn43.Close();
+            return ok;
+        }
+
+        //Questa funzione mi permette di controllare se nella tblGame esiste l'utente
+        public static bool CheckCardsUser(int room, Account user)
+        {
+            string strcn44 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn44 = new SqlConnection(strcn44);
+            cn44.Open();
+
+            String strsql = "SELECT room, idAccount FROM tblCardsSelect WHERE room = '" + room + "' and idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn44);
+            cmd.ExecuteNonQuery();
+
+            var dr26 = cmd.ExecuteReader();
+            dr26.Read();
+            bool ok = dr26.HasRows;
+            dr26.Close();
+            cmd.Dispose();
+            cn44.Close();
+            return ok;
+        }
+
+        //Questa funzione mi permette di controllare se nel db esiste la room
+        public static bool CheckRoom(int room)
+        {
+            string strcn45 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn45 = new SqlConnection(strcn45);
+            cn45.Open();
+
+            String strsql = "SELECT room FROM tblGame WHERE room = '" + room + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn45);
+            cmd.ExecuteNonQuery();
+
+            var dr27 = cmd.ExecuteReader();
+            dr27.Read();
+            bool ok = dr27.HasRows;
+            dr27.Close();
+            cmd.Dispose();
+            cn45.Close();
+            return ok;
         }
 
     }

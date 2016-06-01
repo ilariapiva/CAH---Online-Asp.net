@@ -6,6 +6,7 @@
 <script runat="server">
 
     int indexRoom;
+    int NumberUsers;
     Room room = new Room();
     int totalSeconds = 0;
     int seconds = 0;
@@ -17,26 +18,17 @@
     protected void Page_Load(object sender, EventArgs e)
     {
         //FunctionsDB.OpenConnectionDB();
-
-        int NumberUsers = FunctionsDB.ReadUsersInRoom(indexRoom);
-
-        /*if (NumberUsers == 5)
-        {
-            Response.Redirect("~/game.aspx");
-        }
-        else */
-        if (NumberUsers == 3)
+        indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
+        if(room.listUserIsFull(indexRoom))
         {
             FunctionsDB.UpdateMatchesPlayed(Master.resultUser);
             Response.Redirect("~/game.aspx");
         }
-
         if (!Page.IsPostBack)
         {
             stateChanged = true;
             Session["time1"] = 15; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
         }
-        
         if(stateChanged)
         {
             Game.NewGame(Master.resultUser);
@@ -49,22 +41,19 @@
         Session["time1"] = Convert.ToInt16(Session["time1"]) - 1;
         if (Convert.ToInt16(Session["time1"]) <= 0)
         {
-            int NumberUsers = FunctionsDB.ReadUsersInRoom(indexRoom);
+            indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
+            NumberUsers = FunctionsDB.ReadUsersInRoom(indexRoom);
 
-            /*if (NumberUsers == 5)
-            {
-                Response.Redirect("~/game.aspx");
-            }
-            else */if (NumberUsers == 3)
+            if (room.listUserIsFull(indexRoom))
             {
                 FunctionsDB.UpdateMatchesPlayed(Master.resultUser);
                 Response.Redirect("~/game.aspx");
-            }
-            else if (NumberUsers < 3)
+            }    
+            else 
             {
                 string script = "alert(\"Non ci sono abbastanza giocatori in attesa di iniziare una partita!\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
-                
+
                 if (room.ExistUserInRoom(Master.resultUser))
                 {
                     indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
@@ -77,23 +66,15 @@
                     {
                         room.DeleteUser(indexRoom, Master.resultUser);
                     }
-                    if (room.CheckDeleteCardsBlcak(indexRoom))
+                    if (FunctionsDB.CheckUserInGame(indexRoom, Master.resultUser))
                     {
-                        room.DeleteCardBlack(indexRoom);
+                        FunctionsDB.DeleteUserInGame(indexRoom, Master.resultUser);
                     }
-                    if (room.CheckDeleteKeyRoom(indexRoom))
+                    if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
                     {
-                        room.DeleteRoomInListUsers(indexRoom);
+                        FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
                     }
-                    if (Game.CheckDeleteRoom(indexRoom))
-                    {
-                        Game.DeleteRoom(indexRoom);
-                    }
-                    if (FunctionsDB.CheckRoom(indexRoom))
-                    {
-                        FunctionsDB.DeleteRoomDB(indexRoom);
-                    }
-                }
+                } 
                 //ok = true;
                 Response.Redirect("~/index.aspx");
             }

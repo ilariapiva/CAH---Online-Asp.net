@@ -193,16 +193,78 @@ namespace CAHOnline
          * (lo si ottiene interrogando il db) sia uguale numero dei giocatori della stanza meno il master */
         public bool CheckUserCardSelected(int room)
         {
+            int spacesBlackCard = CheckStringBlackCard(room);
+            int cardsSelect = FunctionsDB.CheckNCardsSelect(room);
+
             if (UsersNotMaster(room) == 4)
             {
-                return true;
+                if (spacesBlackCard == 1)
+                {
+                    if (cardsSelect == 4)
+                    {
+                        return true;
+                    }
+                }
+                if (spacesBlackCard == 2)
+                {
+                    if (cardsSelect == 8)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+
+                if (spacesBlackCard == 3)
+                {
+                    if (cardsSelect == 12)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
             }
             if (UsersNotMaster(room) == 2)
             {
-                return true;
+                if (spacesBlackCard == 1)
+                {
+                    if (cardsSelect == 2)
+                    {
+                        return true;
+                    }
+                }
+                if (spacesBlackCard == 2)
+                {
+                    if (cardsSelect == 4)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+
+                if (spacesBlackCard == 3)
+                {
+                    if (cardsSelect == 6)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
             }
             return false;
         }
+
 
         //Questa funziona mi ritorna il numero dei giocatori meno il master presenti nella stanza
         public int UsersNotMaster(int room)
@@ -214,6 +276,10 @@ namespace CAHOnline
                 if (!IsMaster(user, room))
                 {
                     count++;
+                }
+                if(count == 2)
+                {
+                    break;
                 }
             }
             return count;
@@ -255,12 +321,15 @@ namespace CAHOnline
                     break;
                 }
             }
+
+            FunctionsDB.UpdateRounds(room);
             //return indexMaster;
         }
 
         //Questa funzione permette di eliminare le carte di un utente
         public void DeleteCardsUser(Account user)
         {
+            //listCardsUsers[user.idAccount].Clear();
             listCardsUsers.Remove(user.idAccount);
         }
 
@@ -270,16 +339,24 @@ namespace CAHOnline
             listUsers[indexRoom].Remove(user);
         }
 
-        //Questa funzione permette di eliminare una stanza dalla lista degli utenti
-        public void DeleteRoomInListUsers(int indexRoom)
+        //Questa funzione permette di controllare se la stanza è piena
+        public bool listUserIsFull(int indexRoom)
         {
-            listUsers.Remove(indexRoom);
-        }
+            bool ok = false;
 
+            if (listUsers.ContainsKey(indexRoom))
+            {
+                if(listUsers[indexRoom].Count == 3)
+                {
+                    ok = true;
+                }
+            }
+            return ok;
+        }
         //Questa funzione permette di eliminare le carte nere di una stanza
         public void DeleteCardBlack(int indexRoom)
         {
-            listCardsBlack.Remove(indexRoom);
+            listCardsBlack[indexRoom] = new List<Cards>();
         }
 
         /*Questa funzione permette di controllare se la lista delle carte degli users sia stata eliminata*/
@@ -290,30 +367,6 @@ namespace CAHOnline
             {
                 ok = true;
 
-            }
-            return ok;
-        }
-
-        /*Questa funzione permette di controllare se la lista delle room ,o dove si trovi la room come indice nelle 
-          altre liste, sia stata eliminata*/
-        public bool CheckDeleteKeyRoom(int indexRoom)
-        {
-            bool ok = false;
-            if (listUsers.ContainsKey(indexRoom))
-            {
-                ok = true;
-            }
-            return ok;
-        }
-
-        /*Questa funzione permette di controllare se la lista delle carte nere sia stata eliminata la chiave
-         la quale corrisponde all'id della room*/
-        public bool CheckDeleteCardsBlcak(int indexRoom)
-        {
-            bool ok = false;
-            if (listCardsBlack.ContainsKey(indexRoom))
-            {
-                ok = true;
             }
             return ok;
         }
@@ -342,22 +395,7 @@ namespace CAHOnline
             Game g = new Game();
             List<Room> listRooms = g.rooms();
 
-            //int idRoom = 0;
             int indexRoom = 0;
-
-            /*foreach(Account u in listUsers[idRoom])
-            {
-                if(u == user)
-                {
-                    indexRoom = listUsers.ElementAt(idRoom).Key;
-                    break;
-                }
-                else
-                {
-                    idRoom++;
-                }
-            }
-            return indexRoom;*/
 
             for(int i = 0; i < listRooms.Count; i++)
             {

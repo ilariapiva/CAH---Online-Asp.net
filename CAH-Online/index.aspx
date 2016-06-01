@@ -7,39 +7,30 @@
 
     Room room = new Room();
     int indexRoom = 0;
-    
+
     protected void SelectButton_Click(object sender, EventArgs e)
     {
         if (room.ExistUserInRoom(Master.resultUser))
-        { 
+        {
             indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
 
             if (room.CheckDeleteCardsUser(Master.resultUser))
             {
                 room.DeleteCardsUser(Master.resultUser);
-            }    
-            if(room.CheckDeleteUser(indexRoom, Master.resultUser))
+            }
+            if (room.CheckDeleteUser(indexRoom, Master.resultUser))
             {
                 room.DeleteUser(indexRoom, Master.resultUser);
             }
-            if (room.CheckDeleteCardsBlcak(indexRoom))
+            if (FunctionsDB.CheckUserInGame(indexRoom, Master.resultUser))
             {
-                room.DeleteCardBlack(indexRoom);
+                FunctionsDB.DeleteUserInGame(indexRoom, Master.resultUser);
             }
-            if (room.CheckDeleteKeyRoom(indexRoom))
+            if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
             {
-                room.DeleteRoomInListUsers(indexRoom);
+                FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
             }
-            if (Game.CheckDeleteRoom(indexRoom))
-            {
-                Game.DeleteRoom(indexRoom);
-            }
-            if (FunctionsDB.CheckRoom(indexRoom))
-            {
-                FunctionsDB.DeleteRoomDB(indexRoom);
-            }
-        }
-
+        }      
         Response.Redirect("~/waitingRoom.aspx");
     }
 

@@ -26,24 +26,15 @@
             {
                 room.DeleteUser(indexRoom, Master.resultUser);
             }
-            if (room.CheckDeleteCardsBlcak(indexRoom))
+            if (FunctionsDB.CheckUserInGame(indexRoom, Master.resultUser))
             {
-                room.DeleteCardBlack(indexRoom);
+                FunctionsDB.DeleteUserInGame(indexRoom, Master.resultUser);
             }
-            if (room.CheckDeleteKeyRoom(indexRoom))
+            if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
             {
-                room.DeleteRoomInListUsers(indexRoom);
+                FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
             }
-            if (Game.CheckDeleteRoom(indexRoom))
-            {
-                Game.DeleteRoom(indexRoom);
-            }
-            if (FunctionsDB.CheckRoom(indexRoom))
-            {
-                FunctionsDB.DeleteRoomDB(indexRoom);
-            }
-        }
-        
+        }    
         lblEmail.Text = Session["userEmail"].ToString();
     }
         

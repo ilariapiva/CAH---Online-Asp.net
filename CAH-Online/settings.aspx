@@ -34,6 +34,14 @@
             {
                 FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
             }
+            if (FunctionsDB.CheckDeleteCardsWhite(indexRoom, Master.resultUser))
+            {
+                FunctionsDB.DeleteCardsWhite(indexRoom, Master.resultUser);
+            }
+            if (FunctionsDB.CheckDeleteCardsBlack(indexRoom))
+            {
+                FunctionsDB.DeleteCardsBlack(indexRoom);
+            }
         }    
         lblEmail.Text = Session["userEmail"].ToString();
     }

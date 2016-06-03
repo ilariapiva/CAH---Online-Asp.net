@@ -565,14 +565,14 @@ namespace CAHOnline
         }
 
         //Questa funzione mi permette di scrivere nella tblGame il master
-        public static void UpdateMaster(int room, int indexMaster, Account user)
+        public static void UpdateMaster(int room, int indexMaster, int user)
         {
             string strcn22 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn22 = new SqlConnection(strcn22);
             cn22.Open();
 
             String strsql = "UPDATE tblGame SET master = '" + indexMaster + @"'
-                             WHERE idAccount = '" + user.idAccount + "'";
+                             WHERE idAccount = '" + user + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn22);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -965,7 +965,7 @@ namespace CAHOnline
 
             Round value = ReadRounds(indexRoom);
 
-            String strsql = "INSERT INTO tblRounds(idRoom, numberRound, newRound) VALUES ('" + indexRoom + "', 1, 0)";
+            String strsql = "INSERT INTO tblRounds(idRoom, numberRound, newRound, timer) VALUES ('" + indexRoom + "', 1, 0, 0)";
             SqlCommand cmd = new SqlCommand(strsql, cn37);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -979,7 +979,7 @@ namespace CAHOnline
             SqlConnection cn38 = new SqlConnection(strcn38);
             cn38.Open();
 
-            String strsql = "UPDATE tblRounds SET numberRound = 0 WHERE idRoom = '" + indexRoom + "'";
+            String strsql = "UPDATE tblRounds SET numberRound = 0, newRound = 0, timer = 0 WHERE idRoom = '" + indexRoom + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn38);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -1133,5 +1133,264 @@ namespace CAHOnline
             return ok;
         }
 
+        //Questa funzione mi permette di controllare quanti giocatori ci sono nella tblGame che non sono master
+        public static int UsersNotMaster(int room)
+        {
+            string strcn46 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn46 = new SqlConnection(strcn46);
+            cn46.Open();
+
+            String strsql = "SELECT count(idAccount) as c FROM tblGame WHERE room = '" + room + "' and master = 0";
+            SqlCommand cmd = new SqlCommand(strsql, cn46);
+            cmd.ExecuteNonQuery();
+
+            int value = 0;
+            var dr28 = cmd.ExecuteReader();
+            if (dr28.HasRows)
+            {
+                dr28.Read();
+                value = Convert.ToInt32(dr28["c"]);
+            }
+
+            dr28.Close();
+            cmd.Dispose();
+            cn46.Close();
+            return value;
+        }
+
+        //Questa funzione mi permette di aggiornare il valore del newRound nella tblRounds
+        public static void UpdateNewRound(int indexRoom, int round)
+        {
+            string strcn47 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn47 = new SqlConnection(strcn47);
+            cn47.Open();
+
+            String strsql = "UPDATE tblRounds SET newRound = '" + round + "' WHERE idRoom = '" + indexRoom + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn47);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn47.Close();
+        }
+
+        //Questa funzione mi permette di leggere il count dei secondi per far far vedere i nome degli utenti al master
+        public static int ReadTimer(int indexRoom)
+        {
+            string strcn48 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn48 = new SqlConnection(strcn48);
+            cn48.Open();
+
+            String strsql = "SELECT timer FROM tblRounds WHERE idRoom = '" + indexRoom + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn48);
+            cmd.ExecuteNonQuery();
+
+            int value = 0;
+            var dr29 = cmd.ExecuteReader();
+            if (dr29.HasRows)
+            {
+                dr29.Read();
+                value = Convert.ToInt32(dr29["timer"]);
+            }
+
+            dr29.Close();
+            cmd.Dispose();
+            cn48.Close();
+            return value;
+        }
+
+        //Questa funzione mi permette di aggiornare il count dei secondi per far far vedere i nome degli utenti al master
+        public static void UpdateTimer(int indexRoom)
+        {
+            string strcn49 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn49 = new SqlConnection(strcn49);
+            cn49.Open();
+
+            int timer = FunctionsDB.ReadTimer(indexRoom);
+
+            String strsql = "UPDATE tblRounds SET timer = '" + (timer + 1) + "' WHERE idRoom = '" + indexRoom + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn49);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn49.Close();
+        }
+
+        //Questa funzione mi permette di resettare il count dei secondi per far far vedere i nome degli utenti al master
+        public static void ResetTimer(int indexRoom)
+        {
+            string strcn50 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn50 = new SqlConnection(strcn50);
+            cn50.Open();
+
+            String strsql = "UPDATE tblRounds SET timer = 0 WHERE idRoom = '" + indexRoom + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn50);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn50.Close();
+        }
+
+        //Questa funzione mi permette di scrivere le carte bianche che un utente possiede
+        public static void WriteCardsWhite(int indexRoom, Account user, Cards card)
+        {
+            string strcn51 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn51 = new SqlConnection(strcn51);
+            cn51.Open();
+
+            String strsql = @"INSERT INTO tblCardsWhiteUsers(idRoom, idAccount, idCardWhite, hasBeenUsed) 
+                              VALUES ('" + indexRoom + "', '" + user.idAccount + "', '" + card.idCards + "', 0)";
+            SqlCommand cmd = new SqlCommand(strsql, cn51);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn51.Close();
+        }
+
+        //Questa funzione mi permette se una carta bianca è già usata da un'altro utente
+        public static bool CheckCardsWhite(int room, Cards card)
+        {
+            string strcn52 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn52 = new SqlConnection(strcn52);
+            cn52.Open();
+
+            String strsql = "SELECT idCardWhite FROM tblCardsWhiteUsers WHERE idRoom = '" + room + "' and idCardWhite = '" + card.idCards + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn52);
+            cmd.ExecuteNonQuery();
+
+            var dr30 = cmd.ExecuteReader();
+            dr30.Read();
+            bool ok = dr30.HasRows;
+            dr30.Close();
+            cmd.Dispose();
+            cn52.Close();
+            return ok;
+        }
+
+        //Questa funzione mi permette di aggiornare lo stato della carta bianca, cioè che è stata usata
+        public static void UpdateCardsWhite(int indexRoom, Cards card)
+        {
+            string strcn53 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn53 = new SqlConnection(strcn53);
+            cn53.Open();
+
+            String strsql = "UPDATE tblCardsWhiteUsers SET hasBeenUsed = 1 WHERE idRoom = '" + indexRoom + "' and idCardWhite = '" + card.idCards + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn53);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn53.Close();
+        }
+
+        //Questa funzione permette di eliminare le carte di un utente dalla tblCardsWhiteUsers
+        public static void DeleteCardsWhite(int room, Account user)
+        {
+            string strcn54 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn54 = new SqlConnection(strcn54);
+            cn54.Open();
+
+            String strsql = "DELETE FROM tblCardsWhiteUsers WHERE idRoom = '" + room + "' and idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn54);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn54.Close();
+        }
+
+        //Questa funzione mi permette di controllare se le carte di un utente sono state eliminate
+        public static bool CheckDeleteCardsWhite(int room, Account user)
+        {
+            string strcn55 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn55 = new SqlConnection(strcn55);
+            cn55.Open();
+
+            String strsql = "SELECT idAccount FROM tblCardsWhiteUsers WHERE idRoom = '" + room + "' and idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn55);
+            cmd.ExecuteNonQuery();
+
+            var dr31 = cmd.ExecuteReader();
+            dr31.Read();
+            bool ok = dr31.HasRows;
+            dr31.Close();
+            cmd.Dispose();
+            cn55.Close();
+            return ok;
+        }
+
+        //Questa funzione mi permette di controllare se una carta nera è già stata usata 
+        public static bool CheckCardsBlack(int room, Cards card)
+        {
+            string strcn56 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn56 = new SqlConnection(strcn56);
+            cn56.Open();
+
+            String strsql = "SELECT idCardsBlack FROM tblCardsBlackRoom WHERE idRoom = '" + room + "' and idCardsBlack = '" + card.idCards + "' and hasBeenUsed = 1";
+            SqlCommand cmd = new SqlCommand(strsql, cn56);
+            cmd.ExecuteNonQuery();
+
+            var dr32 = cmd.ExecuteReader();
+            dr32.Read();
+            bool ok = dr32.HasRows;
+            dr32.Close();
+            cmd.Dispose();
+            cn56.Close();
+            return ok;
+        }
+
+        //Questa funzione mi permette di aggiornare lo stato della carta nera, cioè che è stata usata
+        public static void UpdateCardsBlack(int indexRoom, Cards card)
+        {
+            string strcn57 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn57 = new SqlConnection(strcn57);
+            cn57.Open();
+
+            String strsql = "UPDATE tblCardsBlackRoom SET hasBeenUsed = 1 WHERE idRoom = '" + indexRoom + "' and idCardsBlack = '" + card.idCards + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn57);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn57.Close();
+        }
+
+        //Questa funzione permette di eliminare le carte nere dalla tblCardsBlackRoom
+        public static void DeleteCardsBlack(int room)
+        {
+            string strcn58 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn58 = new SqlConnection(strcn58);
+            cn58.Open();
+
+            String strsql = "DELETE FROM tblCardsBlackRoom WHERE idRoom = '" + room + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn58);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn58.Close();
+        }
+
+        //Questa funzione mi permette di controllare se le carte nere sono state eliminate dalla tblCardsBlackRoom
+        public static bool CheckDeleteCardsBlack(int room)
+        {
+            string strcn59 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn59 = new SqlConnection(strcn59);
+            cn59.Open();
+
+            String strsql = "SELECT idRoom FROM tblCardsBlackRoom WHERE idRoom = '" + room + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn59);
+            cmd.ExecuteNonQuery();
+
+            var dr33 = cmd.ExecuteReader();
+            dr33.Read();
+            bool ok = dr33.HasRows;
+            dr33.Close();
+            cmd.Dispose();
+            cn59.Close();
+            return ok;
+        }
+
+        //Questa funzione mi permette di scrivere le carte nere nella tblCardsBlackRoom
+        public static void WriteCardsBlack(int indexRoom, Cards card)
+        {
+            string strcn60 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn60 = new SqlConnection(strcn60);
+            cn60.Open();
+
+            String strsql = @"INSERT INTO tblCardsBlackRoom(idRoom, idCardsBlack, hasBeenUsed) 
+                              VALUES ('" + indexRoom + "', '" + card.idCards + "', 0)";
+            SqlCommand cmd = new SqlCommand(strsql, cn60);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn60.Close();
+        }
     }
 }

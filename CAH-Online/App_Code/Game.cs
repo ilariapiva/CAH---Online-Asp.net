@@ -35,7 +35,7 @@ namespace CAHOnline
                 {
                     if(!IsFull(i))
                     {
-                        if (FunctionsDB.CheckRoom(listRooms.IndexOf(i)))//controllo nel db se c'è già la stanza, se c'è scrivo l'utente, aggiungo 
+                        if(FunctionsDB.CheckRoom(listRooms.IndexOf(i)))//controllo nel db se c'è già la stanza, se c'è scrivo l'utente, aggiungo 
                         {                                               //l'utente alla lista degli utenti e gli genero le carte bianche
                             FunctionsDB.WriteGame(user, listRooms.IndexOf(i), 0);
                             i.AddUser(user, listRooms.IndexOf(i));
@@ -47,7 +47,14 @@ namespace CAHOnline
                             i.AddUser(user, listRooms.IndexOf(i));
                             i.GenerateCardsForUser(user);
                             i.GenerateCardBlack(listRooms.IndexOf(i));
-                            FunctionsDB.ResetRounds(listRooms.IndexOf(i));
+                            if (FunctionsDB.CheckRounds(listRooms.IndexOf(i)))
+                            {
+                                FunctionsDB.ResetRounds(listRooms.IndexOf(i));
+                            }
+                            else
+                            {
+                                FunctionsDB.WriteRounds(listRooms.IndexOf(i));
+                            }                         
                         }
                         //int indexRoom = Convert.ToInt32(listRooms.IndexOf(i));
                         return true;

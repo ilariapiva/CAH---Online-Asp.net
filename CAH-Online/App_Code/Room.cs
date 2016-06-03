@@ -7,23 +7,26 @@ namespace CAHOnline
 {
     public class Room
     {
-        static Dictionary<int, List<Account>> listUsers = new Dictionary<int, List<Account>>();
+        static Dictionary<int, List<int>> listUsers = new Dictionary<int, List<int>>();
         static List<Cards> RandomCardBlack, RandomCardsWhite;
-        static int indexCardBlack, indexCardWhite, indexMaster; //numberCardWhite, 
+        static int indexCardBlack, indexCardWhite, indexMaster, indexUser; //numberCardWhite, 
         static Dictionary<int, List<Cards>> listCardsUsers = new Dictionary<int, List<Cards>>();
         static Dictionary<int, List<Cards>> listCardsBlack = new Dictionary<int, List<Cards>>();
+        List<Cards> cardsWhite = new List<Cards>();
+        List<Cards> cardBlack = new List<Cards>();
 
         public Room()
         {
             indexCardBlack = 0;
             indexCardWhite = 0;
             indexMaster = 0;
+            indexUser = 0;
 
             //prendo tutte le carte dalla tabella BlackCard e le inserisco in una lista
             Random rndBlackCard = new Random();
 
             String BlackCard = "SELECT * FROM tblBlackCard";
-            List<Cards> cardBlack = FunctionsDB.CardsBlack(BlackCard);
+            cardBlack = FunctionsDB.CardsBlack(BlackCard);
 
             RandomCardBlack = (cardBlack.OrderBy(x => rndBlackCard.Next())).ToList();
             //numberCardWhite = CheckStringBlackCard();
@@ -32,7 +35,7 @@ namespace CAHOnline
             Random rndWhiteCards = new Random();
 
             String WhiteCards = "SELECT * FROM tblWhiteCard";
-            List<Cards> cardsWhite = FunctionsDB.CardsWhite(WhiteCards);
+            cardsWhite = FunctionsDB.CardsWhite(WhiteCards);
 
             RandomCardsWhite = (cardsWhite.OrderBy(x => rndWhiteCards.Next())).ToList();
         }
@@ -40,14 +43,14 @@ namespace CAHOnline
         //Creo una nuova lista di utenti e di carte nere in base ad una stanza
         public void CreateNewListInDictionary(int idRoom)
         {
-            listUsers.Add(idRoom, new List<Account>());
+            listUsers.Add(idRoom, new List<int>());
             listCardsBlack.Add(idRoom, new List<Cards>());
         }
 
         //Aggiungo utenti ad una lista in base alla stanza e creo la lista delle carte
         public void AddUser(Account user, int idRoom)
         {
-            listUsers[idRoom].Add(user);
+            listUsers[idRoom].Add(user.idAccount);
             listCardsUsers.Add(user.idAccount, new List<Cards>());
         }
 
@@ -56,13 +59,13 @@ namespace CAHOnline
         {
             Master indexUser = FunctionsDB.ReadMaster(idRoom, user);
             bool ok = false;
-            foreach(Account u in listUsers[idRoom])
+            foreach (int u in listUsers[idRoom])
             {
-                if (u.idAccount == indexUser.idAccount)
+                if (u == indexUser.idAccount)
                 {
-                    if(indexUser.indexMaster == 1)
+                    if (indexUser.indexMaster == 1)
                     {
-                        ok = true;                    
+                        ok = true;
                         break;
                     }
                     else if (indexUser.indexMaster == 0)
@@ -89,24 +92,64 @@ namespace CAHOnline
         //Questa funziona genera una lista iniziale delle carte per l'utente
         public void GenerateCardsForUser(Account user)
         {
-            List<Cards> cards = new List<Cards>();
+            List<Cards> listCards = new List<Cards>();
+
+            int idRoom = ReturnKeyRoomUser(user);
 
             for (int i = 0; i < 10; i++)
             {
-                cards.Add(RandomCardsWhite[indexCardWhite + i]);
+                listCards.Add(RandomCardsWhite[indexCardWhite + i]);
             }
 
-            indexCardWhite += 10;
-            listCardsUsers[user.idAccount] = cards;
+            indexCardWhite += 10;        
+            
+            for(int i = 0; i < listCards.Count; i++)
+            {
+                Cards card = listCards.ElementAt(i);
+                if (FunctionsDB.CheckCardsWhite(idRoom, card))
+                {
+                    listCards.Remove(card);
+                    Cards c = new Cards();
+                    while (FunctionsDB.CheckCardsWhite(idRoom, c))
+                    {
+                        c = RandomCardsWhite[indexCardWhite];
+                        indexCardWhite++;
+                    }
+                    listCards.Add(c);
+                    FunctionsDB.WriteCardsWhite(idRoom, user, c);
+                }
+                else
+                {
+                    FunctionsDB.WriteCardsWhite(idRoom, user, card);
+                }  
+            }
+            listCardsUsers[user.idAccount] = listCards;
         }
 
-        //Questa funziona genera aggiunge una carta all'utente
+        //Questa funziona genera e aggiunge una carta all'utente
         public void GenerateCardForUser(Account user)
         {
+            int idRoom = ReturnKeyRoomUser(user);
             Cards card = new Cards();
             card = RandomCardsWhite[indexCardWhite];
             indexCardWhite++;
-            listCardsUsers[user.idAccount].Add(card);
+
+            if (FunctionsDB.CheckCardsWhite(idRoom, card))
+            {
+                Cards c = new Cards();
+                while (FunctionsDB.CheckCardsWhite(idRoom, c))
+                {
+                    c = RandomCardsWhite[indexCardWhite];
+                    indexCardWhite++;
+                }
+                listCardsUsers[user.idAccount].Add(c);
+                FunctionsDB.WriteCardsWhite(idRoom, user, c);
+            }
+            else
+            {
+                listCardsUsers[user.idAccount].Add(card);
+                FunctionsDB.WriteCardsWhite(idRoom, user, card);
+            }    
         }
 
         //Questa funzione permette di eliminare una carta dalla lista delle carte di un utente
@@ -126,19 +169,22 @@ namespace CAHOnline
         public void GenerateCardBlack(int idRoom)
         {
             Cards c = new Cards();
-            //indexCardBlack++;
             c = RandomCardBlack[indexCardBlack];
-            listCardsBlack[idRoom].Add(c);
-           // return listCardsBlack[idRoom];
-        }
-
-        //Questa funzione genera la carta nera del turno a tutti i giocatori
-        public void GenerateNewCardBlack(int idRoom)
-        {
-            Cards c = new Cards();
-            c = RandomCardBlack[indexCardBlack];
-            listCardsBlack[idRoom].Add(c);
-            // return listCardsBlack[idRoom];
+            if (FunctionsDB.CheckCardsBlack(idRoom, c))
+            {
+                Cards card = new Cards();
+                while (FunctionsDB.CheckCardsWhite(idRoom, card))
+                {
+                    card = RandomCardBlack[indexCardBlack];
+                }
+                listCardsBlack[idRoom].Add(card);
+                FunctionsDB.WriteCardsBlack(idRoom, card);
+            }
+            else
+            {
+                listCardsBlack[idRoom].Add(c);
+                FunctionsDB.WriteCardsBlack(idRoom, c);
+            }    
         }
 
         //Questa funzione restituisce la carta nera del turno a tutti i giocatori
@@ -195,41 +241,42 @@ namespace CAHOnline
         {
             int spacesBlackCard = CheckStringBlackCard(room);
             int cardsSelect = FunctionsDB.CheckNCardsSelect(room);
+            int user = FunctionsDB.UsersNotMaster(room);
+            //if (UsersNotMaster(room, user) == 4)
+            //{
+            //    if (spacesBlackCard == 1)
+            //    {
+            //        if (cardsSelect == 4)
+            //        {
+            //            return true;
+            //        }
+            //    }
+            //    if (spacesBlackCard == 2)
+            //    {
+            //        if (cardsSelect == 8)
+            //        {
+            //            return true;
+            //        }
+            //        else
+            //        {
+            //            return false;
+            //        }
+            //    }
 
-            if (UsersNotMaster(room) == 4)
-            {
-                if (spacesBlackCard == 1)
-                {
-                    if (cardsSelect == 4)
-                    {
-                        return true;
-                    }
-                }
-                if (spacesBlackCard == 2)
-                {
-                    if (cardsSelect == 8)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
+            //    if (spacesBlackCard == 3)
+            //    {
+            //        if (cardsSelect == 12)
+            //        {
+            //            return true;
+            //        }
+            //        else
+            //        {
+            //            return false;
+            //        }
+            //    }
+            //}
 
-                if (spacesBlackCard == 3)
-                {
-                    if (cardsSelect == 12)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
-            if (UsersNotMaster(room) == 2)
+            if (user == 2)
             {
                 if (spacesBlackCard == 1)
                 {
@@ -266,63 +313,89 @@ namespace CAHOnline
         }
 
 
-        //Questa funziona mi ritorna il numero dei giocatori meno il master presenti nella stanza
-        public int UsersNotMaster(int room)
-        {
-            int count = 0;
+        ////Questa funziona mi ritorna il numero dei giocatori meno il master presenti nella stanza
+        //public int UsersNotMaster(int room, Account user)
+        //{
+        //    int count = 0;
 
-            foreach (Account user in listUsers[room])
-            {
-                if (!IsMaster(user, room))
-                {
-                    count++;
-                }
-                if(count == 2)
-                {
-                    break;
-                }
-            }
-            return count;
-        }
+        //    foreach (int u in listUsers[room])
+        //    {
+        //        if (u == user.idAccount)
+        //        {
+        //            if (!IsMaster(user, room))
+        //            {
+        //                count++;
+        //            }
+        //            if (count == 2)
+        //            {
+        //                break;
+        //            }
+        //        }
+        //    }
+        //    return count;
+        //}
 
         //Questa funzione permette di mandare avanti l'index del master
-        public void NewRaund(int room)
+        public void NewRaund(int room, Account user)
         {
-            foreach (Account user in listUsers[room])
+            foreach (int u in listUsers[room])
             {
-                if (IsMaster(user, room))
+                if (u == user.idAccount)
                 {
+                    //if (IsMaster(user, room))
+                    //{
                     if (indexMaster == 3)
                     {
                         indexMaster = 0;
+                        indexUser = 0;
                         indexCardBlack++;
                         GetCardBlack(room);
-                        indexMaster = indexMaster % listUsers[room].Count;
-                        FunctionsDB.UpdateMaster(room, 0, user);
+                        //indexMaster = indexMaster % listUsers[room].Count;
+                        FunctionsDB.UpdateMaster(room, 0, user.idAccount);
                         break;
                     }
                     else if (indexMaster < 3)
                     {
                         indexMaster++;
+                        indexUser++;
                         indexCardBlack++;
                         GenerateCardBlack(room);
-                        indexMaster = indexMaster % listUsers[room].Count;
-                        FunctionsDB.UpdateMaster(room, 0, user);
+                        //indexMaster = indexMaster % listUsers[room].Count;
+                        FunctionsDB.UpdateMaster(room, 0, user.idAccount);
                         break;
                     }
+                    //}
                 }
             }
-            foreach (Account u in listUsers[room])
+            foreach (int u in listUsers[room])
             {
-                int index = listUsers[room].IndexOf(u);
-                if (index == indexMaster)
+                //for (int u = 0; u < listUsers[room].Count; u++)
+                //{
+                int userIndex = listUsers[room].FindIndex(x => x == u);
+                int idAccount = listUsers[room].ElementAt(u);
+                if (userIndex == indexMaster)
                 {
                     FunctionsDB.UpdateMaster(room, 1, u);
                     break;
                 }
             }
+            //}
+                //foreach (int u in listUsers[room])
+                //{
+                //    if (u == user.idAccount)
+                //    {
+                //        int index = listUsers[room].IndexOf(u);
+                //        if (index == indexMaster)
+                //        {
+                //            FunctionsDB.UpdateMaster(room, 1, user);
+                //            break;
+                //        }
+                //    }
+                //}
 
             FunctionsDB.UpdateRounds(room);
+            int round = 1;
+            FunctionsDB.UpdateNewRound(room, round);
             //return indexMaster;
         }
 
@@ -336,7 +409,14 @@ namespace CAHOnline
         //Questa funzione permette di eliminare un utente da una stanza
         public void DeleteUser(int indexRoom, Account user)
         {
-            listUsers[indexRoom].Remove(user);
+            foreach (int u in listUsers[indexRoom])
+            {
+                if (u == user.idAccount)
+                {
+                    listUsers[indexRoom].Remove(u);
+                    break;
+                }
+            }
         }
 
         //Questa funzione permette di controllare se la stanza è piena
@@ -346,7 +426,7 @@ namespace CAHOnline
 
             if (listUsers.ContainsKey(indexRoom))
             {
-                if(listUsers[indexRoom].Count == 3)
+                if (listUsers[indexRoom].Count == 3)
                 {
                     ok = true;
                 }
@@ -366,7 +446,6 @@ namespace CAHOnline
             if (listCardsUsers.ContainsKey(user.idAccount))
             {
                 ok = true;
-
             }
             return ok;
         }
@@ -375,17 +454,17 @@ namespace CAHOnline
         public bool CheckDeleteUser(int indexRoom, Account user)
         {
             bool ok = false;
-            if (listUsers.ContainsKey(indexRoom))
-            {
-                foreach (Account u in listUsers[indexRoom])
+            //if (listUsers.ContainsKey(indexRoom))
+            //{
+            foreach (int u in listUsers[indexRoom])
                 {
-                    if (u == user)
+                    if (u == user.idAccount)
                     {
                         ok = true;
                         break;
                     }
                 }
-            }
+            //}
             return ok;
         }
 
@@ -397,11 +476,11 @@ namespace CAHOnline
 
             int indexRoom = 0;
 
-            for(int i = 0; i < listRooms.Count; i++)
+            for (int i = 0; i < listRooms.Count; i++)
             {
-                foreach (Account u in listUsers[i])
+                foreach (int u in listUsers[i])
                 {
-                    if (u == user)
+                    if (u == user.idAccount)
                     {
                         indexRoom = listUsers.ElementAt(i).Key;
                         break;
@@ -421,17 +500,24 @@ namespace CAHOnline
 
             for (int i = 0; i < listRooms.Count; i++)
             {
-                foreach (Account u in listUsers[i])
-                {
-                    if (u.idAccount == user.idAccount)
-                    {
-                        ok = true;
-                        break;
-                    }
-                }
-                if(ok == true)
+                if (listRooms.Count == 0)
                 {
                     break;
+                }
+                else
+                {
+                    foreach (int u in listUsers[i])
+                    {
+                        if (u == user.idAccount)
+                        {
+                            ok = true;
+                            break;
+                        }
+                    }
+                    if (ok == true)
+                    {
+                        break;
+                    }
                 }
             }
             return ok;

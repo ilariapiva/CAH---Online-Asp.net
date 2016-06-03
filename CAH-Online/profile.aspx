@@ -31,6 +31,14 @@
              {
                  FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
              }
+             if (FunctionsDB.CheckDeleteCardsWhite(indexRoom, Master.resultUser))
+             {
+                 FunctionsDB.DeleteCardsWhite(indexRoom, Master.resultUser);
+             }
+             if (FunctionsDB.CheckDeleteCardsBlack(indexRoom))
+             {
+                 FunctionsDB.DeleteCardsBlack(indexRoom);
+             }
          } 
        
          //Leggo dalla tabella account lo username, partite vinte, partite perse e partite giocate

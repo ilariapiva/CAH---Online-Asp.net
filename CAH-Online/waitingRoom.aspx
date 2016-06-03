@@ -8,16 +8,10 @@
     int indexRoom;
     int NumberUsers;
     Room room = new Room();
-    int totalSeconds = 0;
-    int seconds = 0;
-    int minutes = 0;
-    string time = "";
     bool stateChanged = false;
-    //bool ok = false;
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        //FunctionsDB.OpenConnectionDB();
         indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
         if(room.listUserIsFull(indexRoom))
         {
@@ -27,7 +21,7 @@
         if (!Page.IsPostBack)
         {
             stateChanged = true;
-            Session["time1"] = 15; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 20 sec
+            Session["time1"] = DateTime.Now.AddSeconds(15);
         }
         if(stateChanged)
         {
@@ -38,8 +32,9 @@
 
     protected void Timer1_Tick(object sender, EventArgs e)
     {
-        Session["time1"] = Convert.ToInt16(Session["time1"]) - 1;
-        if (Convert.ToInt16(Session["time1"]) <= 0)
+        TimeSpan time1 = new TimeSpan();
+        time1 = (DateTime)Session["time1"] - DateTime.Now;
+        if (time1.Seconds <= 0)
         {
             indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
             NumberUsers = FunctionsDB.ReadUsersInRoom(indexRoom);
@@ -74,22 +69,17 @@
                     {
                         FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
                     }
+                    if (FunctionsDB.CheckDeleteCardsWhite(indexRoom, Master.resultUser))
+                    {
+                        FunctionsDB.DeleteCardsWhite(indexRoom, Master.resultUser);
+                    }
+                    if (FunctionsDB.CheckDeleteCardsBlack(indexRoom))
+                    {
+                        FunctionsDB.DeleteCardsBlack(indexRoom);
+                    }
                 } 
-                //ok = true;
                 Response.Redirect("~/index.aspx");
             }
-            
-            /*if(ok == true)
-            {
-                Response.Redirect("~/index.aspx");
-            }*/
-        }
-        else
-        {
-            totalSeconds = Convert.ToInt16(Session["time1"]);
-            seconds = totalSeconds % 60;
-            minutes = totalSeconds / 60;
-            time = minutes + ":" + seconds;
         }
     }
 </script>

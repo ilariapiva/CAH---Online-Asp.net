@@ -25,42 +25,21 @@
         
         lblPoints.Text = "Punteggio: " + points;
 
-        //lblUser1.Visible = false;
-        //lblUser2.Visible = false;
-        //lblUser3.Visible = false;
-        //lblUser4.Visible = false;
-        //lblUser5.Visible = false;
-        //lblUser6.Visible = false;
-        //lblUser7.Visible = false;
-        //lblUser8.Visible = false;
-        //lblUser9.Visible = false;
-        //lblUser10.Visible = false;
-        //lblUser11.Visible = false;
-        //lblUser12.Visible = false;
-
-        //btnWhite11.Visible = false;
-        //btnWhite12.Visible = false;
-
         if (!Page.IsPostBack)
         {
             stateChanged = true;
-            //Session["time"] = 50;
-            //Session["time1"] = 40; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
-            //Session["time2"] = 40;
-            //Session["time3"] = 3;
-            
+
             Session["time1"] = DateTime.Now.AddSeconds(50);
-            Session["time2"] = DateTime.Now.AddSeconds(40);
-            Session["time3"] = DateTime.Now.AddSeconds(3);
+            Session["time2"] = DateTime.Now.AddSeconds(80);
+            Session["time3"] = DateTime.Now.AddSeconds(83);
             Session["time4"] = DateTime.Now.AddSeconds(40);
-            Session["time5"] = DateTime.Now.AddSeconds(115);        
-            /* 100 = 1 min e 40 sec
-             * 90 = 1 min 30 sec
-             * 50 = 50 sec
-             */
+            Session["time5"] = DateTime.Now.AddSeconds(115);
+            //Session["time1"] = DateTime.Now.AddSeconds(70);
+            //Session["time2"] = DateTime.Now.AddSeconds(130);
+            //Session["time3"] = DateTime.Now.AddSeconds(133);
+            //Session["time4"] = DateTime.Now.AddSeconds(60);
+            //Session["time5"] = DateTime.Now.AddSeconds(193);        
         }
-        
-        //room.GenerateCardsForUser(Master.resultUser);
 
         if (stateChanged)
         {
@@ -71,24 +50,33 @@
                 room.DeleteCardsUser(Master.resultUser);
                 room.DeleteUser(indexRoom, Master.resultUser);
                 FunctionsDB.DeleteUserInGame(indexRoom, Master.resultUser);
+                FunctionsDB.DeleteCardsWhite(indexRoom, Master.resultUser);
                 if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
                 {
                     FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
+                }
+                if(FunctionsDB.CheckDeleteCardsBlack(indexRoom))
+                {
+                    FunctionsDB.DeleteCardsBlack(indexRoom);
                 }
                 Response.Redirect("~/index.aspx");
             }
             //se l'utente è il master visualizzo solo la carta master 
             if (room.IsMaster(Master.resultUser, indexRoom))
             {
+                int r = 0;
+                FunctionsDB.UpdateNewRound(indexRoom, r);
                 Timer1.Enabled = true;
                 lblTimerXText.Text = "In attesa che i giocatori scelgano le carte bianche";
                 btnConfirmCardSelect.Visible = false;
                 btnConfirmCardSelect.Enabled = false;
+                btnConfirmWinner.Visible = false;
 
                 blackCard = room.GetCardBlack(indexRoom);
                 lblBlack.Attributes.Add("value", blackCard.idCards.ToString());
                 lblBlack.Text = blackCard.Text;
 
+                FunctionsDB.UpdateCardsBlack(indexRoom, blackCard);
                 int spacesBlackCard = room.CheckStringBlackCard(indexRoom);
 
                 if (spacesBlackCard == 1)
@@ -250,6 +238,7 @@
             btnWhite1.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            FunctionsDB.UpdateCardsWhite(indexRoom, c);
             btnWhite1.BackColor = System.Drawing.Color.White;
             btnWhite1.BorderColor = System.Drawing.Color.White;
         }
@@ -261,6 +250,7 @@
             btnWhite2.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            FunctionsDB.UpdateCardsWhite(indexRoom, c);
             btnWhite2.BackColor = System.Drawing.Color.White;
             btnWhite2.BorderColor = System.Drawing.Color.White;
         }
@@ -272,6 +262,7 @@
             btnWhite3.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            FunctionsDB.UpdateCardsWhite(indexRoom, c);
             btnWhite3.BackColor = System.Drawing.Color.White;
             btnWhite3.BorderColor = System.Drawing.Color.White;
         }
@@ -283,6 +274,7 @@
             btnWhite4.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            FunctionsDB.UpdateCardsWhite(indexRoom, c);
             btnWhite4.BackColor = System.Drawing.Color.White;
             btnWhite4.BorderColor = System.Drawing.Color.White;
         }
@@ -294,6 +286,7 @@
             btnWhite5.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            FunctionsDB.UpdateCardsWhite(indexRoom, c);
             btnWhite5.BackColor = System.Drawing.Color.White;
             btnWhite5.BorderColor = System.Drawing.Color.White;
         }
@@ -305,6 +298,7 @@
             btnWhite6.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            FunctionsDB.UpdateCardsWhite(indexRoom, c);
             btnWhite6.BackColor = System.Drawing.Color.White;
             btnWhite6.BorderColor = System.Drawing.Color.White;
         }
@@ -316,6 +310,7 @@
             btnWhite7.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            FunctionsDB.UpdateCardsWhite(indexRoom, c);
             btnWhite7.BackColor = System.Drawing.Color.White;
             btnWhite7.BorderColor = System.Drawing.Color.White;
         }
@@ -327,6 +322,7 @@
             btnWhite8.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            FunctionsDB.UpdateCardsWhite(indexRoom, c);
             btnWhite8.BackColor = System.Drawing.Color.White;
             btnWhite8.BorderColor = System.Drawing.Color.White;
         }
@@ -338,6 +334,7 @@
             btnWhite9.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            FunctionsDB.UpdateCardsWhite(indexRoom, c);
             btnWhite9.BackColor = System.Drawing.Color.White;
             btnWhite9.BorderColor = System.Drawing.Color.White;
         }
@@ -349,6 +346,7 @@
             btnWhite10.Text = "";
             room.DeleteCardForUser(Master.resultUser, c.idCards);
             FunctionsDB.WriteCardsSelect(user, c, indexRoom);
+            FunctionsDB.UpdateCardsWhite(indexRoom, c);
             btnWhite10.BackColor = System.Drawing.Color.White;
             btnWhite10.BorderColor = System.Drawing.Color.White;
         }
@@ -479,8 +477,8 @@
         Cards CardSelect = new Cards();
 
         int spacesBlackCard = room.CheckStringBlackCard(indexRoom);
-
-        //if (room.UsersNotMaster(indexRoom) == 4)
+        int user = FunctionsDB.UsersNotMaster(indexRoom);
+        //if (user == 4)
         //{
         //    if (spacesBlackCard == 1)
         //    {
@@ -611,7 +609,7 @@
         //    }
         //}
 
-        if (room.UsersNotMaster(indexRoom) == 2)
+        if (user == 2)
         {
             if (spacesBlackCard == 1)
             {
@@ -684,7 +682,7 @@
         Account userWin = FunctionsDB.ReadUserWin(indexRoom, CardSelect);
         FunctionsDB.DeleteCardSelectDB(indexRoom);
         btnConfirmWinner.Enabled = false;
-        room.NewRaund(indexRoom);
+        room.NewRaund(indexRoom, Master.resultUser);
         //FunctionsDB.UpdateNewRounds(indexRoom, 1);      
         lblTimerMaster.Text = "TimeOut!";
         Timer2.Dispose();
@@ -695,10 +693,10 @@
     protected void NameUsers(int spacesBlackCard)
     {
         List<Account> usernames = FunctionsDB.ReadUsernames(indexRoom);
-
+        int user = FunctionsDB.UsersNotMaster(indexRoom);
         if (spacesBlackCard == 1)
         {
-            //if (room.UsersNotMaster(indexRoom) == 4)
+            //if (user == 4)
             //{
             //    lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
             //    lblUser1.Text = usernames[0].Username;
@@ -713,7 +711,7 @@
             //    lblUser4.Text = usernames[3].Username;*/
             //}
 
-            if (room.UsersNotMaster(indexRoom) == 2)
+            if (user == 2)
             {
                 lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
                 lblUser1.Text = usernames[0].Username;
@@ -725,7 +723,7 @@
 
         if (spacesBlackCard == 2)
         {
-            //if (room.UsersNotMaster(indexRoom) == 4)
+            //if (user == 4)
             //{
             //    lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
             //    lblUser1.Text = usernames[0].Username;
@@ -752,7 +750,7 @@
             //    lblUser8.Text = usernames[7].Username;*/
             //}
 
-            if (room.UsersNotMaster(indexRoom) == 2)
+            if (user == 2)
             {
                 lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
                 lblUser1.Text = usernames[0].Username;
@@ -770,7 +768,7 @@
 
         if (spacesBlackCard == 3)
         {
-            //if (room.UsersNotMaster(indexRoom) == 4)
+            //if (user == 4)
             //{
             //    lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
             //    lblUser1.Text = usernames[0].Username;
@@ -809,7 +807,7 @@
             //    lblUser12.Text = usernames[1].Username;*/
             //}
 
-            if (room.UsersNotMaster(indexRoom) == 2)
+            if (user == 2)
             {
                 lblUser1.Attributes.Add("value", usernames[0].idAccount.ToString());
                 lblUser1.Text = usernames[0].Username;
@@ -1100,10 +1098,10 @@
     protected void CheckbtnCardSelected()
     {
         List<Cards> textCardSelect = FunctionsDB.ReadTetxtCardsSelect(indexRoom);
-
+        int user = FunctionsDB.UsersNotMaster(indexRoom);
         int spacesBlackCard = room.CheckStringBlackCard(indexRoom);
 
-        //if (room.UsersNotMaster(indexRoom) == 4)
+        //if (user == 4)
         //{
         //    if (spacesBlackCard == 1)
         //    {
@@ -1274,7 +1272,7 @@
         //    }
         //}
 
-        if (room.UsersNotMaster(indexRoom) == 2)
+        if (user == 2)
         {
             if (spacesBlackCard == 1)
             {
@@ -1374,7 +1372,7 @@
         {
             lblTimerMaster.Visible = true;
             btnConfirmWinner.Visible = true;
-            if (room.CheckUserCardSelected(indexRoom) == true)
+            if (room.CheckUserCardSelected(indexRoom))
             {
                 CheckbtnCardSelected();
                 lblTimerXText.Text = "Timer per la scelta del vincitore: ";
@@ -1393,8 +1391,9 @@
                 btnConfirmWinner.Visible = true;
                 lblTimerXText.Text = "Timer per la scelta del vincitore: ";
                 Timer1.Dispose();
-                Timer1.Enabled = false;
+                
                 Timer2.Enabled = true;
+                Timer1.Enabled = false;
             }
         }
     }
@@ -1421,7 +1420,7 @@
                     FunctionsDB.WritePoint(indexRoom, cardSelect);
                     FunctionsDB.DeleteCardSelectDB(indexRoom);
                     btnConfirmWinner.Enabled = false;
-                    room.NewRaund(indexRoom);
+                    room.NewRaund(indexRoom, Master.resultUser);
                     Timer2.Dispose();
                     Timer2.Enabled = false;
                     Timer3.Enabled = true;                    
@@ -1436,7 +1435,7 @@
                     FunctionsDB.WritePoint(indexRoom, cardSelect);
                     FunctionsDB.DeleteCardSelectDB(indexRoom);
                     btnConfirmWinner.Enabled = false;
-                    room.NewRaund(indexRoom);
+                    room.NewRaund(indexRoom, Master.resultUser);
                     Timer2.Dispose();
                     Timer2.Enabled = false;
                     Timer3.Enabled = true;       
@@ -1451,7 +1450,7 @@
                     FunctionsDB.WritePoint(indexRoom, cardSelect);
                     FunctionsDB.DeleteCardSelectDB(indexRoom);
                     btnConfirmWinner.Enabled = false;
-                    room.NewRaund(indexRoom);
+                    room.NewRaund(indexRoom, Master.resultUser);
                     Timer2.Dispose();
                     Timer2.Enabled = false;
                     Timer3.Enabled = true;       
@@ -1474,6 +1473,14 @@
     {
         TimeSpan time3 = new TimeSpan();
         time3 = (DateTime)Session["time3"] - DateTime.Now;
+        int time = FunctionsDB.ReadTimer(indexRoom);
+        if (time == 3)
+        {
+            Timer3.Dispose();
+            Timer3.Enabled = false;
+            FunctionsDB.ResetTimer(indexRoom);
+            Response.Redirect("~/game.aspx");
+        }
         if (time3.Seconds <= 0)
         {
             Timer3.Dispose();
@@ -1483,6 +1490,7 @@
         else
         {
             Label3.Text = time3.Minutes.ToString() + ":" + time3.Seconds.ToString();
+            FunctionsDB.UpdateTimer(indexRoom);
         }
     }
 
@@ -1647,11 +1655,11 @@
         else
         {
             Label2.Text = time5.Minutes.ToString() + ":" + time5.Seconds.ToString();
-            //Round round = FunctionsDB.ReadRounds(indexRoom);
-            //if (round.newRound == 1)
-            //{
-            //    Response.Redirect("~/game.aspx");
-            //}
+            Round round = FunctionsDB.ReadRounds(indexRoom);
+            if (round.newRound == 1)
+            {
+                Response.Redirect("~/game.aspx");
+            }
         }
     }
 </script>
@@ -1663,15 +1671,15 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div class="container game-container">
         <div>
-            <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
-            <asp:Timer ID="Timer1" runat="server" Enabled="False" Interval="1000" OnTick="Timer1_Tick"/>
-            <asp:Timer ID="Timer2" runat="server" Enabled="False" Interval="1000" OnTick="Timer2_Tick"/>      
-            <asp:Timer ID="Timer3" runat="server" Enabled="False" Interval="1000" OnTick="Timer3_Tick"/>
-            <asp:Timer ID="Timer4" runat="server" Enabled="False" Interval="1000" OnTick="Timer4_Tick"></asp:Timer>
-            <asp:Timer ID="Timer5" runat="server" Interval="1000" Enabled="False" EnableViewState="True" OnTick="Timer5_Tick"></asp:Timer>
+            <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>     
         </div>
         <asp:UpdatePanel ID="Pannello" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
+                <asp:Timer ID="Timer1" runat="server" Enabled="False" Interval="1000" OnTick="Timer1_Tick" />
+                <asp:Timer ID="Timer2" runat="server" Enabled="False" Interval="1000" OnTick="Timer2_Tick" />
+                <asp:Timer ID="Timer3" runat="server" Enabled="False" Interval="1000" OnTick="Timer3_Tick" />
+                <asp:Timer ID="Timer4" runat="server" Enabled="False" Interval="1000" OnTick="Timer4_Tick"></asp:Timer>
+                <asp:Timer ID="Timer5" runat="server" Interval="1000" Enabled="False" EnableViewState="True" OnTick="Timer5_Tick"></asp:Timer>
                 <asp:Label ID="lblTimerXText" runat="server"></asp:Label>
                 <asp:Label ID="lblTimer" runat="server"></asp:Label>
                 <asp:Label ID="lblTimerMaster" runat="server"></asp:Label>
@@ -1754,13 +1762,13 @@
                             </div>
                             <asp:Button ID="btnConfirmCardSelect" runat="server" Text="Conferma" OnClick="btnConfirmCardSelect_Click" />
                             <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite11" CssClass="card-container white-card text-white" runat="server" Text="" Visible="False"/>
+                                <asp:Button ID="btnWhite11" CssClass="card-container white-card text-white" runat="server" Text="" Visible="False" />
                                 <div class="username-card">
                                     <asp:Label ID="lblUser11" runat="server" Text="Label" Visible="False"></asp:Label>
                                 </div>
                             </div>
                             <div class="col-card-fixed">
-                                <asp:Button ID="btnWhite12" CssClass="card-container white-card text-white" runat="server" Text="" Visible="False"/>
+                                <asp:Button ID="btnWhite12" CssClass="card-container white-card text-white" runat="server" Text="" Visible="False" />
                                 <div class="username-card">
                                     <asp:Label ID="lblUser12" runat="server" Text="Label" Visible="False"></asp:Label>
                                 </div>

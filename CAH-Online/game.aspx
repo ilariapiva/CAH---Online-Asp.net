@@ -27,7 +27,10 @@
         
         int points = FunctionsDB.ReadPoints(indexRoom, Master.resultUser);
         
-        lblPoints.Text = "Punteggio: " + points;
+        lblPoints.Text = "Score: " + points;
+        
+        Round rounds = FunctionsDB.ReadRounds(indexRoom);
+        lblRounds.Text = "Number of round: " + rounds.numberRound;
 
         if (!Page.IsPostBack)
         {
@@ -80,7 +83,8 @@
             if (room.IsMaster(Master.resultUser, indexRoom))
             {
                 Timer1.Enabled = true;
-                lblTimerXText.Text = "In attesa che i giocatori scelgano le carte bianche";
+                //lblTimerXText.Text = "In attesa che i giocatori scelgano le carte bianche..";
+                lblTimerXText.Text = "Waiting for players to choose white cards..";
                 btnConfirmCardSelect.Visible = false;
                 btnConfirmCardSelect.Enabled = false;
                 btnConfirmWinner.Visible = false;
@@ -146,7 +150,8 @@
             if (!room.IsMaster(Master.resultUser, indexRoom))
             {
                 Timer4.Enabled = true;
-                lblTimerXText.Text = "Timer per la scelta delle carte bianche: ";
+                //lblTimerXText.Text = "Timer per la scelta delle carte bianche: ";
+                lblTimerXText.Text = "Timer for choosing the white cards: ";
                 lblTimerMaster.Visible = false;
                 btnConfirmWinner.Visible = false;
                 btnConfirmWinner.Enabled = false;
@@ -379,26 +384,31 @@
 
             if (value == 1)
             {
-                lblTimer.Text = "TimeOut!";  
+                lblTimer.Text = "TimeOut!";
+                //lblTimerXText.Text = "Aspetta! Il master sta scegliendo il vincitore";
+                lblTimerXText.Text = "Wait! The master is choosing the winner.";
                 btnConfirmCardSelect.Enabled = false;
                 NewCardWhite();
                 int r = 0;
                 FunctionsDB.UpdateNewRound(indexRoom, r);
                 Timer4.Dispose();
                 Timer4.Enabled = false;
-                Timer5.Enabled = true;         
+                Timer5.Enabled = true;  
+                lblTimer.Visible = false;       
             }
             else
             {
                 if (value == 0)
                 {
-                    string script = "alert(\"Devi selezionare 1 carta prima di cliccare su conferma!\");";
+                    //string script = "alert(\"Devi selezionare 1 carta prima di cliccare su conferma!\");";
+                    string script = "alert(\"You must select 1 card before clicking to confirm!\");";
                     ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
                     btnConfirmCardSelect.Enabled = true;
                 }
                 if(value > 1)
                 {
-                    string script = "alert(\"Devi selezionare solo 1 carta!\");";
+                    //string script = "alert(\"Devi selezionare solo 1 carta!\");";
+                    string script = "alert(\"You must select only 1 card!\");";
                     ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
                     btnConfirmCardSelect.Enabled = true;
                     FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
@@ -413,6 +423,8 @@
             if (value == 2)
             {
                 lblTimer.Text = "TimeOut!";
+                //lblTimerXText.Text = "Aspetta! Il master sta scegliendo il vincitore.";
+                lblTimerXText.Text = "Wait! The master is choosing the winner.";
                 btnConfirmCardSelect.Enabled = false;
                 NewCardWhite();
                 int r = 0;
@@ -420,25 +432,29 @@
                 Timer4.Dispose();
                 Timer4.Enabled = false;
                 Timer5.Enabled = true;
+                lblTimer.Visible = false;       
             }
             else
             {
                 if (value == 0)
                 {
-                    string script = "alert(\"Devi selezionare 2 carta prima di cliccare su conferma!\");";
+                    //string script = "alert(\"Devi selezionare 2 carte prima di cliccare su conferma!\");";
+                    string script = "alert(\"You must select 2 cards before clicking to confirm!\");";
                     ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
                     btnConfirmCardSelect.Enabled = true;
                 }
                 if (value > 2)
                 {
-                    string script = "alert(\"Devi selezionare solo 2 carte!\");";
+                    //string script = "alert(\"Devi selezionare solo 2 carte!\");";
+                    string script = "alert(\"You must select 2 cards!\");";
                     ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
                     btnConfirmCardSelect.Enabled = true;
                     FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
                 }
                 if (value == 1)
                 {
-                    string script = "alert(\"Devi selezionare ancora 1 carta!\");";
+                    //string script = "alert(\"Devi selezionare ancora 1 carta!\");";
+                    string script = "alert(\"You must still select 1 card!\");";
                     ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
                     btnConfirmCardSelect.Enabled = true;
                 }
@@ -452,6 +468,8 @@
             if (value == 3)
             {
                 lblTimer.Text = "TimeOut!";
+                //lblTimerXText.Text = "Aspetta! Il master sta scegliendo il vincitore.";
+                lblTimerXText.Text = "Wait! The master is choosing the winner.";
                 btnConfirmCardSelect.Enabled = false;
                 NewCardWhite();
                 int r = 0;
@@ -459,31 +477,36 @@
                 Timer4.Dispose();
                 Timer4.Enabled = false;
                 Timer5.Enabled = true;
+                lblTimer.Visible = false;       
             }
             else
             {
                 if (value == 0)
                 {
-                    string script = "alert(\"Devi selezionare 2 carta prima di cliccare su conferma!\");";
+                    //string script = "alert(\"Devi selezionare 3 carte prima di cliccare su conferma!\");";
+                    string script = "alert(\"You must select 3 cards before clicking to confirm!\");";
                     ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
                     btnConfirmCardSelect.Enabled = true;
                 }
                 if (value > 3)
                 {
-                    string script = "alert(\"Devi selezionare solo 2 carte!\");";
+                    //string script = "alert(\"Devi selezionare solo 3 carte!\");";
+                    string script = "alert(\"You must select only 3 cards!\");";
                     ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
                     btnConfirmCardSelect.Enabled = true;
                     FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
                 }
                 if (value == 1)
                 {
-                    string script = "alert(\"Devi selezionare ancora 2 carte!\");";
+                    //string script = "alert(\"Devi selezionare ancora 2 carte!\");";
+                    string script = "alert(\"You must select 2 cards yet!\");";
                     ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
                     btnConfirmCardSelect.Enabled = true;
                 }
                 if (value == 2)
                 {
-                    string script = "alert(\"Devi selezionare ancora 1 carta!\");";
+                    //string script = "alert(\"Devi selezionare ancora 1 carta!\");";
+                    string script = "alert(\"You must still select 1 card!\");";
                     ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
                     btnConfirmCardSelect.Enabled = true;
                 }             
@@ -1397,7 +1420,8 @@
             if (room.CheckUserCardSelected(indexRoom))
             {
                 CheckbtnCardSelected();
-                lblTimerXText.Text = "Timer per la scelta del vincitore: ";
+                //lblTimerXText.Text = "Timer per la scelta del vincitore: ";
+                lblTimerXText.Text = "Timer for choosing the winner: ";
                 Timer1.Dispose();
                 Timer1.Enabled = false;
                 Timer2.Enabled = true;
@@ -1416,9 +1440,9 @@
                 CheckbtnCardSelected();
                 lblTimerMaster.Visible = true;
                 btnConfirmWinner.Visible = true;
-                lblTimerXText.Text = "Timer per la scelta del vincitore: ";
+                //lblTimerXText.Text = "Timer per la scelta del vincitore: ";
+                lblTimerXText.Text = "Timer for choosing the winner: ";
                 Timer1.Dispose();
-                
                 Timer2.Enabled = true;
                 Timer1.Enabled = false;
             }
@@ -1430,6 +1454,7 @@
         //time2 = (DateTime)Session["time2"] - DateTime.Now;
         //if (time2.Seconds <= 0)
         //{
+        lblTimerMaster.Visible = true;
         Session["time2"] = Convert.ToInt16(Session["time2"]) - 1;
         if (Convert.ToInt16(Session["time2"]) <= 0)
         {
@@ -1548,7 +1573,8 @@
         if (Convert.ToInt16(Session["time4"]) <= 0)
         {
             lblTimer.Text = "TimeOut!";
-            lblTimerXText.Text = "In attesa che il master scelga il vincitore";
+            //lblTimerXText.Text = "Aspetta! Il master sta scegliendo il vincitore";
+            lblTimerXText.Text = "Wait! The master is choosing the winner.";
             if (btnConfirmCardSelect.Enabled == true)
             {
                 int spacesBlackCard = room.CheckStringBlackCard(indexRoom);
@@ -1568,6 +1594,7 @@
                     Timer4.Dispose();
                     Timer4.Enabled = false;
                     Timer5.Enabled = true;
+                    lblTimer.Visible = false;
                 }
 
                 if (spacesBlackCard == 2)
@@ -1588,6 +1615,7 @@
                         Timer4.Dispose();
                         Timer4.Enabled = false;
                         Timer5.Enabled = true;
+                        lblTimer.Visible = false;
                     }
                     else if (value == 0)
                     {
@@ -1612,6 +1640,7 @@
                         Timer4.Dispose();
                         Timer4.Enabled = false;
                         Timer5.Enabled = true;
+                        lblTimer.Visible = false;
                     }
                 }
 
@@ -1632,6 +1661,7 @@
                         Timer4.Dispose();
                         Timer4.Enabled = false;
                         Timer5.Enabled = true;
+                        lblTimer.Visible = false;
                     }
                     else if (value == 2)
                     {
@@ -1656,6 +1686,7 @@
                         Timer4.Dispose();
                         Timer4.Enabled = false;
                         Timer5.Enabled = true;
+                        lblTimer.Visible = false;
                     }
                     else if (value == 0)
                     {
@@ -1685,6 +1716,7 @@
                         Timer4.Dispose();
                         Timer4.Enabled = false;
                         Timer5.Enabled = true;
+                        lblTimer.Visible = false;
                     }
                 }
             }
@@ -1692,6 +1724,7 @@
             {
                 int r = 0;
                 FunctionsDB.UpdateNewRound(indexRoom, r);
+                lblTimer.Visible = false;
                 Timer4.Dispose();
                 Timer4.Enabled = false;
                 Timer5.Enabled = true;
@@ -1757,12 +1790,13 @@
                 <asp:Label ID="lblTimer" runat="server"></asp:Label>
                 <asp:Label ID="lblTimerMaster" runat="server"></asp:Label>
                 <br />
-                <asp:Label ID="Label1" runat="server"></asp:Label>
-                <asp:Label ID="Label2" runat="server"></asp:Label>
-                <asp:Label ID="Label3" runat="server"></asp:Label>
-                <asp:Label ID="Label4" runat="server"></asp:Label>
+                <asp:Label ID="Label1" runat="server" Visible="false"></asp:Label>
+                <asp:Label ID="Label2" runat="server" Visible="false"></asp:Label>
+                <asp:Label ID="Label3" runat="server" Visible="false"></asp:Label>
+                <asp:Label ID="Label4" runat="server" Visible="false"></asp:Label>
                 <br />
                 <asp:Label ID="lblPoints" runat="server"></asp:Label>
+                <asp:Label ID="lblRounds" runat="server"></asp:Label>
                 <div class="row">
                     <div class="col-md-2">
                         <div class="card-black-container">
@@ -1833,7 +1867,6 @@
                                     <asp:Label ID="lblUser10" runat="server" Text="Label" Visible="False"></asp:Label>
                                 </div>
                             </div>
-                            <asp:Button ID="btnConfirmCardSelect" runat="server" Text="Conferma" OnClick="btnConfirmCardSelect_Click" />
                             <div class="col-card-fixed">
                                 <asp:Button ID="btnWhite11" CssClass="card-container white-card text-white" runat="server" Text="" Visible="False" />
                                 <div class="username-card">
@@ -1844,9 +1877,10 @@
                                 <asp:Button ID="btnWhite12" CssClass="card-container white-card text-white" runat="server" Text="" Visible="False" />
                                 <div class="username-card">
                                     <asp:Label ID="lblUser12" runat="server" Text="Label" Visible="False"></asp:Label>
-                                </div>
+                                </div>                              
                             </div>
-                            <asp:Button ID="btnConfirmWinner" runat="server" Text="Conferma" OnClick="btnConfirmWinner_Click" />
+                            <asp:Button ID="btnConfirmCardSelect" runat="server" Text="Confirm" OnClick="btnConfirmCardSelect_Click" CssClass="btn btn-confirm" />
+                            <asp:Button ID="btnConfirmWinner" runat="server" Text="Confirm" OnClick="btnConfirmWinner_Click" CssClass="btn btn-confirm" />
                         </div>
                     </div>
                 </div>

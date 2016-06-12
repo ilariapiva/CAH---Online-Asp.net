@@ -49,7 +49,8 @@
             }    
             else 
             {
-                string script = "alert(\"Non ci sono abbastanza giocatori in attesa di iniziare una partita!\");";
+                //string script = "alert(\"Non ci sono abbastanza giocatori in attesa di iniziare una partita!\");";
+                string script = "alert(\"There are not enough players waiting to start a game!\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
 
                 if (room.ExistUserInRoom(Master.resultUser))
@@ -82,9 +83,9 @@
                     }
                     if (FunctionsDB.CheckDeleteMaster(indexRoom))
                     {
-                        FunctionsDB.CheckDeleteMaster(indexRoom);
+                        FunctionsDB.DeleteMaster(indexRoom);
                     }
-                } 
+                }
                 Response.Redirect("~/index.aspx");
             }
         }
@@ -92,6 +93,7 @@
 </script>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+    <link rel="stylesheet" type="text/css" href="css/Cards.css" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div>
@@ -100,27 +102,55 @@
     </div>
     <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
-            <div class="row">
-                <div class="col-md-4">
-                    <p style="color: #FFFFFF">Attendere, altri giocatori …</p>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-16">
+                                <div class="card-panel-x">
+                                    <div class="row">
+                                        <%--<div class="col-md-8">
+                                            <h3 style="color: #FFFFFF">Attendere altri giocatori …</h3>
+                                        </div>--%>
+                                        <div class="col-md-10">
+                                            <h3 style="color: #FFFFFF">Waiting for other players …</h3>
+                                        </div>
+                                    </div>
+                                    <div class="progress wait">
+                                        <div class="indeterminate"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="position3">
+                    <div id="wrapper">
+                        <ul id="index_cards">
+                            <li id="card-1" class="empty-cards black">
+                                <p class="p-cards">
+                                    ______+______=<br />
+                                    ___________.
+                                </p>
+                            </li>
+                            <li id="card-2" class="empty-cards white">
+                                <p class="p-cards">Raptor attacks.</p>
+                            </li>
+                            <li id="card-3" class="empty-cards white">
+                                <p class="p-cards">The terrorists</p>
+                            </li>
+                            <li id="card-4" class="empty-cards white">
+                                <p class="p-cards">Oompa-<br />
+                                    Loompas.</p>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            <div class="preloader-wrapper big active">
-                <div class="spinner-layer spinner-blue">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="gap-patch">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="circle-clipper right">
-                        <div class="circle"></div>
-                    </div>
-                </div>
         </ContentTemplate>
         <Triggers>
-                <asp:AsyncPostBackTrigger ControlID="Timer1" EventName="Tick" />
-            </Triggers>
+            <asp:AsyncPostBackTrigger ControlID="Timer1" EventName="Tick" />
+        </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
 

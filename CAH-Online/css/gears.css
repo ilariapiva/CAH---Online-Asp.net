@@ -1,0 +1,141 @@
+﻿/*body {
+    background: #f6f6f6;
+    color: #333;
+    margin: 0px;
+    padding: 0px;
+    font-family: Verdana;
+    font-size: 0.9em;
+}*/
+/*div.cont {
+    width: 220px;
+    height: 220px;
+    margin: 100px 0 0 300px;
+    position: absolute;
+}*/
+
+.position-right{
+  /*margin-top: 34px !important;*/
+  margin-right: 500px !important;
+}
+
+.position-left{
+  /*margin-top: 34px !important;*/
+  margin-left: 1150px !important;
+}
+
+
+img.gr1 {
+    position: relative;
+    width: 60px;
+    top: 20px;
+    -webkit-animation: grRotate 10s infinite linear;
+    -moz-animation: grRotate 10s infinite linear;
+    -o-animation: grRotate 10s infinite linear;
+    animation: grRotate 10s infinite linear;
+}
+
+img.gr2 {
+    position: relative;
+    /*right: 60px;*/
+    max-width: 90px;
+    top: 1px;
+    -webkit-animation: grRotate2 10s infinite linear;
+    -moz-animation: grRotate2 10s infinite linear;
+    -o-animation: grRotate2 10s infinite linear;
+    animation: grRotate2 10s infinite linear;
+}
+
+img.gr3 {
+    position: relative;
+    width: 50px;
+    /*left: 30px;*/
+    top: 0px;
+    -webkit-animation: grRotate 10s infinite linear;
+    -moz-animation: grRotate 10s infinite linear;
+    -o-animation: grRotate 10s infinite linear;
+    animation: grRotate 10s infinite linear;
+}
+
+.gr1-right {
+   left: 15px;
+}
+
+.gr2-right {
+   right: 60px;
+}
+
+.gr3-right {
+    left: 1px;
+}
+
+.gr1-left {
+    left: 15px;
+}
+
+.gr2-left {
+    left: 60px;
+}
+
+.gr3-left {
+    left: 30px;
+}
+
+@-webkit-keyframes grRotate {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes grRotate2 {
+    from {
+        -webkit-transform: rotate(360deg);
+    }
+
+    to {
+        -webkit-transform: rotate(0deg);
+    }
+}
+
+@-moz-keyframes grRotate {
+    from {
+        -moz-transform: rotate(0deg);
+    }
+
+    to {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-moz-keyframes grRotate2 {
+    from {
+        -moz-transform: rotate(360deg);
+    }
+
+    to {
+        -moz-transform: rotate(0deg);
+    }
+}
+
+@-o-keyframes grRotate {
+    from {
+        -o-transform: rotate(0deg);
+    }
+
+    to {
+        -o-transform: rotate(360deg);
+    }
+}
+
+@-o-keyframes grRotate2 {
+    from {
+        -o-transform: rotate(360deg);
+    }
+
+    to {
+        -o-transform: rotate(0deg);
+    }
+}

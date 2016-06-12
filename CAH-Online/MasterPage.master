@@ -44,7 +44,7 @@
     <link href="js/bootstrap.min.css" type="text/css" rel="stylesheet" />
     <link href="js/bootstrap.css.map" type="text/plain" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/Style2.css" />
+    <link rel="stylesheet" type="text/css" href="css/Style.css" />
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
     <title>CAH - Online</title>
@@ -102,7 +102,7 @@
                         <a href="login.aspx" class="nav-text">Login</a>
                     </li>
                     <li>
-                        <a href="SignUp.aspx" class="nav-text">Sign Up</a>
+                        <a href="signUp.aspx" class="nav-text">Sign Up</a>
                     </li>
                 </ul>
                 <% } %>
@@ -115,10 +115,9 @@
         <footer class="footer">
             <div class="black-text p-footer">
                 <p class="left-footer">Copyright &copy; Ilaria Piva</p>
-                <p class="right-footer">CAH - Online 2015/2016</p>
+                <p class="right-footer">CAH - Online 2016</p>
             </div>
         </footer>
     </form>
 </body>
 </html>
-v

@@ -1393,7 +1393,7 @@ namespace CAHOnline
             cn60.Close();
         }
 
-        //Questa funzione mi permette di controllare se le carte nere sono state eliminate dalla tblCardsBlackRoom
+        //Questa funzione mi permette di controllare se il master è stato eliminato dal db
         public static bool CheckDeleteMaster(int room)
         {
             string strcn61 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
@@ -1413,7 +1413,7 @@ namespace CAHOnline
             return ok;
         }
 
-        //Questa funzione mi permette di scrivere le carte nere nella tblCardsBlackRoom
+        //Questa funzione mi permette di scrivere l'indice del master nella tblMaster
         public static void WriteIndexMaster(int indexRoom)
         {
             string strcn62 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
@@ -1427,7 +1427,7 @@ namespace CAHOnline
             cn62.Close();
         }
 
-        //Questa funzione mi permette di aggiornare il count dei secondi per far far vedere i nome degli utenti al master
+        //Questa funzione mi permette di aggiornare l'indice del master nella tblMaster
         public static void UpdateIndexMaster(int indexRoom)
         {
             string strcn63 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
@@ -1443,7 +1443,7 @@ namespace CAHOnline
             cn63.Close();
         }
 
-        //Questa funzione mi permette di resettare il count dei secondi per far far vedere i nome degli utenti al master
+        //Questa funzione mi permette di resettare l'indice del master nella tblMaster
         public static void ResetIndexMaster(int indexRoom)
         {
             string strcn64 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
@@ -1456,7 +1456,7 @@ namespace CAHOnline
             cmd.Dispose();
             cn64.Close();
         }
-        //Questa funzione mi permette di resettare il count dei secondi per far far vedere i nome degli utenti al master
+        //Questa funzione mi permette di leggere il numero dell'indice del master dalla tblMaster
         public static int ReadIndexMaster(int indexRoom)
         {
             string strcn65 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
@@ -1481,33 +1481,18 @@ namespace CAHOnline
             return value;
         }
 
-        ////Questa funzione restituisce tutti gli idAccount presenti nella tblGame data una stanza
-        //public static List<Account> GetIdAccountFromGame(int room)
-        //{
-        //    string strcn66 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-        //    SqlConnection cn66 = new SqlConnection(strcn66);
-        //    cn66.Open();
+        //Questa funzione permette di eliminare l'indice del master nella tblMaster
+        public static void DeleteMaster(int room)
+        {
+            string strcn66 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn66 = new SqlConnection(strcn66);
+            cn66.Open();
 
-        //    String strsql = "SELECT idAccount FROM tblGame WHERE room = '" + room + "'";
-        //    SqlCommand cmd = new SqlCommand(strsql, cn66);
-
-        //    List<Account> listIdAccount = new List<Account>();
-
-        //    var dr36 = cmd.ExecuteReader();
-
-        //    while (dr36.Read())
-        //    {
-        //        if (dr36.HasRows)
-        //        {
-        //            Account value = new Account();
-        //            value.idAccount = Convert.ToInt32(dr36["idAccount"]);
-        //            listIdAccount.Add(value);
-        //        }
-        //    }
-        //    dr36.Close();
-        //    cmd.Dispose();
-        //    cn66.Close();
-        //    return listIdAccount;
-        //}
+            String strsql = "DELETE FROM tblMaster WHERE idRoom = '" + room + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn66);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn66.Close();
+        }
     }
 }

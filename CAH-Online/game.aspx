@@ -10,6 +10,10 @@
     Cards blackCard;
     List<Cards> whiteCards = new List<Cards>();
     bool stateChanged = false;
+    int totalSeconds = 0;
+    int seconds = 0;
+    int minutes = 0;
+    string time = "";
     
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -29,28 +33,35 @@
         {
             stateChanged = true;
 
-            Session["time1"] = DateTime.Now.AddSeconds(50);
-            Session["time2"] = DateTime.Now.AddSeconds(80);
-            Session["time3"] = DateTime.Now.AddSeconds(83);
-            Session["time4"] = DateTime.Now.AddSeconds(40);
-            Session["time5"] = DateTime.Now.AddSeconds(115);
+            //Session["time1"] = DateTime.Now.AddSeconds(50);
+            //Session["time2"] = DateTime.Now.AddSeconds(80);
+            //Session["time3"] = DateTime.Now.AddSeconds(83);
+            //Session["time4"] = DateTime.Now.AddSeconds(40);
+            //Session["time5"] = DateTime.Now.AddSeconds(115);
             //Session["time1"] = DateTime.Now.AddSeconds(70);
             //Session["time2"] = DateTime.Now.AddSeconds(130);
             //Session["time3"] = DateTime.Now.AddSeconds(133);
             //Session["time4"] = DateTime.Now.AddSeconds(60);
-            //Session["time5"] = DateTime.Now.AddSeconds(193);        
+            //Session["time5"] = DateTime.Now.AddSeconds(193);   
+            Session["time1"] = 50;
+            Session["time2"] = 40; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
+            Session["time3"] = 3;
+            Session["time4"] = 40;
+            Session["time5"] = 150;           
         }
-
+         
         if (stateChanged)
         {
             Round round = FunctionsDB.ReadRounds(indexRoom);
-            if (round.numberRound > 2)
+            if (round.numberRound > 3)
             {
                 UpdateMatches();
                 room.DeleteCardsUser(Master.resultUser);
                 room.DeleteUser(indexRoom, Master.resultUser);
                 FunctionsDB.DeleteUserInGame(indexRoom, Master.resultUser);
                 FunctionsDB.DeleteCardsWhite(indexRoom, Master.resultUser);
+                //FunctionsDB.ResetRounds(indexRoom);
+                //FunctionsDB.ResetTimer(indexRoom);
                 if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
                 {
                     FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
@@ -59,13 +70,15 @@
                 {
                     FunctionsDB.DeleteCardsBlack(indexRoom);
                 }
+                if(FunctionsDB.CheckDeleteMaster(indexRoom))
+                {
+                    FunctionsDB.CheckDeleteMaster(indexRoom);
+                }
                 Response.Redirect("~/index.aspx");
             }
             //se l'utente è il master visualizzo solo la carta master 
             if (room.IsMaster(Master.resultUser, indexRoom))
             {
-                int r = 0;
-                FunctionsDB.UpdateNewRound(indexRoom, r);
                 Timer1.Enabled = true;
                 lblTimerXText.Text = "In attesa che i giocatori scelgano le carte bianche";
                 btnConfirmCardSelect.Visible = false;
@@ -369,6 +382,8 @@
                 lblTimer.Text = "TimeOut!";  
                 btnConfirmCardSelect.Enabled = false;
                 NewCardWhite();
+                int r = 0;
+                FunctionsDB.UpdateNewRound(indexRoom, r);
                 Timer4.Dispose();
                 Timer4.Enabled = false;
                 Timer5.Enabled = true;         
@@ -400,6 +415,8 @@
                 lblTimer.Text = "TimeOut!";
                 btnConfirmCardSelect.Enabled = false;
                 NewCardWhite();
+                int r = 0;
+                FunctionsDB.UpdateNewRound(indexRoom, r);
                 Timer4.Dispose();
                 Timer4.Enabled = false;
                 Timer5.Enabled = true;
@@ -437,6 +454,8 @@
                 lblTimer.Text = "TimeOut!";
                 btnConfirmCardSelect.Enabled = false;
                 NewCardWhite();
+                int r = 0;
+                FunctionsDB.UpdateNewRound(indexRoom, r);
                 Timer4.Dispose();
                 Timer4.Enabled = false;
                 Timer5.Enabled = true;
@@ -1366,9 +1385,12 @@
     
     protected void Timer1_Tick(object sender, EventArgs e)
     {
-        TimeSpan time1 = new TimeSpan();
-        time1 = (DateTime)Session["time1"] - DateTime.Now;
-        if (time1.Seconds <= 0)
+        //TimeSpan time1 = new TimeSpan();
+        //time1 = (DateTime)Session["time1"] - DateTime.Now;
+        //if (time1.Seconds <= 0)
+        //{
+        Session["time1"] = Convert.ToInt16(Session["time1"]) - 1;
+        if (Convert.ToInt16(Session["time1"]) <= 0)
         {
             lblTimerMaster.Visible = true;
             btnConfirmWinner.Visible = true;
@@ -1383,7 +1405,12 @@
         }
         else
         {
-            Label4.Text = time1.Minutes.ToString() + ":" + time1.Seconds.ToString();
+            //Label4.Text = time1.Minutes.ToString() + ":" + time1.Seconds.ToString();
+            totalSeconds = Convert.ToInt16(Session["time1"]);
+            seconds = totalSeconds % 60;
+            minutes = totalSeconds / 60;
+            time = minutes + ":" + seconds;
+            Label4.Text = time;
             if (room.CheckUserCardSelected(indexRoom))
             {
                 CheckbtnCardSelected();
@@ -1399,9 +1426,12 @@
     }
     protected void Timer2_Tick(object sender, EventArgs e)
     {
-        TimeSpan time2 = new TimeSpan();
-        time2 = (DateTime)Session["time2"] - DateTime.Now;
-        if (time2.Seconds <= 0)
+        //TimeSpan time2 = new TimeSpan();
+        //time2 = (DateTime)Session["time2"] - DateTime.Now;
+        //if (time2.Seconds <= 0)
+        //{
+        Session["time2"] = Convert.ToInt16(Session["time2"]) - 1;
+        if (Convert.ToInt16(Session["time2"]) <= 0)
         {
             lblTimerMaster.Text = "TimeOut!";
 
@@ -1465,40 +1495,57 @@
         }
         else
         {
-            lblTimerMaster.Text = time2.Minutes.ToString() + ":" + time2.Seconds.ToString();
+            //lblTimerMaster.Text = time2.Minutes.ToString() + ":" + time2.Seconds.ToString();
+            totalSeconds = Convert.ToInt16(Session["time2"]);
+            seconds = totalSeconds % 60;
+            minutes = totalSeconds / 60;
+            time = minutes + ":" + seconds;
+            lblTimerMaster.Text = time;
         }
     }
 
     protected void Timer3_Tick(object sender, EventArgs e)
     {
-        TimeSpan time3 = new TimeSpan();
-        time3 = (DateTime)Session["time3"] - DateTime.Now;
-        int time = FunctionsDB.ReadTimer(indexRoom);
-        if (time == 3)
+        //TimeSpan time3 = new TimeSpan();
+        //time3 = (DateTime)Session["time3"] - DateTime.Now;
+        //int time = FunctionsDB.ReadTimer(indexRoom);
+        //if (time == 3)
+        //{
+        //    Timer3.Dispose();
+        //    Timer3.Enabled = false;
+        //    FunctionsDB.ResetTimer(indexRoom);
+        //    Response.Redirect("~/game.aspx");
+        //}
+        //if (time3.Seconds <= 0)
+        //{
+        Session["time3"] = Convert.ToInt16(Session["time3"]) - 1;
+        if (Convert.ToInt16(Session["time3"]) <= 0)
         {
             Timer3.Dispose();
             Timer3.Enabled = false;
-            FunctionsDB.ResetTimer(indexRoom);
-            Response.Redirect("~/game.aspx");
-        }
-        if (time3.Seconds <= 0)
-        {
-            Timer3.Dispose();
-            Timer3.Enabled = false;
+            //FunctionsDB.ResetTimer(indexRoom);
             Response.Redirect("~/game.aspx");
         }
         else
         {
-            Label3.Text = time3.Minutes.ToString() + ":" + time3.Seconds.ToString();
-            FunctionsDB.UpdateTimer(indexRoom);
+            //Label3.Text = time3.Minutes.ToString() + ":" + time3.Seconds.ToString();
+            //FunctionsDB.UpdateTimer(indexRoom);
+            totalSeconds = Convert.ToInt16(Session["time3"]);
+            seconds = totalSeconds % 60;
+            minutes = totalSeconds / 60;
+            time = minutes + ":" + seconds;
+            Label3.Text = time;
         }
     }
 
     protected void Timer4_Tick(object sender, EventArgs e)
     {
-        TimeSpan time4 = new TimeSpan();
-        time4 = (DateTime)Session["time4"] - DateTime.Now;
-        if (time4.Seconds <= 0)
+        //TimeSpan time4 = new TimeSpan();
+        //time4 = (DateTime)Session["time4"] - DateTime.Now;
+        //if (time4.Seconds <= 0)
+        //{
+        Session["time4"] = Convert.ToInt16(Session["time4"]) - 1;
+        if (Convert.ToInt16(Session["time4"]) <= 0)
         {
             lblTimer.Text = "TimeOut!";
             lblTimerXText.Text = "In attesa che il master scelga il vincitore";
@@ -1516,6 +1563,8 @@
                     room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
                     room.GenerateCardForUser(Master.resultUser);
                     btnConfirmCardSelect.Enabled = false;
+                    int r = 0;
+                    FunctionsDB.UpdateNewRound(indexRoom, r);
                     Timer4.Dispose();
                     Timer4.Enabled = false;
                     Timer5.Enabled = true;
@@ -1534,6 +1583,8 @@
                         room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
                         room.GenerateCardForUser(Master.resultUser);
                         btnConfirmCardSelect.Enabled = false;
+                        int r = 0;
+                        FunctionsDB.UpdateNewRound(indexRoom, r);
                         Timer4.Dispose();
                         Timer4.Enabled = false;
                         Timer5.Enabled = true;
@@ -1556,6 +1607,8 @@
                         room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
 
                         btnConfirmCardSelect.Enabled = false;
+                        int r = 0;
+                        FunctionsDB.UpdateNewRound(indexRoom, r);
                         Timer4.Dispose();
                         Timer4.Enabled = false;
                         Timer5.Enabled = true;
@@ -1574,6 +1627,8 @@
                         room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
                         room.GenerateCardForUser(Master.resultUser);
                         btnConfirmCardSelect.Enabled = false;
+                        int r = 0;
+                        FunctionsDB.UpdateNewRound(indexRoom, r);
                         Timer4.Dispose();
                         Timer4.Enabled = false;
                         Timer5.Enabled = true;
@@ -1596,6 +1651,8 @@
                         room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
 
                         btnConfirmCardSelect.Enabled = false;
+                        int r = 0;
+                        FunctionsDB.UpdateNewRound(indexRoom, r);
                         Timer4.Dispose();
                         Timer4.Enabled = false;
                         Timer5.Enabled = true;
@@ -1623,6 +1680,8 @@
                         room.UsersAndCards(cardSelect, indexRoom, Master.resultUser);
 
                         btnConfirmCardSelect.Enabled = false;
+                        int r = 0;
+                        FunctionsDB.UpdateNewRound(indexRoom, r);
                         Timer4.Dispose();
                         Timer4.Enabled = false;
                         Timer5.Enabled = true;
@@ -1631,6 +1690,8 @@
             }
             else
             {
+                int r = 0;
+                FunctionsDB.UpdateNewRound(indexRoom, r);
                 Timer4.Dispose();
                 Timer4.Enabled = false;
                 Timer5.Enabled = true;
@@ -1638,15 +1699,23 @@
         }
         else
         {
-            lblTimer.Text = time4.Minutes.ToString() + ":" + time4.Seconds.ToString();
+            //lblTimer.Text = time4.Minutes.ToString() + ":" + time4.Seconds.ToString();
+            totalSeconds = Convert.ToInt16(Session["time4"]);
+            seconds = totalSeconds % 60;
+            minutes = totalSeconds / 60;
+            time = minutes + ":" + seconds;
+            lblTimer.Text = time;
         }
     }
 
     protected void Timer5_Tick(object sender, EventArgs e)
     {
-        TimeSpan time5 = new TimeSpan();
-        time5 = (DateTime)Session["time5"] - DateTime.Now;
-        if (time5.Seconds <= 0)
+        //TimeSpan time5 = new TimeSpan();
+        //time5 = (DateTime)Session["time5"] - DateTime.Now;
+        //if (time5.Seconds <= 0)
+        //{
+        Session["time5"] = Convert.ToInt16(Session["time5"]) - 1;
+        if (Convert.ToInt16(Session["time5"]) <= 0)
         {
             Timer5.Dispose();
             Timer5.Enabled = false;
@@ -1654,7 +1723,12 @@
         }
         else
         {
-            Label2.Text = time5.Minutes.ToString() + ":" + time5.Seconds.ToString();
+            //Label2.Text = time5.Minutes.ToString() + ":" + time5.Seconds.ToString();
+            totalSeconds = Convert.ToInt16(Session["time5"]);
+            seconds = totalSeconds % 60;
+            minutes = totalSeconds / 60;
+            time = minutes + ":" + seconds;
+            Label2.Text = time;
             Round round = FunctionsDB.ReadRounds(indexRoom);
             if (round.newRound == 1)
             {
@@ -1667,7 +1741,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <link rel="stylesheet" type="text/css" href="css/game.css" />
 </asp:Content>
-
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div class="container game-container">
         <div>

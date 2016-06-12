@@ -13,10 +13,13 @@
     protected void Page_Load(object sender, EventArgs e)
     {
         indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
-        if(room.listUserIsFull(indexRoom))
+        if (FunctionsDB.CheckUserInGame(Master.resultUser))
         {
-            FunctionsDB.UpdateMatchesPlayed(Master.resultUser);
-            Response.Redirect("~/game.aspx");
+            if (room.listUserIsFull(indexRoom))
+            {
+                FunctionsDB.UpdateMatchesPlayed(Master.resultUser);
+                Response.Redirect("~/game.aspx");
+            }
         }
         if (!Page.IsPostBack)
         {
@@ -77,6 +80,10 @@
                     {
                         FunctionsDB.DeleteCardsBlack(indexRoom);
                     }
+                    if (FunctionsDB.CheckDeleteMaster(indexRoom))
+                    {
+                        FunctionsDB.CheckDeleteMaster(indexRoom);
+                    }
                 } 
                 Response.Redirect("~/index.aspx");
             }
@@ -98,6 +105,18 @@
                     <p style="color: #FFFFFF">Attendere, altri giocatori …</p>
                 </div>
             </div>
+            <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-blue">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
         </ContentTemplate>
         <Triggers>
                 <asp:AsyncPostBackTrigger ControlID="Timer1" EventName="Tick" />

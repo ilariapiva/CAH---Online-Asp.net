@@ -39,6 +39,10 @@
              {
                  FunctionsDB.DeleteCardsBlack(indexRoom);
              }
+             if (FunctionsDB.CheckDeleteMaster(indexRoom))
+             {
+                 FunctionsDB.CheckDeleteMaster(indexRoom);
+             }
          } 
        
          //Leggo dalla tabella account lo username, partite vinte, partite perse e partite giocate

@@ -8,7 +8,7 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (!FunctionsDB.ExistCookies())
+        if (FunctionsDB.ExistCookies())
         {
             Room room = new Room();
             if (room.ExistUserInRoom(Master.resultUser))
@@ -39,6 +39,10 @@
                 {
                     FunctionsDB.DeleteCardsBlack(indexRoom);
                 }
+                if (FunctionsDB.CheckDeleteMaster(indexRoom))
+                {
+                    FunctionsDB.CheckDeleteMaster(indexRoom);
+                }
             } 
         }
     }
@@ -46,11 +50,12 @@
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+    <%--<link rel="stylesheet" type="text/css" href="css/Style.css" />--%>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div>
-        <div class="card-panel teal-panel">
+        <div class="card-panel-text">
             <h1 class="h1-text">Le regole del gioco<br />
                 <br />
             </h1>

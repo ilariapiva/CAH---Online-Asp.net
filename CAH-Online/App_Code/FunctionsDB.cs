@@ -259,14 +259,14 @@ namespace CAHOnline
         }
 
         //Questa funzione legge tutti gli ID delle carte inserite nel DB e le inserisce in una lista
-        public static List<Cards> CardsBlack(String strsql)
+        public static List<Cards> CardsBlack()
         {
             string strcn8 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn8 = new SqlConnection(strcn8);
             cn8.Open();
 
             List<Cards> value = new List<Cards>();
-
+            String strsql = "SELECT * FROM tblBlackCard";
             SqlCommand cmd = new SqlCommand(strsql, cn8);
             var dr5 = cmd.ExecuteReader();
 
@@ -285,14 +285,14 @@ namespace CAHOnline
         }
 
         //Questa funzione legge tutti gli ID delle carte inserite nel DB e le inserisce in una lista
-        public static List<Cards> CardsWhite(String strsql)
+        public static List<Cards> CardsWhite()
         {
             string strcn9 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn9 = new SqlConnection(strcn9);
             cn9.Open();
 
             List<Cards> value = new List<Cards>();
-
+            String strsql = "SELECT * FROM tblWhiteCard";
             SqlCommand cmd = new SqlCommand(strsql, cn9);
             var dr6 = cmd.ExecuteReader();
 
@@ -318,7 +318,7 @@ namespace CAHOnline
             cn10.Open();
 
             String strsql = @"INSERT INTO tblGame(points, idAccount, room, master) 
-                            VALUES ('0', '" + user.idAccount + "', '" + idRoom + "', '" + indexMaster + "')";
+                            VALUES (0, '" + user.idAccount + "', '" + idRoom + "', '" + indexMaster + "')";
             SqlCommand cmd = new SqlCommand(strsql, cn10);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -1392,5 +1392,122 @@ namespace CAHOnline
             cmd.Dispose();
             cn60.Close();
         }
+
+        //Questa funzione mi permette di controllare se le carte nere sono state eliminate dalla tblCardsBlackRoom
+        public static bool CheckDeleteMaster(int room)
+        {
+            string strcn61 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn61 = new SqlConnection(strcn61);
+            cn61.Open();
+
+            String strsql = "SELECT idRoom FROM tblMaster WHERE idRoom = '" + room + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn61);
+            cmd.ExecuteNonQuery();
+
+            var dr34 = cmd.ExecuteReader();
+            dr34.Read();
+            bool ok = dr34.HasRows;
+            dr34.Close();
+            cmd.Dispose();
+            cn61.Close();
+            return ok;
+        }
+
+        //Questa funzione mi permette di scrivere le carte nere nella tblCardsBlackRoom
+        public static void WriteIndexMaster(int indexRoom)
+        {
+            string strcn62 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn62 = new SqlConnection(strcn62);
+            cn62.Open();
+
+            String strsql = "INSERT INTO tblMaster(idRoom, indexMaster) VALUES ('" + indexRoom + "', 0)";
+            SqlCommand cmd = new SqlCommand(strsql, cn62);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn62.Close();
+        }
+
+        //Questa funzione mi permette di aggiornare il count dei secondi per far far vedere i nome degli utenti al master
+        public static void UpdateIndexMaster(int indexRoom)
+        {
+            string strcn63 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn63 = new SqlConnection(strcn63);
+            cn63.Open();
+
+            int indexMaster = FunctionsDB.ReadIndexMaster(indexRoom);
+
+            String strsql = "UPDATE tblMaster SET indexMaster = '" + (indexMaster + 1) + "' WHERE idRoom = '" + indexRoom + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn63);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn63.Close();
+        }
+
+        //Questa funzione mi permette di resettare il count dei secondi per far far vedere i nome degli utenti al master
+        public static void ResetIndexMaster(int indexRoom)
+        {
+            string strcn64 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn64 = new SqlConnection(strcn64);
+            cn64.Open();
+
+            String strsql = "UPDATE tblMaster SET indexMaster = 1 WHERE idRoom = '" + indexRoom + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn64);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn64.Close();
+        }
+        //Questa funzione mi permette di resettare il count dei secondi per far far vedere i nome degli utenti al master
+        public static int ReadIndexMaster(int indexRoom)
+        {
+            string strcn65 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn65 = new SqlConnection(strcn65);
+            cn65.Open();
+
+            String strsql = "SELECT indexMaster FROM tblMaster WHERE idRoom = '" + indexRoom + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn65);
+            cmd.ExecuteNonQuery();
+
+            int value = 0;
+            var dr35 = cmd.ExecuteReader();
+            if (dr35.HasRows)
+            {
+                dr35.Read();
+                value = Convert.ToInt32(dr35["indexMaster"]);
+            }
+
+            dr35.Close();
+            cmd.Dispose();
+            cn65.Close();
+            return value;
+        }
+
+        ////Questa funzione restituisce tutti gli idAccount presenti nella tblGame data una stanza
+        //public static List<Account> GetIdAccountFromGame(int room)
+        //{
+        //    string strcn66 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+        //    SqlConnection cn66 = new SqlConnection(strcn66);
+        //    cn66.Open();
+
+        //    String strsql = "SELECT idAccount FROM tblGame WHERE room = '" + room + "'";
+        //    SqlCommand cmd = new SqlCommand(strsql, cn66);
+
+        //    List<Account> listIdAccount = new List<Account>();
+
+        //    var dr36 = cmd.ExecuteReader();
+
+        //    while (dr36.Read())
+        //    {
+        //        if (dr36.HasRows)
+        //        {
+        //            Account value = new Account();
+        //            value.idAccount = Convert.ToInt32(dr36["idAccount"]);
+        //            listIdAccount.Add(value);
+        //        }
+        //    }
+        //    dr36.Close();
+        //    cmd.Dispose();
+        //    cn66.Close();
+        //    return listIdAccount;
+        //}
     }
 }

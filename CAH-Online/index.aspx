@@ -38,6 +38,10 @@
             {
                 FunctionsDB.DeleteCardsBlack(indexRoom);
             }
+            if (FunctionsDB.CheckDeleteMaster(indexRoom))
+            {
+                FunctionsDB.CheckDeleteMaster(indexRoom);
+            }
         }      
         Response.Redirect("~/waitingRoom.aspx");
     }
@@ -46,11 +50,48 @@
     {
         if (!FunctionsDB.ExistCookies())
         {
-            SelectButton.Enabled = false;
+            SelectButton.Enabled = false; 
+        }
+        else
+        {
+            if (room.ExistUserInRoom(Master.resultUser))
+            {
+                indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
+
+                if (room.CheckDeleteCardsUser(Master.resultUser))
+                {
+                    room.DeleteCardsUser(Master.resultUser);
+                }
+                if (room.CheckDeleteUser(indexRoom, Master.resultUser))
+                {
+                    room.DeleteUser(indexRoom, Master.resultUser);
+                }
+                if (FunctionsDB.CheckUserInGame(indexRoom, Master.resultUser))
+                {
+                    FunctionsDB.DeleteUserInGame(indexRoom, Master.resultUser);
+                }
+                if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
+                {
+                    FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
+                }
+                if (FunctionsDB.CheckDeleteCardsWhite(indexRoom, Master.resultUser))
+                {
+                    FunctionsDB.DeleteCardsWhite(indexRoom, Master.resultUser);
+                }
+                if (FunctionsDB.CheckDeleteCardsBlack(indexRoom))
+                {
+                    FunctionsDB.DeleteCardsBlack(indexRoom);
+                }
+                if (FunctionsDB.CheckDeleteMaster(indexRoom))
+                {
+                    FunctionsDB.CheckDeleteMaster(indexRoom);
+                }
+            }      
         }
     }
 </script>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+     <%--<link rel="stylesheet" type="text/css" href="css/Style.css" />--%>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
@@ -58,7 +99,7 @@
         <div class="col-md-6">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card-panel teal-panel">
+                    <div class="card-panel-text">
                         <h1 class="h1-text">Descrizione del gioco<br />
                             <br />
                         </h1>
@@ -68,7 +109,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card-panel teal-panel">
+                    <div class="card-panel-text">
                         <h1 class="h1-text">La nascita del gioco<br />
                             <br />
                         </h1>
@@ -79,7 +120,9 @@
         </div>
         <div class="col-md-6">
             <div class="row">
-                <asp:LinkButton ID="SelectButton" runat="server" CssClass="btn btn-start-play text-btn-play" OnClick="SelectButton_Click"><i class="icon-ok icon-white"><img class="img-play" src="img/play.png" alt="play"/></i>&nbsp;Start a new game</asp:LinkButton>
+                <asp:LinkButton ID="SelectButton" runat="server" CssClass="btn waves-effect waves-light btn-start-play" OnClick="SelectButton_Click">Start a new game
+                    <i class="material-icons right">play_arrow</i>
+                </asp:LinkButton>
             </div>
         </div>
     </div>

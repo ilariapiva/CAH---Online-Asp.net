@@ -1,43 +1,10 @@
-﻿<%@ Master Language="C#" %>
-
-<%@ Import Namespace="System.Data" %>
-<%@ Import Namespace="CAHOnline" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="_Default" %>
 
 <!DOCTYPE html>
 
-<script runat="server">
-
-    public Account resultUser;
-
-    //Memorizzo tramite i cookies l'email e tramite l'email faccio un controllo nel db e ricavo lo username
-    protected void Page_Init(object sender, EventArgs e)
-    {
-        //FunctionsDB.OpenConnectionDB();
-
-        if (FunctionsDB.ExistCookies())
-        {
-            resultUser = FunctionsDB.ReadValuesProfileDB();
-
-            lblUser.Text = resultUser.Username;
-        }
-    }
-
-    protected void Page_Load(object sender, EventArgs e)
-    {
-    }
-
-    private void linkClick(object sender, EventArgs e)
-    {
-        FunctionsDB.DeleteCookies(resultUser);
-        Response.Redirect("~/index.aspx");
-    }
-</script>
-<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="js/bootstrap.min.js"></script>
-
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="description" content="" />
     <meta name="author" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -47,24 +14,18 @@
     <link rel="stylesheet" type="text/css" href="css/Style2.css" />
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
-    <title>CAH - Online</title>
-    <asp:ContentPlaceHolder ID="head" runat="server">
-    </asp:ContentPlaceHolder>
+    <title></title>
 </head>
-<body>
+<body style="background-color:#000">
     <form id="form1" runat="server">
+        <!-- Dropdown Structure -->
         <ul id="dropdown1" class="dropdown-content">
             <li><a href="profile.aspx" class="nav-text">Profile</a></li>
             <li><a href="settings.aspx" class="nav-text">Settings</a></li>
             <li class="divider"></li>
-            <li>
-                <asp:LinkButton ID="Logout" runat="server" OnClientClick="linkClick" CssClass="nav-text" OnClick="linkClick">Logout</asp:LinkButton>
-                <%--<a href="index.aspx" class="nav-text">Logout</a>--%>
-            </li>
+            <li><a href="index.aspx" class="nav-text">Logout</a></li>
         </ul>
         <nav>
-            <% if (FunctionsDB.ExistCookies()){
-               %>
             <div class="nav-wrapper">
                 <a href="index.aspx" class="brand-logo center">
                     <img src="img/logo2.png" alt="CAH - Online" />
@@ -78,15 +39,12 @@
                     </li>
                     <li>
                         <a class="dropdown-button nav-text" href="index.aspx" data-activates="dropdown1">
-                            <asp:Label ID="lblUser" runat="server" CssClass="label-form"></asp:Label>
+                            <asp:Label ID="Label1" runat="server" CssClass="label-form">PROVA</asp:Label>
                             <i class="material-icons right">arrow_drop_down</i>
                         </a>
                     </li>
                 </ul>
             </div>
-            <% }
-               else
-               {  %>
             <div class="nav-wrapper">
                 <a href="index.aspx" class="brand-logo center">
                     <img src="img/logo2.png" alt="CAH - Online" />
@@ -99,26 +57,16 @@
                         <a href="rules.aspx" class="nav-text">Rules</a>
                     </li>
                     <li>
-                        <a href="login.aspx" class="nav-text">Login</a>
+                       <a href="login.aspx" class="nav-text">Login</a>
                     </li>
                     <li>
-                        <a href="SignUp.aspx" class="nav-text">Sign Up</a>
+                       <a href="register.aspx" class="nav-text">Register</a>
                     </li>
                 </ul>
-                <% } %>
             </div>
         </nav>
-        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-        <script type="text/javascript" src="js/materialize.min.js"></script>
-        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
-        </asp:ContentPlaceHolder>
-        <footer class="footer">
-            <div class="black-text p-footer">
-                <p class="left-footer">Copyright &copy; Ilaria Piva</p>
-                <p class="right-footer">CAH - Online 2015/2016</p>
-            </div>
-        </footer>
     </form>
+     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script type="text/javascript" src="js/materialize.min.js"></script>
 </body>
 </html>
-v

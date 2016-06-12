@@ -9,7 +9,7 @@ namespace CAHOnline
     {
         static Dictionary<int, List<int>> listUsers = new Dictionary<int, List<int>>();
         static List<Cards> RandomCardBlack, RandomCardsWhite;
-        static int indexCardBlack, indexCardWhite, indexMaster, indexUser; //numberCardWhite, 
+        static int indexCardBlack, indexCardWhite; //, indexMaster;//, indexUser; //numberCardWhite, 
         static Dictionary<int, List<Cards>> listCardsUsers = new Dictionary<int, List<Cards>>();
         static Dictionary<int, List<Cards>> listCardsBlack = new Dictionary<int, List<Cards>>();
         List<Cards> cardsWhite = new List<Cards>();
@@ -19,23 +19,19 @@ namespace CAHOnline
         {
             indexCardBlack = 0;
             indexCardWhite = 0;
-            indexMaster = 0;
-            indexUser = 0;
+            //indexMaster = 1;
+            //indexUser = 0;
 
             //prendo tutte le carte dalla tabella BlackCard e le inserisco in una lista
             Random rndBlackCard = new Random();
-
-            String BlackCard = "SELECT * FROM tblBlackCard";
-            cardBlack = FunctionsDB.CardsBlack(BlackCard);
+            cardBlack = FunctionsDB.CardsBlack();
 
             RandomCardBlack = (cardBlack.OrderBy(x => rndBlackCard.Next())).ToList();
             //numberCardWhite = CheckStringBlackCard();
 
             //prendo tutte le carte dalla tabella WhiteCard e le inserisco in una lista
             Random rndWhiteCards = new Random();
-
-            String WhiteCards = "SELECT * FROM tblWhiteCard";
-            cardsWhite = FunctionsDB.CardsWhite(WhiteCards);
+            cardsWhite = FunctionsDB.CardsWhite();
 
             RandomCardsWhite = (cardsWhite.OrderBy(x => rndWhiteCards.Next())).ToList();
         }
@@ -337,48 +333,74 @@ namespace CAHOnline
 
         //Questa funzione permette di mandare avanti l'index del master
         public void NewRaund(int room, Account user)
-        {
+        {     
             foreach (int u in listUsers[room])
             {
                 if (u == user.idAccount)
                 {
+                    int indexMaster = FunctionsDB.ReadIndexMaster(room);
                     //if (IsMaster(user, room))
                     //{
                     if (indexMaster == 3)
                     {
-                        indexMaster = 0;
-                        indexUser = 0;
+                        FunctionsDB.ResetIndexMaster(room);
+                        //indexMaster = 0;
+                        //indexUser = 0;
                         indexCardBlack++;
                         GetCardBlack(room);
                         //indexMaster = indexMaster % listUsers[room].Count;
-                        FunctionsDB.UpdateMaster(room, 0, user.idAccount);
+                        FunctionsDB.UpdateMaster(room, 0, user.idAccount);                      
                         break;
                     }
                     else if (indexMaster < 3)
                     {
-                        indexMaster++;
-                        indexUser++;
+                        //indexMaster++;
+                        //indexUser++;
                         indexCardBlack++;
                         GenerateCardBlack(room);
                         //indexMaster = indexMaster % listUsers[room].Count;
                         FunctionsDB.UpdateMaster(room, 0, user.idAccount);
+                        FunctionsDB.UpdateIndexMaster(room);
                         break;
                     }
                     //}
                 }
             }
+
+            int masterIndex = FunctionsDB.ReadIndexMaster(room);
             foreach (int u in listUsers[room])
             {
-                //for (int u = 0; u < listUsers[room].Count; u++)
-                //{
-                int userIndex = listUsers[room].FindIndex(x => x == u);
-                int idAccount = listUsers[room].ElementAt(u);
-                if (userIndex == indexMaster)
+                int userIndex = listUsers[room].FindIndex(x => x == u);          
+                if (userIndex == masterIndex)
                 {
-                    FunctionsDB.UpdateMaster(room, 1, u);
+                    int idAccount = listUsers[room].ElementAt(userIndex);
+                    FunctionsDB.UpdateMaster(room, 1, idAccount);
                     break;
                 }
             }
+            //List<Account> listIdAccount = FunctionsDB.GetIdAccountFromGame(room);
+            //foreach (Account id in listIdAccount)
+            //{
+            //    int idAccount = listIdAccount.IndexOf(id);
+            //    if(idAccount == masterIndex)
+            //    {
+            //        int idUser = listUsers[room].ElementAt(id.idAccount);
+            //        FunctionsDB.UpdateMaster(room, 1, idAccount);
+            //    }
+            //}
+                //foreach (int u in listUsers[room])
+                //{
+                    //for (int u = 0; u < listUsers[room].Count; u++)
+                    //{
+
+                    //int userIndex = listUsers[room].FindIndex(x => x == u);
+                    //int idAccount = listUsers[room].ElementAt(u);
+                    //if (idAccount == indexMaster)
+                    //{
+                    //    FunctionsDB.UpdateMaster(room, 1, u);
+                    //    break;
+                    //}
+                //}
             //}
                 //foreach (int u in listUsers[room])
                 //{
@@ -473,7 +495,6 @@ namespace CAHOnline
         {
             Game g = new Game();
             List<Room> listRooms = g.rooms();
-
             int indexRoom = 0;
 
             for (int i = 0; i < listRooms.Count; i++)
@@ -487,7 +508,6 @@ namespace CAHOnline
                     }
                 }
             }
-
             return indexRoom;
         }
 

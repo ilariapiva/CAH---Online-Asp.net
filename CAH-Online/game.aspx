@@ -1777,7 +1777,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div class="container game-container">
         <div>
-            <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>     
+            <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
         </div>
         <asp:UpdatePanel ID="Pannello" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
@@ -1786,17 +1786,21 @@
                 <asp:Timer ID="Timer3" runat="server" Enabled="False" Interval="1000" OnTick="Timer3_Tick" />
                 <asp:Timer ID="Timer4" runat="server" Enabled="False" Interval="1000" OnTick="Timer4_Tick"></asp:Timer>
                 <asp:Timer ID="Timer5" runat="server" Interval="1000" Enabled="False" EnableViewState="True" OnTick="Timer5_Tick"></asp:Timer>
-                <asp:Label ID="lblTimerXText" runat="server"></asp:Label>
-                <asp:Label ID="lblTimer" runat="server"></asp:Label>
-                <asp:Label ID="lblTimerMaster" runat="server"></asp:Label>
+                <asp:Label ID="lblTimerXText" runat="server" ForeColor="Black" Font-Bold="True"></asp:Label>
+                <asp:Label ID="lblTimer" runat="server" ForeColor="#CC0000" Font-Bold="True"></asp:Label>
+                <asp:Label ID="lblTimerMaster" runat="server" ForeColor="#CC0000" Font-Bold="True"></asp:Label>
                 <br />
                 <asp:Label ID="Label1" runat="server" Visible="false"></asp:Label>
                 <asp:Label ID="Label2" runat="server" Visible="false"></asp:Label>
                 <asp:Label ID="Label3" runat="server" Visible="false"></asp:Label>
                 <asp:Label ID="Label4" runat="server" Visible="false"></asp:Label>
                 <br />
-                <asp:Label ID="lblPoints" runat="server"></asp:Label>
-                <asp:Label ID="lblRounds" runat="server"></asp:Label>
+                <div>
+                    <asp:Label ID="lblPoints" runat="server" ForeColor="Black" Font-Bold="True"></asp:Label>
+                </div>
+                <div>
+                    <asp:Label ID="lblRounds" runat="server" ForeColor="Black" Font-Bold="True"></asp:Label>
+                </div>
                 <div class="row">
                     <div class="col-md-2">
                         <div class="card-black-container">
@@ -1877,7 +1881,7 @@
                                 <asp:Button ID="btnWhite12" CssClass="card-container white-card text-white" runat="server" Text="" Visible="False" />
                                 <div class="username-card">
                                     <asp:Label ID="lblUser12" runat="server" Text="Label" Visible="False"></asp:Label>
-                                </div>                              
+                                </div>
                             </div>
                             <asp:Button ID="btnConfirmCardSelect" runat="server" Text="Confirm" OnClick="btnConfirmCardSelect_Click" CssClass="btn btn-confirm" />
                             <asp:Button ID="btnConfirmWinner" runat="server" Text="Confirm" OnClick="btnConfirmWinner_Click" CssClass="btn btn-confirm" />
@@ -1889,7 +1893,7 @@
                 <asp:AsyncPostBackTrigger ControlID="Timer1" EventName="Tick" />
                 <asp:AsyncPostBackTrigger ControlID="Timer2" EventName="Tick" />
                 <asp:AsyncPostBackTrigger ControlID="Timer3" EventName="Tick" />
-                 <asp:AsyncPostBackTrigger ControlID="Timer4" EventName="Tick" />
+                <asp:AsyncPostBackTrigger ControlID="Timer4" EventName="Tick" />
                 <asp:AsyncPostBackTrigger ControlID="Timer5" EventName="Tick" />
             </Triggers>
         </asp:UpdatePanel>

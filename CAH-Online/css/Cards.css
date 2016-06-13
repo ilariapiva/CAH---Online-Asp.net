@@ -41,6 +41,9 @@ ul#index_cards .empty-cards {
     color: #000;
     border-color: #fff !important;
     border: 1px solid !important;
+    text-align: left !important;
+    white-space: normal !important;
+
 }
 
 #card-1 {
@@ -212,8 +215,8 @@ ul#index_cards .li-cards:hover {
 }
 
 #card-11:hover {
-    -moz-transform: scale(1.1) rotate(-20deg);
-    -webkit-transform: scale(1.1) rotate(-20deg);
+    -moz-transform: scale(1.1) rotate(+5deg);
+    -webkit-transform: scale(1.1) rotate(+5deg);
 }
 
 

@@ -99,7 +99,7 @@
                         <a href="rules.aspx" class="nav-text">Rules</a>
                     </li>
                     <li>
-                        <a href="login.aspx" class="nav-text">Login</a>
+                        <a href="login.aspx" class="nav-text">Log In</a>
                     </li>
                     <li>
                         <a href="signUp.aspx" class="nav-text">Sign Up</a>

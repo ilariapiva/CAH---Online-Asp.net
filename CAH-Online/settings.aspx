@@ -36,10 +36,6 @@
             {
                 FunctionsDB.DeleteCardsBlack(indexRoom);
             }
-            if (FunctionsDB.CheckDeleteMaster(indexRoom))
-            {
-                FunctionsDB.DeleteMaster(indexRoom);
-            }
         }
         lblEmailUse.Text = Session["userEmail"].ToString();
     }

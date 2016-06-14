@@ -41,10 +41,6 @@
                 {
                     FunctionsDB.DeleteCardsBlack(indexRoom);
                 }
-                if (FunctionsDB.CheckDeleteMaster(indexRoom))
-                {
-                    FunctionsDB.DeleteMaster(indexRoom);
-                }
             }
             FunctionsDB.DeleteCookies(Master.resultUser);
             Response.Redirect("~/login.aspx");

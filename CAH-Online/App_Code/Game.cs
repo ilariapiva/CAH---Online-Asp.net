@@ -27,7 +27,6 @@ namespace CAHOnline
                 room.GenerateCardsForUser(user);
                 room.GenerateCardBlack(listRooms.IndexOf(room));
                 FunctionsDB.WriteRounds(listRooms.IndexOf(room));
-                FunctionsDB.WriteIndexMaster(listRooms.IndexOf(room));
                 return true;
             }
             else //Se la lista rooms non è vuota allora controllo se nelle rooms c'è spazio, e se ce nè allora aggiungo lo user nella prima room non piena
@@ -48,7 +47,6 @@ namespace CAHOnline
                             i.AddUser(user, listRooms.IndexOf(i));
                             i.GenerateCardsForUser(user);
                             i.GenerateCardBlack(listRooms.IndexOf(i));
-                            FunctionsDB.WriteIndexMaster(listRooms.IndexOf(i));
                             if (FunctionsDB.CheckRounds(listRooms.IndexOf(i)))
                             {
                                 FunctionsDB.ResetRounds(listRooms.IndexOf(i));
@@ -72,7 +70,6 @@ namespace CAHOnline
                 room.GenerateCardsForUser(user);
                 room.GenerateCardBlack(listRooms.IndexOf(room));
                 FunctionsDB.WriteRounds(listRooms.IndexOf(room));
-                FunctionsDB.WriteIndexMaster(listRooms.IndexOf(room));
                 return true;
             }
         }

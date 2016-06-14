@@ -50,14 +50,6 @@
                 {
                     FunctionsDB.DeleteCardsWhite(indexRoom, Master.resultUser);
                 }
-                if (FunctionsDB.CheckDeleteCardsBlack(indexRoom))
-                {
-                    FunctionsDB.DeleteCardsBlack(indexRoom);
-                }
-                if (FunctionsDB.CheckDeleteMaster(indexRoom))
-                {
-                    FunctionsDB.DeleteMaster(indexRoom);
-                }
             }
         }
     }
@@ -119,10 +111,6 @@
             if (FunctionsDB.CheckDeleteCardsBlack(indexRoom))
             {
                 FunctionsDB.DeleteCardsBlack(indexRoom);
-            }
-            if (FunctionsDB.CheckDeleteMaster(indexRoom))
-            {
-                FunctionsDB.DeleteMaster(indexRoom);
             }
         }
         Response.Redirect("~/waitingRoom.aspx");

@@ -266,14 +266,14 @@ namespace CAHOnline
             cn8.Open();
 
             List<Cards> value = new List<Cards>();
-            String strsql = "SELECT * FROM tblBlackCard";
+            String strsql = "SELECT * FROM tblBlackCards ";
             SqlCommand cmd = new SqlCommand(strsql, cn8);
             var dr5 = cmd.ExecuteReader();
 
             while (dr5.Read())
             {
                 Cards cards = new Cards();
-                cards.idCards = Convert.ToInt32(dr5["idCardBlack"]);
+                cards.idCards = Convert.ToInt32(dr5["idBlackCards"]);
                 cards.Text = dr5["textBlack"].ToString();
                 value.Add(cards);
             }
@@ -292,14 +292,14 @@ namespace CAHOnline
             cn9.Open();
 
             List<Cards> value = new List<Cards>();
-            String strsql = "SELECT * FROM tblWhiteCard";
+            String strsql = "SELECT * FROM tblWhiteCards";
             SqlCommand cmd = new SqlCommand(strsql, cn9);
             var dr6 = cmd.ExecuteReader();
 
             while (dr6.Read())
             {
                 Cards cards = new Cards();
-                cards.idCards = Convert.ToInt32(dr6["idCardWhite"]);
+                cards.idCards = Convert.ToInt32(dr6["idWhiteCards"]);
                 cards.Text = dr6["textWhite"].ToString();
                 value.Add(cards);
             }
@@ -317,7 +317,7 @@ namespace CAHOnline
             SqlConnection cn10 = new SqlConnection(strcn10);
             cn10.Open();
 
-            String strsql = @"INSERT INTO tblGame(points, idAccount, room, master) 
+            String strsql = @"INSERT INTO tblGame(points, idAccount, idRoom, isMaster) 
                             VALUES (0, '" + user.idAccount + "', '" + idRoom + "', '" + indexMaster + "')";
             SqlCommand cmd = new SqlCommand(strsql, cn10);
             cmd.ExecuteNonQuery();
@@ -332,12 +332,12 @@ namespace CAHOnline
             SqlConnection cn11 = new SqlConnection(strcn11);
             cn11.Open();
 
-            String strsql = "SELECT room FROM tblGame WHERE idAccount = '" + user.idAccount + "'";
+            String strsql = "SELECT idRoom FROM tblGame WHERE idAccount = '" + user.idAccount + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn11);
             cmd.ExecuteNonQuery();
             var dr7 = cmd.ExecuteReader();
             dr7.Read();
-            int idRoom = Convert.ToInt32(dr7["room"]);
+            int idRoom = Convert.ToInt32(dr7["idRoom"]);
             cmd.Dispose();
             cn11.Close();
             return idRoom;
@@ -351,7 +351,7 @@ namespace CAHOnline
             SqlConnection cn12 = new SqlConnection(strcn12);
             cn12.Open();
 
-            String strsql = "INSERT INTO tblCardsSelect(idAccount, idCardWhite, room) VALUES ('" + user.idAccount + "', '" + card.idCards + "', '" + idRoom + "')";
+            String strsql = "INSERT INTO tblSelectedCards(idAccount, idWhiteCards, idRoom) VALUES ('" + user.idAccount + "', '" + card.idCards + "', '" + idRoom + "')";
             SqlCommand cmd = new SqlCommand(strsql, cn12);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -368,8 +368,8 @@ namespace CAHOnline
 
             List<Account> ListUsers = new List<Account>();
 
-            String strsql = @"SELECT a.idAccount, a.username FROM tblAccount AS a INNER JOIN tblCardsSelect as cs
-                              ON a.idAccount = cs.idAccount WHERE cs.room = '" + room + "' ORDER BY cs.idAccount ASC";
+            String strsql = @"SELECT a.idAccount, a.username FROM tblAccount AS a INNER JOIN tblSelectedCards as cs
+                              ON a.idAccount = cs.idAccount WHERE cs.idRoom = '" + room + "' ORDER BY cs.idAccount ASC";
 
             SqlCommand cmd = new SqlCommand(strsql, cn13);
             var dr8 = cmd.ExecuteReader();
@@ -394,9 +394,9 @@ namespace CAHOnline
             SqlConnection cn14 = new SqlConnection(strcn14);
             cn14.Open();
 
-            String strsql = @"SELECT a.idAccount, a.username FROM tblAccount AS a INNER JOIN tblCardsSelect as cs
-                            ON a.idAccount = cs.idAccount WHERE cs.room = '" + room + @"' 
-                            AND idCardWhite = '" + cardId.idCards + "'";
+            String strsql = @"SELECT a.idAccount, a.username FROM tblAccount AS a INNER JOIN tblSelectedCards as cs
+                            ON a.idAccount = cs.idAccount WHERE cs.idRoom = '" + room + @"' 
+                            AND idWhiteCards = '" + cardId.idCards + "'";
 
             SqlCommand cmd = new SqlCommand(strsql, cn14);
             cmd.ExecuteNonQuery();
@@ -464,8 +464,8 @@ namespace CAHOnline
 
             List<Cards> ListIdCards = new List<Cards>();
 
-            String strsql = @"SELECT cs.idCardWhite, wc.textWhite FROM tblCardsSelect as cs INNER JOIN tblWhiteCard as wc 
-                                ON cs.idCardWhite = wc.idCardWhite WHERE room = '" + room + "' ORDER BY cs.idAccount";
+            String strsql = @"SELECT cs.idWhiteCards, wc.textWhite FROM tblSelectedCards as cs INNER JOIN tblWhiteCards as wc 
+                                ON cs.idWhiteCards = wc.idWhiteCards WHERE idRoom = '" + room + "' ORDER BY cs.idAccount";
             SqlCommand cmd = new SqlCommand(strsql, cn17);
             var dr11 = cmd.ExecuteReader();
 
@@ -475,7 +475,7 @@ namespace CAHOnline
                 {
                     //dr.Read();
                     Cards value = new Cards();
-                    value.idCards = Convert.ToInt32(dr11["idCardWhite"]);
+                    value.idCards = Convert.ToInt32(dr11["idWhiteCards"]);
                     value.Text = dr11["textWhite"].ToString();
                     ListIdCards.Add(value);
                 }
@@ -486,14 +486,14 @@ namespace CAHOnline
             return ListIdCards;
         }
 
-        //Questa funzione permette di eliminare le righe dalla tblCardsSelect 
+        //Questa funzione permette di eliminare le righe dalla tblSelectedCards 
         public static void DeleteCardSelectDB(int room)
         {
             string strcn18 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn18 = new SqlConnection(strcn18);
             cn18.Open();
 
-            String strsql = @"DELETE FROM tblCardsSelect WHERE room = '" + room + "'";
+            String strsql = @"DELETE FROM tblSelectedCards WHERE idRoom = '" + room + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn18);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -507,7 +507,7 @@ namespace CAHOnline
             SqlConnection cn19 = new SqlConnection(strcn19);
             cn19.Open();
 
-            String strsql = "SELECT points FROM tblGame WHERE idAccount = '" + user.idAccount + "' and room = '" + room + "'";
+            String strsql = "SELECT points FROM tblGame WHERE idAccount = '" + user.idAccount + "' and idRoom = '" + room + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn19);
             cmd.ExecuteNonQuery();
 
@@ -532,7 +532,7 @@ namespace CAHOnline
             SqlConnection cn20 = new SqlConnection(strcn20);
             cn20.Open();
 
-            String strsql = "SELECT COUNT(idAccount) as C FROM tblGame WHERE room = '" + room + "'";
+            String strsql = "SELECT COUNT(idAccount) as C FROM tblGame WHERE idRoom = '" + room + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn20);
             cmd.ExecuteNonQuery();
 
@@ -557,7 +557,7 @@ namespace CAHOnline
             SqlConnection cn21 = new SqlConnection(strcn21);
             cn21.Open();
 
-            String strsql = @"DELETE FROM tblGame WHERE room = '" + room + "'";
+            String strsql = @"DELETE FROM tblGame WHERE idRoom = '" + room + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn21);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -571,7 +571,7 @@ namespace CAHOnline
             SqlConnection cn22 = new SqlConnection(strcn22);
             cn22.Open();
 
-            String strsql = "UPDATE tblGame SET master = '" + indexMaster + @"'
+            String strsql = "UPDATE tblGame SET isMaster = '" + indexMaster + @"'
                              WHERE idAccount = '" + user + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn22);
             cmd.ExecuteNonQuery();
@@ -586,7 +586,7 @@ namespace CAHOnline
             SqlConnection cn23 = new SqlConnection(strcn23);
             cn23.Open();
 
-            String strsql = "SELECT master, idAccount FROM tblGame WHERE room = '" + room + @"' 
+            String strsql = "SELECT isMaster, idAccount FROM tblGame WHERE idRoom = '" + room + @"' 
                              AND idAccount = '" + user.idAccount + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn23);
             cmd.ExecuteNonQuery();
@@ -596,7 +596,7 @@ namespace CAHOnline
             if (dr14.HasRows)
             {
                 dr14.Read();
-                value.indexMaster = Convert.ToInt32(dr14["master"]);
+                value.indexMaster = Convert.ToInt32(dr14["isMaster"]);
                 value.idAccount = Convert.ToInt32(dr14["idAccount"]);
             }
 
@@ -746,7 +746,7 @@ namespace CAHOnline
             SqlConnection cn29 = new SqlConnection(strcn29);
             cn29.Open();
 
-            String strsql = "SELECT MAX(points) AS maxPoints FROM tblGame WHERE room = '" + room + "'";
+            String strsql = "SELECT MAX(points) AS maxPoints FROM tblGame WHERE idRoom = '" + room + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn29);
 
             int points = 0;
@@ -770,7 +770,7 @@ namespace CAHOnline
             SqlConnection cn30 = new SqlConnection(strcn30);
             cn30.Open();
 
-            String strsql = "SELECT a.username AS u FROM tblGame as g INNER JOIN tblAccount as a ON g.idAccount = a.idAccount WHERE room = '" + room + "' and points <> '" + maxPoint + "'";
+            String strsql = "SELECT a.username AS u FROM tblGame as g INNER JOIN tblAccount as a ON g.idAccount = a.idAccount WHERE idRoom = '" + room + "' and points <> '" + maxPoint + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn30);
 
             List<Account> listUsername = new List<Account>();
@@ -801,7 +801,7 @@ namespace CAHOnline
 
             int point = GetMaxPoint(room);
 
-            String strsql = "SELECT COUNT(idAccount) AS nUserWon FROM tblGame WHERE points = '" + point + "' and room = '" + room + "'";
+            String strsql = "SELECT COUNT(idAccount) AS nUserWon FROM tblGame WHERE points = '" + point + "' and idRoom = '" + room + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn31);
 
             int numberUserWon = 0;
@@ -824,7 +824,7 @@ namespace CAHOnline
             SqlConnection cn32 = new SqlConnection(strcn32);
             cn32.Open();
 
-            String strsql = "SELECT a.username AS u FROM tblGame as g INNER JOIN tblAccount as a ON g.idAccount = a.idAccount WHERE points = '" + point + "' and room = '" + room + "'";
+            String strsql = "SELECT a.username AS u FROM tblGame as g INNER JOIN tblAccount as a ON g.idAccount = a.idAccount WHERE points = '" + point + "' and idRoom = '" + room + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn32);
 
             List<Account> listUsername = new List<Account>();
@@ -875,7 +875,7 @@ namespace CAHOnline
 
             Round value = ReadRounds(indexRoom);
 
-            String strsql = "UPDATE tblRounds SET numberRound = '" + (value.numberRound + 1) + "' WHERE idRoom = '" + indexRoom + "'";
+            String strsql = "UPDATE tblRooms SET numberRound = '" + (value.numberRound + 1) + "' WHERE idRoom = '" + indexRoom + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn34);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -889,7 +889,7 @@ namespace CAHOnline
             SqlConnection cn35 = new SqlConnection(strcn35);
             cn35.Open();
 
-            String strsql = "SELECT numberRound, newRound FROM tblRounds WHERE idRoom = '" + indexRoom + "'";
+            String strsql = "SELECT numberRound, newRound FROM tblRooms WHERE idRoom = '" + indexRoom + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn35);
             cmd.ExecuteNonQuery();
 
@@ -918,7 +918,7 @@ namespace CAHOnline
             SqlConnection cn36 = new SqlConnection(strcn36);
             cn36.Open();
 
-            String strsql = "SELECT COUNT(idAccount) as c FROM tblCardsSelect WHERE idAccount = '" + user.idAccount + "' and room = '" + indexRoom + "'";
+            String strsql = "SELECT COUNT(idAccount) as c FROM tblSelectedCards WHERE idAccount = '" + user.idAccount + "' and idRoom = '" + indexRoom + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn36);
             cmd.ExecuteNonQuery();
 
@@ -936,14 +936,14 @@ namespace CAHOnline
             return value;
         }
 
-        ////Questa funzione mi permette di controllare se nella tblCardsSelect ci sono delle carte già selezionate
+        ////Questa funzione mi permette di controllare se nella tblSelectedCards ci sono delle carte già selezionate
         //public static bool CheckCardsSelect(int indexRoom)
         //{
         //    string strcn38 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
         //    SqlConnection cn38 = new SqlConnection(strcn38);
         //    cn38.Open();
 
-        //    String strsql = "SELECT * FROM tblCardsSelect WHERE room = '" + indexRoom + "'";
+        //    String strsql = "SELECT * FROM tblSelectedCards WHERE idRoom = '" + indexRoom + "'";
         //    SqlCommand cmd = new SqlCommand(strsql, cn38);
         //    cmd.ExecuteNonQuery();
 
@@ -965,7 +965,7 @@ namespace CAHOnline
 
             Round value = ReadRounds(indexRoom);
 
-            String strsql = "INSERT INTO tblRounds(idRoom, numberRound, newRound, timer) VALUES ('" + indexRoom + "', 1, 0, 0)";
+            String strsql = "INSERT INTO tblRooms(idRoom, numberRound, newRound, timer, indexMaster) VALUES ('" + indexRoom + "', 1, 0, 0, 0)";
             SqlCommand cmd = new SqlCommand(strsql, cn37);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -979,35 +979,35 @@ namespace CAHOnline
             SqlConnection cn38 = new SqlConnection(strcn38);
             cn38.Open();
 
-            String strsql = "UPDATE tblRounds SET numberRound = 0, newRound = 0, timer = 0 WHERE idRoom = '" + indexRoom + "'";
+            String strsql = "UPDATE tblRooms SET numberRound = 0, newRound = 0, timer = 0, indexMaster = 0 WHERE idRoom = '" + indexRoom + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn38);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             cn38.Close();
         }
 
-        ////Questa funzione permette di eliminare le righe dalla tblRounds
+        ////Questa funzione permette di eliminare le righe dalla tblRooms
         //public static void DeleteRounds(int room)
         //{
         //    string strcn41 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
         //    SqlConnection cn41 = new SqlConnection(strcn41);
         //    cn41.Open();
 
-        //    String strsql = "DELETE FROM tblRounds WHERE idRoom = '" + room + "'";
+        //    String strsql = "DELETE FROM tblRooms WHERE idRoom = '" + room + "'";
         //    SqlCommand cmd = new SqlCommand(strsql, cn41);
         //    cmd.ExecuteNonQuery();
         //    cmd.Dispose();
         //    cn41.Close();
         //}
 
-        //Questa funzione mi permette di controllare se nella tblRounds è già presente la stanza con i round
+        //Questa funzione mi permette di controllare se nella tblRooms è già presente la stanza con i round
         public static bool CheckRounds(int indexRoom)
         {
             string strcn39 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn39 = new SqlConnection(strcn39);
             cn39.Open();
 
-            String strsql = "SELECT idRoom FROM tblRounds WHERE idRoom = '" + indexRoom + "'";
+            String strsql = "SELECT idRoom FROM tblRooms WHERE idRoom = '" + indexRoom + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn39);
             cmd.ExecuteNonQuery();
 
@@ -1020,14 +1020,14 @@ namespace CAHOnline
             return ok;
         }
 
-        //Questa funzione mi permette di controllare se nella tblCardsSelect sono state selezionate il numero giusto di carte
+        //Questa funzione mi permette di controllare se nella tblSelectedCards sono state selezionate il numero giusto di carte
         public static int CheckNCardsSelect(int indexRoom)
         {
             string strcn40 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn40 = new SqlConnection(strcn40);
             cn40.Open();
 
-            String strsql = "SELECT COUNT(room) as c FROM tblCardsSelect WHERE room = '" + indexRoom + "'";
+            String strsql = "SELECT COUNT(idRoom) as c FROM tblSelectedCards WHERE idRoom = '" + indexRoom + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn40);
             cmd.ExecuteNonQuery();
 
@@ -1045,14 +1045,14 @@ namespace CAHOnline
             return value;
         }
 
-        //Questa funzione permette di eliminare le carte che un utente ha selezionato dalla tblCardsSelect 
+        //Questa funzione permette di eliminare le carte che un utente ha selezionato dalla tblSelectedCards 
         public static void DeleteCardSelectUser(int room, Account user)
         {
             string strcn41 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn41 = new SqlConnection(strcn41);
             cn41.Open();
 
-            String strsql = "DELETE FROM tblCardsSelect WHERE room = '" + room + "' and idAccount = '" + user.idAccount + "'";
+            String strsql = "DELETE FROM tblSelectedCards WHERE idRoom = '" + room + "' and idAccount = '" + user.idAccount + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn41);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -1066,7 +1066,7 @@ namespace CAHOnline
             SqlConnection cn42 = new SqlConnection(strcn42);
             cn42.Open();
 
-            String strsql = "DELETE FROM tblGame WHERE room = '" + room + "' and idAccount = '" + user.idAccount + "'";
+            String strsql = "DELETE FROM tblGame WHERE idRoom = '" + room + "' and idAccount = '" + user.idAccount + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn42);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -1074,13 +1074,13 @@ namespace CAHOnline
         }
 
         //Questa funzione mi permette di controllare se nella tblGame esiste l'utente
-        public static bool CheckUserInGame(int room, Account user)
+        public static bool CheckUserInGame(int idRoom, Account user)
         {
             string strcn43 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn43 = new SqlConnection(strcn43);
             cn43.Open();
 
-            String strsql = "SELECT * FROM tblGame WHERE room = '" + room + "' and idAccount = '" + user.idAccount + "'";
+            String strsql = "SELECT * FROM tblGame WHERE idRoom = '" + idRoom + "' and idAccount = '" + user.idAccount + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn43);
             cmd.ExecuteNonQuery();
 
@@ -1100,7 +1100,7 @@ namespace CAHOnline
             SqlConnection cn44 = new SqlConnection(strcn44);
             cn44.Open();
 
-            String strsql = "SELECT room, idAccount FROM tblCardsSelect WHERE room = '" + room + "' and idAccount = '" + user.idAccount + "'";
+            String strsql = "SELECT idRoom, idAccount FROM tblSelectedCards WHERE idRoom = '" + room + "' and idAccount = '" + user.idAccount + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn44);
             cmd.ExecuteNonQuery();
 
@@ -1120,7 +1120,7 @@ namespace CAHOnline
             SqlConnection cn45 = new SqlConnection(strcn45);
             cn45.Open();
 
-            String strsql = "SELECT room FROM tblGame WHERE room = '" + room + "'";
+            String strsql = "SELECT idRoom FROM tblGame WHERE idRoom = '" + room + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn45);
             cmd.ExecuteNonQuery();
 
@@ -1140,7 +1140,7 @@ namespace CAHOnline
             SqlConnection cn46 = new SqlConnection(strcn46);
             cn46.Open();
 
-            String strsql = "SELECT count(idAccount) as c FROM tblGame WHERE room = '" + room + "' and master = 0";
+            String strsql = "SELECT count(idAccount) as c FROM tblGame WHERE idRoom = '" + room + "' and isMaster = 0";
             SqlCommand cmd = new SqlCommand(strsql, cn46);
             cmd.ExecuteNonQuery();
 
@@ -1158,14 +1158,14 @@ namespace CAHOnline
             return value;
         }
 
-        //Questa funzione mi permette di aggiornare il valore del newRound nella tblRounds
+        //Questa funzione mi permette di aggiornare il valore del newRound nella tblRooms
         public static void UpdateNewRound(int indexRoom, int round)
         {
             string strcn47 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn47 = new SqlConnection(strcn47);
             cn47.Open();
 
-            String strsql = "UPDATE tblRounds SET newRound = '" + round + "' WHERE idRoom = '" + indexRoom + "'";
+            String strsql = "UPDATE tblRooms SET newRound = '" + round + "' WHERE idRoom = '" + indexRoom + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn47);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -1179,7 +1179,7 @@ namespace CAHOnline
             SqlConnection cn48 = new SqlConnection(strcn48);
             cn48.Open();
 
-            String strsql = "SELECT timer FROM tblRounds WHERE idRoom = '" + indexRoom + "'";
+            String strsql = "SELECT timer FROM tblRooms WHERE idRoom = '" + indexRoom + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn48);
             cmd.ExecuteNonQuery();
 
@@ -1206,7 +1206,7 @@ namespace CAHOnline
 
             int timer = FunctionsDB.ReadTimer(indexRoom);
 
-            String strsql = "UPDATE tblRounds SET timer = '" + (timer + 1) + "' WHERE idRoom = '" + indexRoom + "'";
+            String strsql = "UPDATE tblRooms SET timer = '" + (timer + 1) + "' WHERE idRoom = '" + indexRoom + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn49);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -1220,7 +1220,7 @@ namespace CAHOnline
             SqlConnection cn50 = new SqlConnection(strcn50);
             cn50.Open();
 
-            String strsql = "UPDATE tblRounds SET timer = 0 WHERE idRoom = '" + indexRoom + "'";
+            String strsql = "UPDATE tblRooms SET timer = 0 WHERE idRoom = '" + indexRoom + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn50);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -1234,7 +1234,7 @@ namespace CAHOnline
             SqlConnection cn51 = new SqlConnection(strcn51);
             cn51.Open();
 
-            String strsql = @"INSERT INTO tblCardsWhiteUsers(idRoom, idAccount, idCardWhite, hasBeenUsed) 
+            String strsql = @"INSERT INTO tblWhiteCardsUsed (idRoom, idAccount, idWhiteCards, cardsUsed) 
                               VALUES ('" + indexRoom + "', '" + user.idAccount + "', '" + card.idCards + "', 0)";
             SqlCommand cmd = new SqlCommand(strsql, cn51);
             cmd.ExecuteNonQuery();
@@ -1249,7 +1249,7 @@ namespace CAHOnline
             SqlConnection cn52 = new SqlConnection(strcn52);
             cn52.Open();
 
-            String strsql = "SELECT idCardWhite FROM tblCardsWhiteUsers WHERE idRoom = '" + room + "' and idCardWhite = '" + card.idCards + "'";
+            String strsql = "SELECT idWhiteCards FROM tblWhiteCardsUsed WHERE idRoom = '" + room + "' and idWhiteCards = '" + card.idCards + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn52);
             cmd.ExecuteNonQuery();
 
@@ -1269,21 +1269,21 @@ namespace CAHOnline
             SqlConnection cn53 = new SqlConnection(strcn53);
             cn53.Open();
 
-            String strsql = "UPDATE tblCardsWhiteUsers SET hasBeenUsed = 1 WHERE idRoom = '" + indexRoom + "' and idCardWhite = '" + card.idCards + "'";
+            String strsql = "UPDATE tblWhiteCardsUsed SET cardsUsed = 1 WHERE idRoom = '" + indexRoom + "' and idWhiteCards = '" + card.idCards + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn53);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             cn53.Close();
         }
 
-        //Questa funzione permette di eliminare le carte di un utente dalla tblCardsWhiteUsers
+        //Questa funzione permette di eliminare le carte di un utente dalla tblWhiteCardsUsed
         public static void DeleteCardsWhite(int room, Account user)
         {
             string strcn54 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn54 = new SqlConnection(strcn54);
             cn54.Open();
 
-            String strsql = "DELETE FROM tblCardsWhiteUsers WHERE idRoom = '" + room + "' and idAccount = '" + user.idAccount + "'";
+            String strsql = "DELETE FROM tblWhiteCardsUsed WHERE idRoom = '" + room + "' and idAccount = '" + user.idAccount + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn54);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -1297,7 +1297,7 @@ namespace CAHOnline
             SqlConnection cn55 = new SqlConnection(strcn55);
             cn55.Open();
 
-            String strsql = "SELECT idAccount FROM tblCardsWhiteUsers WHERE idRoom = '" + room + "' and idAccount = '" + user.idAccount + "'";
+            String strsql = "SELECT idAccount FROM tblWhiteCardsUsed WHERE idRoom = '" + room + "' and idAccount = '" + user.idAccount + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn55);
             cmd.ExecuteNonQuery();
 
@@ -1317,7 +1317,7 @@ namespace CAHOnline
             SqlConnection cn56 = new SqlConnection(strcn56);
             cn56.Open();
 
-            String strsql = "SELECT idCardsBlack FROM tblCardsBlackRoom WHERE idRoom = '" + room + "' and idCardsBlack = '" + card.idCards + "' and hasBeenUsed = 1";
+            String strsql = "SELECT idBlackCards FROM tblBlackCardsUsed WHERE idRoom = '" + room + "' and idBlackCards = '" + card.idCards + "' and cardsUsed = 1";
             SqlCommand cmd = new SqlCommand(strsql, cn56);
             cmd.ExecuteNonQuery();
 
@@ -1337,35 +1337,35 @@ namespace CAHOnline
             SqlConnection cn57 = new SqlConnection(strcn57);
             cn57.Open();
 
-            String strsql = "UPDATE tblCardsBlackRoom SET hasBeenUsed = 1 WHERE idRoom = '" + indexRoom + "' and idCardsBlack = '" + card.idCards + "'";
+            String strsql = "UPDATE tblBlackCardsUsed SET cardsUsed = 1 WHERE idRoom = '" + indexRoom + "' and idBlackCards = '" + card.idCards + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn57);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             cn57.Close();
         }
 
-        //Questa funzione permette di eliminare le carte nere dalla tblCardsBlackRoom
+        //Questa funzione permette di eliminare le carte nere dalla tblBlackCardsUsed
         public static void DeleteCardsBlack(int room)
         {
             string strcn58 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn58 = new SqlConnection(strcn58);
             cn58.Open();
 
-            String strsql = "DELETE FROM tblCardsBlackRoom WHERE idRoom = '" + room + "'";
+            String strsql = "DELETE FROM tblBlackCardsUsed WHERE idRoom = '" + room + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn58);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             cn58.Close();
         }
 
-        //Questa funzione mi permette di controllare se le carte nere sono state eliminate dalla tblCardsBlackRoom
+        //Questa funzione mi permette di controllare se le carte nere sono state eliminate dalla tblBlackCardsUsed
         public static bool CheckDeleteCardsBlack(int room)
         {
             string strcn59 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn59 = new SqlConnection(strcn59);
             cn59.Open();
 
-            String strsql = "SELECT idRoom FROM tblCardsBlackRoom WHERE idRoom = '" + room + "'";
+            String strsql = "SELECT idRoom FROM tblBlackCardsUsed WHERE idRoom = '" + room + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn59);
             cmd.ExecuteNonQuery();
 
@@ -1378,14 +1378,14 @@ namespace CAHOnline
             return ok;
         }
 
-        //Questa funzione mi permette di scrivere le carte nere nella tblCardsBlackRoom
+        //Questa funzione mi permette di scrivere le carte nere nella tblBlackCardsUsed
         public static void WriteCardsBlack(int indexRoom, Cards card)
         {
             string strcn60 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn60 = new SqlConnection(strcn60);
             cn60.Open();
 
-            String strsql = @"INSERT INTO tblCardsBlackRoom(idRoom, idCardsBlack, hasBeenUsed) 
+            String strsql = @"INSERT INTO tblBlackCardsUsed(idRoom, idBlackCards, cardsUsed) 
                               VALUES ('" + indexRoom + "', '" + card.idCards + "', 0)";
             SqlCommand cmd = new SqlCommand(strsql, cn60);
             cmd.ExecuteNonQuery();
@@ -1393,39 +1393,39 @@ namespace CAHOnline
             cn60.Close();
         }
 
-        //Questa funzione mi permette di controllare se il master è stato eliminato dal db
-        public static bool CheckDeleteMaster(int room)
-        {
-            string strcn61 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn61 = new SqlConnection(strcn61);
-            cn61.Open();
+        ////Questa funzione mi permette di controllare se il master è stato eliminato dal db
+        //public static bool CheckDeleteMaster(int room)
+        //{
+        //    string strcn61 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+        //    SqlConnection cn61 = new SqlConnection(strcn61);
+        //    cn61.Open();
 
-            String strsql = "SELECT idRoom FROM tblMaster WHERE idRoom = '" + room + "'";
-            SqlCommand cmd = new SqlCommand(strsql, cn61);
-            cmd.ExecuteNonQuery();
+        //    String strsql = "SELECT idRoom FROM tblMaster WHERE idRoom = '" + room + "'";
+        //    SqlCommand cmd = new SqlCommand(strsql, cn61);
+        //    cmd.ExecuteNonQuery();
 
-            var dr34 = cmd.ExecuteReader();
-            dr34.Read();
-            bool ok = dr34.HasRows;
-            dr34.Close();
-            cmd.Dispose();
-            cn61.Close();
-            return ok;
-        }
+        //    var dr34 = cmd.ExecuteReader();
+        //    dr34.Read();
+        //    bool ok = dr34.HasRows;
+        //    dr34.Close();
+        //    cmd.Dispose();
+        //    cn61.Close();
+        //    return ok;
+        //}
 
-        //Questa funzione mi permette di scrivere l'indice del master nella tblMaster
-        public static void WriteIndexMaster(int indexRoom)
-        {
-            string strcn62 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn62 = new SqlConnection(strcn62);
-            cn62.Open();
+        ////Questa funzione mi permette di scrivere l'indice del master nella tblMaster
+        //public static void WriteIndexMaster(int indexRoom)
+        //{
+        //    string strcn62 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+        //    SqlConnection cn62 = new SqlConnection(strcn62);
+        //    cn62.Open();
 
-            String strsql = "INSERT INTO tblMaster(idRoom, indexMaster) VALUES ('" + indexRoom + "', 0)";
-            SqlCommand cmd = new SqlCommand(strsql, cn62);
-            cmd.ExecuteNonQuery();
-            cmd.Dispose();
-            cn62.Close();
-        }
+        //    String strsql = "INSERT INTO tblMaster(idRoom, indexMaster) VALUES ('" + indexRoom + "', 0)";
+        //    SqlCommand cmd = new SqlCommand(strsql, cn62);
+        //    cmd.ExecuteNonQuery();
+        //    cmd.Dispose();
+        //    cn62.Close();
+        //}
 
         //Questa funzione mi permette di aggiornare l'indice del master nella tblMaster
         public static void UpdateIndexMaster(int indexRoom)
@@ -1436,7 +1436,7 @@ namespace CAHOnline
 
             int indexMaster = FunctionsDB.ReadIndexMaster(indexRoom);
 
-            String strsql = "UPDATE tblMaster SET indexMaster = '" + (indexMaster + 1) + "' WHERE idRoom = '" + indexRoom + "'";
+            String strsql = "UPDATE tblRooms SET indexMaster = '" + (indexMaster + 1) + "' WHERE idRoom = '" + indexRoom + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn63);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -1450,7 +1450,7 @@ namespace CAHOnline
             SqlConnection cn64 = new SqlConnection(strcn64);
             cn64.Open();
 
-            String strsql = "UPDATE tblMaster SET indexMaster = 1 WHERE idRoom = '" + indexRoom + "'";
+            String strsql = "UPDATE tblRooms SET indexMaster = 0 WHERE idRoom = '" + indexRoom + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn64);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -1463,7 +1463,7 @@ namespace CAHOnline
             SqlConnection cn65 = new SqlConnection(strcn65);
             cn65.Open();
 
-            String strsql = "SELECT indexMaster FROM tblMaster WHERE idRoom = '" + indexRoom + "'";
+            String strsql = "SELECT indexMaster FROM tblRooms WHERE idRoom = '" + indexRoom + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn65);
             cmd.ExecuteNonQuery();
 
@@ -1481,18 +1481,18 @@ namespace CAHOnline
             return value;
         }
 
-        //Questa funzione permette di eliminare l'indice del master nella tblMaster
-        public static void DeleteMaster(int room)
-        {
-            string strcn66 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn66 = new SqlConnection(strcn66);
-            cn66.Open();
+        ////Questa funzione permette di eliminare l'indice del master nella tblMaster
+        //public static void DeleteMaster(int room)
+        //{
+        //    string strcn66 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+        //    SqlConnection cn66 = new SqlConnection(strcn66);
+        //    cn66.Open();
 
-            String strsql = "DELETE FROM tblMaster WHERE idRoom = '" + room + "'";
-            SqlCommand cmd = new SqlCommand(strsql, cn66);
-            cmd.ExecuteNonQuery();
-            cmd.Dispose();
-            cn66.Close();
-        }
+        //    String strsql = "DELETE FROM tblMaster WHERE idRoom = '" + room + "'";
+        //    SqlCommand cmd = new SqlCommand(strsql, cn66);
+        //    cmd.ExecuteNonQuery();
+        //    cmd.Dispose();
+        //    cn66.Close();
+        //}
     }
 }

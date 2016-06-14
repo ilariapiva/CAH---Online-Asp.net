@@ -73,10 +73,6 @@
                 {
                     FunctionsDB.DeleteCardsBlack(indexRoom);
                 }
-                if(FunctionsDB.CheckDeleteMaster(indexRoom))
-                {
-                    FunctionsDB.CheckDeleteMaster(indexRoom);
-                }
                 Response.Redirect("~/index.aspx");
             }
             //se l'utente è il master visualizzo solo la carta master 

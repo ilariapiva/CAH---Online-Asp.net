@@ -205,9 +205,7 @@
             </ul>
             <p class="paragraph p1">
                 <br />
-                There are obviously many variables at play. The creators invite the development of new forms of gaming and allocation of points.<br />
-                You may want to enter a fixed master, or more rewarding cynicism or sadism answers.
-                <br />
+                For this game there are many variations. In fact, the game makers want you to add new cards and to change the rules.<br />
                 That is why the rules in this game change a little compared to the original game rules.
             </p>
         </div>

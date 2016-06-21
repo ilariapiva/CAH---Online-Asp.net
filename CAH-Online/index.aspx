@@ -132,25 +132,13 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card-panel-text">
-                                <%--<h1 class="h1-text">Descrizione del gioco<br />
-                            <br />
-                        </h1>--%>
                                 <h1 class="h1-text">Game Description<br />
                                     <br />
                                 </h1>
-                                <%--<p class="paragraph p3">
-                            CAH – Online si riferisce a 
-                            <a class="link" href="https://cardsagainsthumanity.com">Cards Against Humanity</a>, 
-                            un gioco da tavolo americano, basato sul sarcasmo e sull'ironia dei suoi stessi giocatori. Il gioco sfrutta la licenza Creative Commons 
-                            ed è attualmente disponibile con licenza Free Download, che ne permette il download e la copia in forma completamente gratuita. 
-                            Il suo titolo è un riferimento alla frase Crimini contro l'umanità, in allusione al suo contenuto politicamente scorretto.
-                        </p>--%>
                                 <p class="paragraph p3">
-                                    CAH - Online refers to
-                            <a class="link" href="https://cardsagainsthumanity.com">Cards Against Humanity</a>,an American board game, based on the sarcasm and
-                             irony of his own players. The game takes advantage of the Creative Commons and is currently available with license Free Download, 
-                             which allows downloading and copying completely free of charge. Its title is a reference to the sentence Crimes against humanity, 
-                             in allusion to his politically incorrect content.
+                                    CAH - Online refers to <a class="link" href="https://cardsagainsthumanity.com">Cards Against Humanity</a>, an American board game. 
+                                    This game is based on the sarcasm and the irony of the phrases created by the players. 
+                                    CAH uses the Creative Commons license and is also available with a free license.
                                 </p>
                             </div>
                         </div>
@@ -158,25 +146,12 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card-panel-text">
-                                <%--<h1 class="h1-text">La nascita del gioco<br />
-                            <br />
-                        </h1>--%>
                                 <h1 class="h1-text">The birth of the game<br />
                                     <br />
                                 </h1>
-                                <%--<p class="paragraph p3">
-                            Il gioco è stato creato da un gruppo di studenti della scuola superiore di Highland Park, 
-                            nell'Illinois, per celebrare la festa di capodanno e fu finanziato attraverso il sito web 
-                            <a class="link" href="https://www.kickstarter.com">Kickstarter</a>, 
-                            superando l'obiettivo prefissato di quasi il 300%. Ben Hantoot, uno dei creatori, dichiarò che lo sviluppo del 
-                            gioco era in larga parte dovuto a: "8 di noi che fummo il nucleo di creatori e scrittori, 5 o 6 collaboratori occasionali 
-                            e decine di amici e conoscenti che hanno giocato al gioco".
-                        </p>--%>
                                 <p class="paragraph p3">
-                                    The game was created by a group of high school students from Highland Park, Illinois, to celebrate the New Year's celebration 
-                            and was funded through the <a class="link" href="https://www.kickstarter.com">Kickstarter</a>,  website, surpassing its target by almost 300 %. 
-                            Ben Hantoot, one of the creators, said that the game's development was largely due to: "8 of us who were the nucleus of the creators and writers,
-                            5 or 6 occasional contributors and dozens of friends and acquaintances who have played the game" .
+                                    Cards Against Humanity, whose title is a reference to politically incorrect content, has been created by some students of the high school Highlander Park, Illinois. 
+                                    This game has been funded through the website <a class="link" href="https://www.kickstarter.com">Kickstarter</a> and the funding goal has been exceeded three times the target.
                                 </p>
                             </div>
                         </div>

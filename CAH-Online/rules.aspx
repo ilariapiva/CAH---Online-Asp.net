@@ -139,71 +139,71 @@
             <h1 class="h1-text-rules">The rules of the game<br />
                 <br />
             </h1>
-            <p class="paragraph p1">
+            <p class="paragraph pRules">
                 The rules are:<br />
                 <br />
             </p>
             <ul class="ul-style">
                 <li class="color-number-list li-list">1.
-                    <asp:Label ID="lbl1" runat="server" Text="The maximum number of players per 'room' is 5 people." CssClass="paragraph" ForeColor="White"></asp:Label>
+                    <asp:Label ID="lbl1" runat="server" Text="The maximum number of players per 'room' is 5 people." CssClass="paragraph pRules" ForeColor="White"></asp:Label>
                     <br />
                     <br />
                 </li>
                 <li class="color-number-list li-list">2.
                     <asp:Label ID="lbl2" runat="server" Text="The first entering the 'room' will be the master for the first round, then in the second round the Master will be the second 
-                        person who has entered the 'room', and so on." CssClass="paragraph" ForeColor="White"></asp:Label>
+                        person who has entered the 'room', and so on." CssClass="paragraph pRules" ForeColor="White"></asp:Label>
                     <br />
                     <br />
                 </li>
                 <li class="color-number-list li-list">3.
-                    <asp:Label ID="lbl3" runat="server" CssClass="paragraph" ForeColor="White" Text="The Question (black card) will be chosen randomly and all the players will see it."></asp:Label>
+                    <asp:Label ID="lbl3" runat="server" CssClass="paragraph pRules" ForeColor="White" Text="The Question (black card) will be chosen randomly and all the players will see it."></asp:Label>
                     <br />
                     <br />
                 </li>
                 <li class="color-number-list li-list">4.
-                     <asp:Label ID="lbl4" runat="server" CssClass="paragraph" ForeColor="White" Text="Players who are not Master will be distribute 10 cards Answer (white paper)."></asp:Label>
+                     <asp:Label ID="lbl4" runat="server" CssClass="paragraph pRules" ForeColor="White" Text="Players who are not Master will be distribute 10 cards Answer (white paper)."></asp:Label>
                     <br />
                     <br />
                 </li>
                 <li class="color-number-list li-list">5.
-                     <asp:Label ID="lbl5" runat="server" CssClass="paragraph" ForeColor="White" Text="The players choose, in a limited period of time, the Response card to give to the Master, "></asp:Label>
+                     <asp:Label ID="lbl5" runat="server" CssClass="paragraph pRules" ForeColor="White" Text="The players choose, in a limited period of time, the Response card to give to the Master, "></asp:Label>
                     <br />
                     <br />
                 </li>
                 <li class="color-number-list li-list">6.
-                     <asp:Label ID="lbl6" runat="server" CssClass="paragraph" ForeColor="White" Text="The Master , without knowing the username of the player who has chosen a given card ( in case there are more response cards, "></asp:Label>
+                     <asp:Label ID="lbl6" runat="server" CssClass="paragraph pRules" ForeColor="White" Text="The Master , without knowing the username of the player who has chosen a given card ( in case there are more response cards, "></asp:Label>
                     <br />
-                    <asp:Label ID="lbl7" runat="server" CssClass="paragraph" ForeColor="White" Text='&nbsp;&nbsp;&nbsp;&nbsp;under the cards will be repeated "User X" so the Master knows the response pairs of cards), reads one by one answers.'></asp:Label>
+                    <asp:Label ID="lbl7" runat="server" CssClass="paragraph pRules" ForeColor="White" Text='&nbsp;&nbsp;&nbsp;&nbsp;under the cards will be repeated "User X" so the Master knows the response pairs of cards), reads one by one answers.'></asp:Label>
                     <br />
                     <br />
                 </li>
                 <li class="color-number-list li-list">7.
-                     <asp:Label ID="lbl8" runat="server" CssClass="paragraph" ForeColor="White" Text="The Master, in a limited period of time choose response paper that he most liked and declares the winner, and the winner is awarded a victory point."></asp:Label>
+                     <asp:Label ID="lbl8" runat="server" CssClass="paragraph pRules" ForeColor="White" Text="The Master, in a limited period of time choose response paper that he most liked and declares the winner, and the winner is awarded a victory point."></asp:Label>
                     <br />
                     <br />
                 </li>
                 <li class="color-number-list li-list">8.
-                     <asp:Label ID="lbl9" runat="server" CssClass="paragraph" ForeColor="White" Text="After deciding the winner, under the card displays the username of the players who played the cards."></asp:Label>
+                     <asp:Label ID="lbl9" runat="server" CssClass="paragraph pRules" ForeColor="White" Text="After deciding the winner, under the card displays the username of the players who played the cards."></asp:Label>
                     <br />
                     <br />
                 </li>
                 <li class="color-number-list li-list">9.
-                     <asp:Label ID="lbl10" runat="server" CssClass="paragraph" ForeColor="White" Text="At the end of the round all players are assigned new cards Response to return to the initial number of 10."></asp:Label>
+                     <asp:Label ID="lbl10" runat="server" CssClass="paragraph pRules" ForeColor="White" Text="At the end of the round all players are assigned new cards Response to return to the initial number of 10."></asp:Label>
                     <br />
                     <br />
                 </li>
                 <li class="color-number-list li-list">10.
-                     <asp:Label ID="lbl11" runat="server" CssClass="paragraph" ForeColor="White" Text="The player, who in the first round was the Master, are assigned to him 10 cards and the new Master will no longer see their cards Response down to the next round."></asp:Label>
+                     <asp:Label ID="lbl11" runat="server" CssClass="paragraph pRules" ForeColor="White" Text="The player, who in the first round was the Master, are assigned to him 10 cards and the new Master will no longer see their cards Response down to the next round."></asp:Label>
                     <br />
                     <br />
                 </li>
                 <li class="color-number-list li-list">11.
-                     <asp:Label ID="lbl12" runat="server" CssClass="paragraph" Text="A game lasts 20 rounds and in the end the player with the more points win." ForeColor="White"></asp:Label>
+                     <asp:Label ID="lbl12" runat="server" CssClass="paragraph pRules" Text="A game lasts 20 rounds and in the end the player with the more points win." ForeColor="White"></asp:Label>
                     <br />
                     <br />
                 </li>
             </ul>
-            <p class="paragraph p1">
+            <p class="paragraph pRules">
                 <br />
                 For this game there are many variations. In fact, the game makers want you to add new cards and to change the rules.<br />
                 That is why the rules in this game change a little compared to the original game rules.

@@ -27,6 +27,7 @@ namespace CAHOnline
                 room.GenerateCardsForUser(user);
                 room.GenerateCardBlack(listRooms.IndexOf(room));
                 FunctionsDB.WriteRounds(listRooms.IndexOf(room));
+                FunctionsDB.WriteUserExit(user, listRooms.IndexOf(room));
                 return true;
             }
             else //Se la lista rooms non è vuota allora controllo se nelle rooms c'è spazio, e se ce nè allora aggiungo lo user nella prima room non piena
@@ -40,6 +41,7 @@ namespace CAHOnline
                             FunctionsDB.WriteGame(user, listRooms.IndexOf(i), 0);
                             i.AddUser(user, listRooms.IndexOf(i));
                             i.GenerateCardsForUser(user);
+                            FunctionsDB.WriteUserExit(user, listRooms.IndexOf(i));
                         }
                         else //se invece la stanza non è già presente nel db, scrivo l'utente, aggiungo l'utente alla lista degli utenti e gli genero le carte bianche 
                         {   //e genero la carta nera e resetto i round
@@ -54,7 +56,8 @@ namespace CAHOnline
                             else
                             {
                                 FunctionsDB.WriteRounds(listRooms.IndexOf(i));
-                            }                         
+                            }
+                            FunctionsDB.WriteUserExit(user, listRooms.IndexOf(i));
                         }
                         //int indexRoom = Convert.ToInt32(listRooms.IndexOf(i));
                         return true;
@@ -70,6 +73,7 @@ namespace CAHOnline
                 room.GenerateCardsForUser(user);
                 room.GenerateCardBlack(listRooms.IndexOf(room));
                 FunctionsDB.WriteRounds(listRooms.IndexOf(room));
+                FunctionsDB.WriteUserExit(user, listRooms.IndexOf(room));
                 return true;
             }
         }

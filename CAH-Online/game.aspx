@@ -1431,6 +1431,12 @@
             minutes = totalSeconds / 60;
             time = minutes + ":" + seconds;
             Label4.Text = time;
+            int userExit = FunctionsDB.ReadUserExit();
+            if (userExit > 0)
+            {
+                UpdateMatches();
+                Response.Redirect("~/index.aspx");
+            }
             if (room.CheckUserCardSelected(indexRoom))
             {
                 CheckbtnCardSelected();
@@ -1522,6 +1528,12 @@
             minutes = totalSeconds / 60;
             time = minutes + ":" + seconds;
             lblTimerMaster.Text = time;
+            int userExit = FunctionsDB.ReadUserExit();
+            if (userExit > 0)
+            {
+                UpdateMatches();
+                Response.Redirect("~/index.aspx");
+            }
         }
     }
 
@@ -1556,6 +1568,12 @@
             minutes = totalSeconds / 60;
             time = minutes + ":" + seconds;
             Label3.Text = time;
+            int userExit = FunctionsDB.ReadUserExit();
+            if (userExit > 0)
+            {
+                UpdateMatches();
+                Response.Redirect("~/index.aspx");
+            }
         }
     }
 
@@ -1734,6 +1752,12 @@
             minutes = totalSeconds / 60;
             time = minutes + ":" + seconds;
             lblTimer.Text = time;
+            int userExit = FunctionsDB.ReadUserExit();
+            if (userExit > 0)
+            {
+                UpdateMatches();
+                Response.Redirect("~/index.aspx");
+            }
         }
     }
 
@@ -1759,6 +1783,12 @@
             time = minutes + ":" + seconds;
             Label2.Text = time;
             Round round = FunctionsDB.ReadRounds(indexRoom);
+            int userExit = FunctionsDB.ReadUserExit();
+            if (userExit > 0)
+            {
+                UpdateMatches();
+                Response.Redirect("~/index.aspx");
+            }
             if (round.newRound == 1)
             {
                 Response.Redirect("~/game.aspx");

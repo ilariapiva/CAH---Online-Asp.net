@@ -1494,5 +1494,93 @@ namespace CAHOnline
         //    cmd.Dispose();
         //    cn66.Close();
         //}
+
+        //Questa funzione mi permette di aggiornare nella tabella l'uscita del giocatore dal gioco
+        public static void UpdateUserExit(Account user)
+        {
+            string strcn66 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn66 = new SqlConnection(strcn66);
+            cn66.Open();
+
+            String strsql = "UPDATE tblUserExit SET isExit = '1' WHERE idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn66);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn66.Close();
+        }
+
+        //Questa funzione mi permette di leggere il numero di utenti che sono usciti dal gioco
+        public static int ReadUserExit()
+        {
+            string strcn67 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn67 = new SqlConnection(strcn67);
+            cn67.Open();
+
+            String strsql = "SELECT COUNT(idAccount) AS a FROM tblUserExit WHERE isExit = 1";
+            SqlCommand cmd = new SqlCommand(strsql, cn67);
+            cmd.ExecuteNonQuery();
+
+            int value = 0;
+            var dr36 = cmd.ExecuteReader();
+            if (dr36.HasRows)
+            {
+                dr36.Read();
+                value = Convert.ToInt32(dr36["a"]);
+            }
+
+            dr36.Close();
+            cmd.Dispose();
+            cn67.Close();
+            return value;
+        }
+
+        //Scrivo nella tabella userExit
+        public static void WriteUserExit(Account user, int idRoom)
+        {
+            string strcn68 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn68 = new SqlConnection(strcn68);
+            cn68.Open();
+
+            String strsql = @"INSERT INTO tblUserExit(idAccount, idRoom, isExit) 
+                            VALUES ('" + user.idAccount + "', '" + idRoom + "', 0)";
+            SqlCommand cmd = new SqlCommand(strsql, cn68);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn68.Close();
+        }
+
+        //Questa funzione permette di eliminare le righe dalla tblUserExit 
+        public static void DeleteUserExit(int room)
+        {
+            string strcn69 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn69 = new SqlConnection(strcn69);
+            cn69.Open();
+
+            String strsql = @"DELETE FROM tblUserExit WHERE idRoom = '" + room + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn69);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn69.Close();
+        }
+
+        //Questa funzione mi permette di controllare se nella tblUserExit esiste l'utente
+        public static bool CheckUserExit(int room, Account user)
+        {
+            string strcn70 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn70 = new SqlConnection(strcn70);
+            cn70.Open();
+
+            String strsql = "SELECT idRoom, idAccount FROM tblUserExit WHERE idRoom = '" + room + "' and idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn70);
+            cmd.ExecuteNonQuery();
+
+            var dr37 = cmd.ExecuteReader();
+            dr37.Read();
+            bool ok = dr37.HasRows;
+            dr37.Close();
+            cmd.Dispose();
+            cn70.Close();
+            return ok;
+        }
     }
 }

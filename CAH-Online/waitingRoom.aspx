@@ -25,6 +25,11 @@
         {
             stateChanged = true;
             Session["time1"] = DateTime.Now.AddSeconds(15);
+            int isUserExit = FunctionsDB.UserExit(Master.resultUser);
+            if(isUserExit == 1)
+            {
+                Response.Redirect("~/index.aspx");
+            }
         }
         if(stateChanged)
         {

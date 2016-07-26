@@ -16,10 +16,10 @@
     {
         if (!Page.IsPostBack)
         {
-            Session["time1"] = 50;
+            Session["time1"] = 1000;
             GenerateCardsWhite();
         }
-
+        
         if (!FunctionsDB.ExistCookies())
         {
             SelectButton.Enabled = false;
@@ -115,8 +115,12 @@
             }
             if (FunctionsDB.CheckUserExit(indexRoom, Master.resultUser))
             {
-                FunctionsDB.DeleteUserExit(Master.resultUser);
+                FunctionsDB.DeleteUserExit(indexRoom);
             }
+        }
+        if (FunctionsDB.CheckUserExit(indexRoom, Master.resultUser))
+        {
+            FunctionsDB.DeleteUserExit(indexRoom);
         }
         Response.Redirect("~/waitingRoom.aspx");
     }

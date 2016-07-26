@@ -50,7 +50,8 @@
             Session["time2"] = 40; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
             Session["time3"] = 3;
             Session["time4"] = 40;
-            Session["time5"] = 150;           
+            Session["time5"] = 150;
+            Session["time6"] = 1;        
         }
          
         if (stateChanged)
@@ -398,14 +399,16 @@
                 {
                     //string script = "alert(\"Devi selezionare 1 carta prima di cliccare su conferma!\");";
                     string script = "alert(\"You must select 1 card before clicking to confirm!\");";
-                    ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    //ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    ScriptManager.RegisterClientScriptBlock((sender as Control), this.GetType(), "alert", script, true);
                     btnConfirmCardSelect.Enabled = true;
                 }
                 if(value > 1)
                 {
                     //string script = "alert(\"Devi selezionare solo 1 carta!\");";
                     string script = "alert(\"You must select only 1 card!\");";
-                    ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    //ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    ScriptManager.RegisterClientScriptBlock((sender as Control), this.GetType(), "alert", script, true);
                     btnConfirmCardSelect.Enabled = true;
                     FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
                 }
@@ -436,14 +439,16 @@
                 {
                     //string script = "alert(\"Devi selezionare 2 carte prima di cliccare su conferma!\");";
                     string script = "alert(\"You must select 2 cards before clicking to confirm!\");";
-                    ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    //ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    ScriptManager.RegisterClientScriptBlock((sender as Control), this.GetType(), "alert", script, true);
                     btnConfirmCardSelect.Enabled = true;
                 }
                 if (value > 2)
                 {
                     //string script = "alert(\"Devi selezionare solo 2 carte!\");";
                     string script = "alert(\"You must select 2 cards!\");";
-                    ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    //ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    ScriptManager.RegisterClientScriptBlock((sender as Control), this.GetType(), "alert", script, true);
                     btnConfirmCardSelect.Enabled = true;
                     FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
                 }
@@ -451,7 +456,8 @@
                 {
                     //string script = "alert(\"Devi selezionare ancora 1 carta!\");";
                     string script = "alert(\"You must still select 1 card!\");";
-                    ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    //ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    ScriptManager.RegisterClientScriptBlock((sender as Control), this.GetType(), "alert", script, true);
                     btnConfirmCardSelect.Enabled = true;
                 }
             }
@@ -481,14 +487,16 @@
                 {
                     //string script = "alert(\"Devi selezionare 3 carte prima di cliccare su conferma!\");";
                     string script = "alert(\"You must select 3 cards before clicking to confirm!\");";
-                    ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    //ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    ScriptManager.RegisterClientScriptBlock((sender as Control), this.GetType(), "alert", script, true);
                     btnConfirmCardSelect.Enabled = true;
                 }
                 if (value > 3)
                 {
                     //string script = "alert(\"Devi selezionare solo 3 carte!\");";
                     string script = "alert(\"You must select only 3 cards!\");";
-                    ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    //ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    ScriptManager.RegisterClientScriptBlock((sender as Control), this.GetType(), "alert", script, true);
                     btnConfirmCardSelect.Enabled = true;
                     FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
                 }
@@ -496,14 +504,16 @@
                 {
                     //string script = "alert(\"Devi selezionare ancora 2 carte!\");";
                     string script = "alert(\"You must select 2 cards yet!\");";
-                    ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    //ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    ScriptManager.RegisterClientScriptBlock((sender as Control), this.GetType(), "alert", script, true);
                     btnConfirmCardSelect.Enabled = true;
                 }
                 if (value == 2)
                 {
                     //string script = "alert(\"Devi selezionare ancora 1 carta!\");";
                     string script = "alert(\"You must still select 1 card!\");";
-                    ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    //ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+                    ScriptManager.RegisterClientScriptBlock((sender as Control), this.GetType(), "alert", script, true);
                     btnConfirmCardSelect.Enabled = true;
                 }             
             }
@@ -718,6 +728,7 @@
         NameUsers(spacesBlackCard);
         FunctionsDB.WritePoint(indexRoom, CardSelect);
         Account userWin = FunctionsDB.ReadUserWin(indexRoom, CardSelect);
+        FunctionsDB.UpadateIsWinner(userWin, 1);
         FunctionsDB.DeleteCardSelectDB(indexRoom);
         btnConfirmWinner.Enabled = false;
         room.NewRaund(indexRoom, Master.resultUser);
@@ -1791,8 +1802,39 @@
             }
             if (round.newRound == 1)
             {
+                String usernameWinner = FunctionsDB.ReadUsernameWinner();
+                string script = "alert(\"The winner of round is: " + usernameWinner + "\");";
+                ScriptManager.RegisterClientScriptBlock((sender as Control), this.GetType(), "alert", script, true);
+                Timer5.Dispose();
+                Timer5.Enabled = false;
+                Timer6.Enabled = true;
+                //Response.Redirect("~/game.aspx");
+            }
+        }
+    }
+
+    protected void Timer6_Tick(object sender, EventArgs e)
+    {
+        Session["time6"] = Convert.ToInt16(Session["time6"]) - 1;
+        if (Convert.ToInt16(Session["time6"]) <= 0)
+        {
+            if (FunctionsDB.CheckUserIsWinner(Master.resultUser))
+            {
+                FunctionsDB.UpadateIsWinner(Master.resultUser, 0);
                 Response.Redirect("~/game.aspx");
             }
+            else
+            {
+                Response.Redirect("~/game.aspx");
+            }
+        }
+        else
+        {
+            //Label2.Text = time5.Minutes.ToString() + ":" + time5.Seconds.ToString();
+            totalSeconds = Convert.ToInt16(Session["time6"]);
+            seconds = totalSeconds % 60;
+            minutes = totalSeconds / 60;
+            time = minutes + ":" + seconds;
         }
     }
 </script>
@@ -1812,6 +1854,7 @@
                 <asp:Timer ID="Timer3" runat="server" Enabled="False" Interval="1000" OnTick="Timer3_Tick" />
                 <asp:Timer ID="Timer4" runat="server" Enabled="False" Interval="1000" OnTick="Timer4_Tick"></asp:Timer>
                 <asp:Timer ID="Timer5" runat="server" Interval="1000" Enabled="False" EnableViewState="True" OnTick="Timer5_Tick"></asp:Timer>
+                <asp:Timer ID="Timer6" runat="server" Interval="1000" Enabled="False" EnableViewState="True" OnTick="Timer6_Tick" ></asp:Timer>
                 <asp:Label ID="lblTimerXText" runat="server" ForeColor="Black" Font-Bold="True"></asp:Label>
                 <asp:Label ID="lblTimer" runat="server" ForeColor="#CC0000" Font-Bold="True"></asp:Label>
                 <asp:Label ID="lblTimerMaster" runat="server" ForeColor="#CC0000" Font-Bold="True"></asp:Label>

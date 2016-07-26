@@ -52,7 +52,7 @@ namespace CAHOnline
         public static bool ExistCookies()
         {
             String existEmailCookies = CookiesRequest();
-            if(existEmailCookies != "")
+            if (existEmailCookies != "")
             {
                 return true;
             }
@@ -116,7 +116,7 @@ namespace CAHOnline
         {
             String pass = SelectPwd(email);
 
-            if(pass == "")
+            if (pass == "")
             {
                 return false;
             }
@@ -124,7 +124,7 @@ namespace CAHOnline
             if (Hashing.ValidatePassword(pwd, pass) == true)
             {
                 return true;
-            } 
+            }
             else
             {
                 return false;
@@ -216,7 +216,7 @@ namespace CAHOnline
             string strcn6 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn6 = new SqlConnection(strcn6);
             cn6.Open();
-            
+
             String pass = Hashing.HashPassword(pwd);
             String email = CookiesRequest();
 
@@ -317,8 +317,8 @@ namespace CAHOnline
             SqlConnection cn10 = new SqlConnection(strcn10);
             cn10.Open();
 
-            String strsql = @"INSERT INTO tblGame(points, idAccount, idRoom, isMaster) 
-                            VALUES (0, '" + user.idAccount + "', '" + idRoom + "', '" + indexMaster + "')";
+            String strsql = @"INSERT INTO tblGame(points, idAccount, idRoom, isMaster, isWinner) 
+                            VALUES (0, '" + user.idAccount + "', '" + idRoom + "', '" + indexMaster + "', 0)";
             SqlCommand cmd = new SqlCommand(strsql, cn10);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -657,14 +657,14 @@ namespace CAHOnline
 
                 cmd.ExecuteNonQuery();
                 cmd.Dispose();
-                cn24.Close();   
+                cn24.Close();
                 return true;
             }
             else
             {
-                cn24.Close();   
+                cn24.Close();
                 return false;
-            }      
+            }
         }
 
         //Questa funzione mi permette di aggiornare la il numero di partite giocate 
@@ -828,7 +828,7 @@ namespace CAHOnline
             SqlCommand cmd = new SqlCommand(strsql, cn32);
 
             List<Account> listUsername = new List<Account>();
-   
+
             var dr19 = cmd.ExecuteReader();
 
             while (dr19.Read())
@@ -863,7 +863,7 @@ namespace CAHOnline
             dr20.Close();
             cmd.Dispose();
             cn33.Close();
-            return ok; 
+            return ok;
         }
 
         //Questa funzione mi permette di aggiornare il numero dei rounds 
@@ -899,7 +899,7 @@ namespace CAHOnline
             {
                 dr21.Read();
                 value.numberRound = Convert.ToInt32(dr21["numberRound"]);
-                value.newRound = Convert.ToInt32(dr21["newRound"]);    
+                value.newRound = Convert.ToInt32(dr21["newRound"]);
             }
 
             dr21.Close();
@@ -1582,5 +1582,119 @@ namespace CAHOnline
             cn70.Close();
             return ok;
         }
+
+        //Questa funzione mi permette di controllare se nella tblUserExit esiste l'utente
+        public static int UserExit(Account user)
+        {
+            string strcn71 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn71 = new SqlConnection(strcn71);
+            cn71.Open();
+
+            String strsql = "SELECT isExit FROM tblUserExit WHERE idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn71);
+            cmd.ExecuteNonQuery();
+
+            int value = 0;
+            var dr38 = cmd.ExecuteReader();
+            if (dr38.HasRows)
+            {
+                dr38.Read();
+                value = Convert.ToInt32(dr38["isExit"]);
+            }
+
+            dr38.Close();
+            cmd.Dispose();
+            cn71.Close();
+            return value;
+        }
+
+        //Questa funzione mi permette di aggiornare nella tblGame se l'utente è il vincitore del turno
+        public static void UpadateIsWinner(Account user, int isWinner)
+        {
+            string strcn72 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn72 = new SqlConnection(strcn72);
+            cn72.Open();
+
+            String strsql = "UPDATE tblGame SET isWinner = '" + isWinner + "' WHERE idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn72);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn72.Close();
+        }
+
+        //Questa funzione mi permette di controllare se l'utente è il vincitore del turno
+        public static bool CheckUserIsWinner(Account user)
+        {
+            string strcn73 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn73 = new SqlConnection(strcn73);
+            cn73.Open();
+
+            String strsql = "SELECT idAccount FROM tblGame WHERE isWinner = 1 and idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn73);
+            cmd.ExecuteNonQuery();
+
+            var dr39 = cmd.ExecuteReader();
+            dr39.Read();
+            bool ok = dr39.HasRows;
+            dr39.Close();
+            cmd.Dispose();
+            cn73.Close();
+            return ok;
+        }
+
+        //Questa funzione mi permette di controllare se nella tblUserExit esiste l'utente
+        public static String ReadUsernameWinner()
+        {
+            string strcn74 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn74 = new SqlConnection(strcn74);
+            cn74.Open();
+
+            String strsql = "SELECT a.username AS u FROM tblAccount AS a INNER JOIN tblGame AS g ON a.idAccount = g.idAccount WHERE g.isWinner = 1";
+            SqlCommand cmd = new SqlCommand(strsql, cn74);
+            cmd.ExecuteNonQuery();
+
+            String userWinner = "";
+            var dr38 = cmd.ExecuteReader();
+            if (dr38.HasRows)
+            {
+                dr38.Read();
+                userWinner = dr38["u"].ToString();
+            }
+
+            dr38.Close();
+            cmd.Dispose();
+            cn74.Close();
+            return userWinner;
+        }
+
+        //Questa funzione restituisce lo username in base all'idAccount e il punteggio
+        public static Dictionary<int, int> GetNCardsSelect(int room)
+        {
+            string strcn75 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn75 = new SqlConnection(strcn75);
+            cn75.Open();
+
+            String strsql = "SELECT COUNT(idAccount) FROM tblSelectedCards WHERE idRoom = '" + room + "' GROUP BY idAccount";
+            SqlCommand cmd = new SqlCommand(strsql, cn75);
+
+            Dictionary<int, int> listNCardsSelect = new Dictionary<int, int>();
+
+            var dr39 = cmd.ExecuteReader();
+            int value = 0;
+            while (dr39.Read())
+            {
+                if (dr39.HasRows)
+                {
+                    
+                    value.Username = dr39["u"].ToString();
+                    listNCardsSelect.Add(value);
+                }
+            }
+            dr39.Close();
+            cmd.Dispose();
+            cn75.Close();
+            return listNCardsSelect;
+        }
+
     }
 }

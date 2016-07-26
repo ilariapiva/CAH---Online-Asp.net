@@ -1666,35 +1666,5 @@ namespace CAHOnline
             cn74.Close();
             return userWinner;
         }
-
-        //Questa funzione restituisce lo username in base all'idAccount e il punteggio
-        public static Dictionary<int, int> GetNCardsSelect(int room)
-        {
-            string strcn75 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
-            SqlConnection cn75 = new SqlConnection(strcn75);
-            cn75.Open();
-
-            String strsql = "SELECT COUNT(idAccount) FROM tblSelectedCards WHERE idRoom = '" + room + "' GROUP BY idAccount";
-            SqlCommand cmd = new SqlCommand(strsql, cn75);
-
-            Dictionary<int, int> listNCardsSelect = new Dictionary<int, int>();
-
-            var dr39 = cmd.ExecuteReader();
-            int value = 0;
-            while (dr39.Read())
-            {
-                if (dr39.HasRows)
-                {
-                    
-                    value.Username = dr39["u"].ToString();
-                    listNCardsSelect.Add(value);
-                }
-            }
-            dr39.Close();
-            cmd.Dispose();
-            cn75.Close();
-            return listNCardsSelect;
-        }
-
     }
 }

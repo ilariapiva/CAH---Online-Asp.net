@@ -16,7 +16,7 @@
     {
         if (!Page.IsPostBack)
         {
-            Session["time1"] = 1000;
+            Session["time1"] = 9000;
             GenerateCardsWhite();
         }
         
@@ -76,11 +76,18 @@
     protected void Timer1_Tick(object sender, EventArgs e)
     {
         Session["time1"] = Convert.ToInt16(Session["time1"]) - 1;
-        totalSeconds = Convert.ToInt16(Session["time1"]);
-        seconds = totalSeconds % 60;
-        minutes = totalSeconds / 60;
-        time = minutes + ":" + seconds;
-        GenerateCardsWhite();
+        if (Convert.ToInt16(Session["time1"]) <= 0)
+        {
+            Response.Redirect("~/index.aspx");
+        }
+        else
+        {
+            totalSeconds = Convert.ToInt16(Session["time1"]);
+            seconds = totalSeconds % 60;
+            minutes = totalSeconds / 60;
+            time = minutes + ":" + seconds;
+            GenerateCardsWhite();
+        }
     }
 
     protected void SelectButton_Click(object sender, EventArgs e)

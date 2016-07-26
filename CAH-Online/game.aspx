@@ -47,7 +47,7 @@
             //Session["time4"] = DateTime.Now.AddSeconds(60);
             //Session["time5"] = DateTime.Now.AddSeconds(193);   
             Session["time1"] = 50;
-            Session["time2"] = 40; //definisco tempo per il conteggio alla rovescia. Il tempo stabilito è di 1 min e 40 sec
+            Session["time2"] = 40;
             Session["time3"] = 3;
             Session["time4"] = 40;
             Session["time5"] = 150;
@@ -239,7 +239,8 @@
             }
         }
     }
-       
+    
+    //Questa funzione permette di confermare le carte selezionate dall'utente
     public void ConfirmCardSelect()
     {
         Account user = Master.resultUser;
@@ -1413,6 +1414,7 @@
         }
     }
     
+    //Timer utilizzato nella pagina del master per aspettare che i giocatori scelgano le carte
     protected void Timer1_Tick(object sender, EventArgs e)
     {
         //TimeSpan time1 = new TimeSpan();
@@ -1432,6 +1434,16 @@
                 Timer1.Dispose();
                 Timer1.Enabled = false;
                 Timer2.Enabled = true;
+            }
+            else
+            {
+                FunctionsDB.UpdateUserExit(Master.resultUser);
+                //int userExit = FunctionsDB.ReadUserExit();
+                //if (userExit > 0)
+                //{
+                    UpdateMatches();
+                    Response.Redirect("~/index.aspx");
+                //}
             }
         }
         else

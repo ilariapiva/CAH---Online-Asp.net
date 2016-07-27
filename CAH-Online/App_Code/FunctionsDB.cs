@@ -183,7 +183,7 @@ namespace CAHOnline
             String pass = Hashing.HashPassword(pwd);
 
             String strsql = @"INSERT INTO tblAccount(email, username, pwd, matchesPlayed, matchesWon, matchesMissed, matchesEqualized) 
-                              VALUES (@email, @username, @pwd, '0', '0', '0', '0')";
+                              VALUES (@email, @username, @pwd, '0', '0', '0', '0', '0')";
             SqlCommand cmd = new SqlCommand(strsql, cn4);
             cmd.Parameters.AddWithValue("email", email);
             cmd.Parameters.AddWithValue("username", user);
@@ -847,7 +847,7 @@ namespace CAHOnline
         }
 
         //Questa funzione mi permette di controllare se nella tblGame c'è già il giocatore
-        public static bool CheckUserInGame(Account user)
+        public static bool checkUserInGame(Account user)
         {
             string strcn33 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn33 = new SqlConnection(strcn33);
@@ -1060,13 +1060,13 @@ namespace CAHOnline
         }
 
         //Questa funzione permette di eliminare un utente dalla tblGame
-        public static void DeleteUserInGame(int room, Account user)
+        public static void DeleteUserInGame(Account user)
         {
             string strcn42 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn42 = new SqlConnection(strcn42);
             cn42.Open();
 
-            String strsql = "DELETE FROM tblGame WHERE idRoom = '" + room + "' and idAccount = '" + user.idAccount + "'";
+            String strsql = "DELETE FROM tblGame WHERE idAccount = '" + user.idAccount + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn42);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -1550,13 +1550,13 @@ namespace CAHOnline
         }
 
         //Questa funzione permette di eliminare le righe dalla tblUserExit 
-        public static void DeleteUserExit(int room)
+        public static void DeleteUserExit(Account user)
         {
             string strcn69 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn69 = new SqlConnection(strcn69);
             cn69.Open();
 
-            String strsql = @"DELETE FROM tblUserExit WHERE idRoom = '" + room + "'";
+            String strsql = @"DELETE FROM tblUserExit WHERE idAccount = '" + user.idAccount + "'";
             SqlCommand cmd = new SqlCommand(strsql, cn69);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -1666,5 +1666,70 @@ namespace CAHOnline
             cn74.Close();
             return userWinner;
         }
+
+        //Questa funzione sapere se c'è un vincitore del round
+        public static int nUserWinnerRound(int indexRoom)
+        {
+            string strcn75 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn75 = new SqlConnection(strcn75);
+            cn75.Open();
+
+            String strsql = "SELECT COUNT(isWinner) AS w FROM tblGame WHERE idRoom = '" + indexRoom + "' and isWinner = 1 ";
+            SqlCommand cmd = new SqlCommand(strsql, cn75);
+            cmd.ExecuteNonQuery();
+
+            int nUserWinner = 0;
+            var dr39 = cmd.ExecuteReader();
+            if (dr39.HasRows)
+            {
+                dr39.Read();
+                nUserWinner = Convert.ToInt32(dr39["w"]);
+            }
+
+            dr39.Close();
+            cmd.Dispose();
+            cn75.Close();
+            return nUserWinner;
+        }
+
+        //Questa funzione mi permette di controllare un utente ha già iniziato una partita
+        public static int isPlaying(Account user)
+        {
+            string strcn76 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn76 = new SqlConnection(strcn76);
+            cn76.Open();
+
+            String strsql = "SELECT isPlaying FROM tblAccount WHERE idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn76);
+            cmd.ExecuteNonQuery();
+
+            int ok = 0;
+            var dr40 = cmd.ExecuteReader();
+            if (dr40.HasRows)
+            {
+                dr40.Read();
+                ok = Convert.ToInt32(dr40["isPlaying"]);
+            }
+
+            dr40.Close();
+            cmd.Dispose();
+            cn76.Close();
+            return ok;
+        }
+
+        //Questa funzione mi permette di aggiornare nella tblAccount se l'utente sta giocando
+        public static void UpadateIsPlaying(Account user, int isPlaying)
+        {
+            string strcn77 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn77 = new SqlConnection(strcn77);
+            cn77.Open();
+
+            String strsql = "UPDATE tblAccount SET isPlaying = '" + isPlaying + "' WHERE idAccount = '" + user.idAccount + "'";
+            SqlCommand cmd = new SqlCommand(strsql, cn77);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            cn77.Close();
+        }
+
     }
 }

@@ -14,6 +14,7 @@
             if (room.ExistUserInRoom(Master.resultUser))
             {
                 int indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
+                FunctionsDB.UpdateUserExit(Master.resultUser);
 
                 if (room.CheckDeleteCardsUser(Master.resultUser))
                 {
@@ -25,7 +26,7 @@
                 }
                 if (FunctionsDB.CheckUserInGame(indexRoom, Master.resultUser))
                 {
-                    FunctionsDB.DeleteUserInGame(indexRoom, Master.resultUser);
+                    FunctionsDB.DeleteUserInGame(Master.resultUser);
                 }
                 if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
                 {

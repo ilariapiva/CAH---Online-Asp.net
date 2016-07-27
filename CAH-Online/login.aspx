@@ -27,7 +27,7 @@
                 }
                 if (FunctionsDB.CheckUserInGame(indexRoom, Master.resultUser))
                 {
-                    FunctionsDB.DeleteUserInGame(indexRoom, Master.resultUser);
+                    FunctionsDB.DeleteUserInGame(Master.resultUser);
                 }
                 if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
                 {

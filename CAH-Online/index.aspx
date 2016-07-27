@@ -17,6 +17,17 @@
         if (!Page.IsPostBack)
         {
             Session["time1"] = 9000;
+            Session["time2"] = 1;
+            
+            FunctionsDB.UpadateIsPlaying(Master.resultUser, 0);
+            if (room.ExistUserInRoom(Master.resultUser))
+            {
+                indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
+                if(FunctionsDB.CheckUserExit(indexRoom, Master.resultUser))
+                {
+                     FunctionsDB.UpdateUserExit(Master.resultUser);
+                }
+            }
             GenerateCardsWhite();
         }
         
@@ -24,35 +35,40 @@
         {
             SelectButton.Enabled = false;
         }
-        else
-        {
-            if (room.ExistUserInRoom(Master.resultUser))
-            {
-                indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
-                FunctionsDB.UpdateUserExit(Master.resultUser);
-
-                if (room.CheckDeleteCardsUser(Master.resultUser))
-                {
-                    room.DeleteCardsUser(Master.resultUser);
-                }
-                if (room.CheckDeleteUser(indexRoom, Master.resultUser))
-                {
-                    room.DeleteUser(indexRoom, Master.resultUser);
-                }
-                if (FunctionsDB.CheckUserInGame(indexRoom, Master.resultUser))
-                {
-                    FunctionsDB.DeleteUserInGame(indexRoom, Master.resultUser);
-                }
-                if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
-                {
-                    FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
-                }
-                if (FunctionsDB.CheckDeleteCardsWhite(indexRoom, Master.resultUser))
-                {
-                    FunctionsDB.DeleteCardsWhite(indexRoom, Master.resultUser);
-                }
-            }
-        }
+        //else
+        //{
+        //    if (room.ExistUserInRoom(Master.resultUser))
+        //    {
+        //        indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
+        //        FunctionsDB.UpdateUserExit(Master.resultUser);
+        //        FunctionsDB.UpadateIsPlaying(Master.resultUser, 0);
+                
+        //        if (room.CheckDeleteCardsUser(Master.resultUser))
+        //        {
+        //            room.DeleteCardsUser(Master.resultUser);
+        //        }
+        //        if (room.CheckDeleteUser(indexRoom, Master.resultUser))
+        //        {
+        //            room.DeleteUser(indexRoom, Master.resultUser);
+        //        }
+        //        if (FunctionsDB.CheckUserInGame(indexRoom, Master.resultUser))
+        //        {
+        //            FunctionsDB.DeleteUserInGame(indexRoom, Master.resultUser);
+        //        }
+        //        if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
+        //        {
+        //            FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
+        //        }
+        //        if (FunctionsDB.CheckDeleteCardsWhite(indexRoom, Master.resultUser))
+        //        {
+        //            FunctionsDB.DeleteCardsWhite(indexRoom, Master.resultUser);
+        //        }
+        //        if (FunctionsDB.CheckDeleteCardsBlack(indexRoom))
+        //        {
+        //            FunctionsDB.DeleteCardsBlack(indexRoom);
+        //        }
+        //    }
+        //}
     }
 
     protected int RandomCard(List<Cards> listCards)
@@ -71,7 +87,6 @@
         lblCardWhite.Attributes.Add("value", cardWhite.idCards.ToString());
         lblCardWhite.Text = cardWhite.Text;
     }
-
 
     protected void Timer1_Tick(object sender, EventArgs e)
     {
@@ -92,44 +107,151 @@
 
     protected void SelectButton_Click(object sender, EventArgs e)
     {
-        if (room.ExistUserInRoom(Master.resultUser))
+        //FunctionsDB.UpdateUserExit(Master.resultUser);
+        
+        int userIsPlaying = FunctionsDB.isPlaying(Master.resultUser);
+        if (userIsPlaying == 1)
         {
-            indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
+            int idRoom = room.ReturnKeyRoomUser(Master.resultUser);
+            if (room.listUserIsFull(idRoom))
+            {
+                indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
+                if (FunctionsDB.CheckUserExit(indexRoom, Master.resultUser))
+                {
+                    FunctionsDB.DeleteUserExit(Master.resultUser);
+                }
+                if (room.CheckDeleteCardsUser(Master.resultUser))
+                {
+                    room.DeleteCardsUser(Master.resultUser);
+                }
+                if (room.CheckDeleteUser(indexRoom, Master.resultUser))
+                {
+                    room.DeleteUser(indexRoom, Master.resultUser);
+                }
+                if (FunctionsDB.CheckUserInGame(indexRoom, Master.resultUser))
+                {
+                    FunctionsDB.DeleteUserInGame(Master.resultUser);
+                }
+                if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
+                {
+                    FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
+                }
+                if (FunctionsDB.CheckDeleteCardsWhite(indexRoom, Master.resultUser))
+                {
+                    FunctionsDB.DeleteCardsWhite(indexRoom, Master.resultUser);
+                }
+                if (FunctionsDB.CheckDeleteCardsBlack(indexRoom))
+                {
+                    FunctionsDB.DeleteCardsBlack(indexRoom);
+                }
+                FunctionsDB.UpadateIsPlaying(Master.resultUser, 0);
+                //string script = "alert(\"Non ci sono abbastanza giocatori in attesa di iniziare una partita!\");";
+                string script = "alert(\"There was an error, please try again!\");";
+                ScriptManager.RegisterClientScriptBlock((sender as Control), this.GetType(), "alert", script, true);
+                Timer1.Enabled = false;
+                Timer1.Dispose();
+                Timer2.Enabled = true;
+            }
+            else
+            {
+                indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
+                if (FunctionsDB.CheckUserExit(indexRoom, Master.resultUser))
+                {
+                    FunctionsDB.DeleteUserExit(Master.resultUser);
+                }
+                if (room.CheckDeleteCardsUser(Master.resultUser))
+                {
+                    room.DeleteCardsUser(Master.resultUser);
+                }
+                if (room.CheckDeleteUser(indexRoom, Master.resultUser))
+                {
+                    room.DeleteUser(indexRoom, Master.resultUser);
+                }
+                if (FunctionsDB.CheckUserInGame(indexRoom, Master.resultUser))
+                {
+                    FunctionsDB.DeleteUserInGame(Master.resultUser);
+                }
+                if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
+                {
+                    FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
+                }
+                if (FunctionsDB.CheckDeleteCardsWhite(indexRoom, Master.resultUser))
+                {
+                    FunctionsDB.DeleteCardsWhite(indexRoom, Master.resultUser);
+                }
+                if (FunctionsDB.CheckDeleteCardsBlack(indexRoom))
+                {
+                    FunctionsDB.DeleteCardsBlack(indexRoom);
+                }
+                FunctionsDB.UpadateIsPlaying(Master.resultUser, 0);
+                Response.Redirect("~/waitingRoom.aspx");
+            }
+        }
+        else
+        {
+            if (room.ExistUserInRoom(Master.resultUser))
+            {
+                indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
+                if (FunctionsDB.CheckUserExit(indexRoom, Master.resultUser))
+                {
+                    int userIsExit = FunctionsDB.UserExit(Master.resultUser);
+                    if (userIsExit == 1)
+                    {
+                        FunctionsDB.DeleteUserExit(Master.resultUser);
+                        FunctionsDB.UpadateIsPlaying(Master.resultUser, 0);
 
-            if (room.CheckDeleteCardsUser(Master.resultUser))
-            {
-                room.DeleteCardsUser(Master.resultUser);
+                        if (room.CheckDeleteCardsUser(Master.resultUser))
+                        {
+                            room.DeleteCardsUser(Master.resultUser);
+                        }
+                        if (room.CheckDeleteUser(indexRoom, Master.resultUser))
+                        {
+                            room.DeleteUser(indexRoom, Master.resultUser);
+                        }
+                        if (FunctionsDB.CheckUserInGame(indexRoom, Master.resultUser))
+                        {
+                            FunctionsDB.DeleteUserInGame(Master.resultUser);
+                        }
+                        if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
+                        {
+                            FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
+                        }
+                        if (FunctionsDB.CheckDeleteCardsWhite(indexRoom, Master.resultUser))
+                        {
+                            FunctionsDB.DeleteCardsWhite(indexRoom, Master.resultUser);
+                        }
+                        if (FunctionsDB.CheckDeleteCardsBlack(indexRoom))
+                        {
+                            FunctionsDB.DeleteCardsBlack(indexRoom);
+                        }
+                        Response.Redirect("~/waitingRoom.aspx");
+                    }
+                }
             }
-            if (room.CheckDeleteUser(indexRoom, Master.resultUser))
+            else
             {
-                room.DeleteUser(indexRoom, Master.resultUser);
-            }
-            if (FunctionsDB.CheckUserInGame(indexRoom, Master.resultUser))
-            {
-                FunctionsDB.DeleteUserInGame(indexRoom, Master.resultUser);
-            }
-            if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
-            {
-                FunctionsDB.DeleteCardSelectUser(indexRoom, Master.resultUser);
-            }
-            if (FunctionsDB.CheckDeleteCardsWhite(indexRoom, Master.resultUser))
-            {
-                FunctionsDB.DeleteCardsWhite(indexRoom, Master.resultUser);
-            }
-            if (FunctionsDB.CheckDeleteCardsBlack(indexRoom))
-            {
-                FunctionsDB.DeleteCardsBlack(indexRoom);
-            }
-            if (FunctionsDB.CheckUserExit(indexRoom, Master.resultUser))
-            {
-                FunctionsDB.DeleteUserExit(indexRoom);
+                FunctionsDB.DeleteUserExit(Master.resultUser);
+                FunctionsDB.DeleteUserInGame(Master.resultUser);
+                Response.Redirect("~/waitingRoom.aspx");
             }
         }
-        if (FunctionsDB.CheckUserExit(indexRoom, Master.resultUser))
+    }
+
+    protected void Timer2_Tick(object sender, EventArgs e)
+    {
+        Session["time2"] = Convert.ToInt16(Session["time2"]) - 1;
+        if (Convert.ToInt16(Session["time2"]) <= 0)
         {
-            FunctionsDB.DeleteUserExit(indexRoom);
+            
+            Response.Redirect("~/index.aspx");
         }
-        Response.Redirect("~/waitingRoom.aspx");
+        else
+        {
+            totalSeconds = Convert.ToInt16(Session["time2"]);
+            seconds = totalSeconds % 60;
+            minutes = totalSeconds / 60;
+            time = minutes + ":" + seconds;
+        }
     }
 </script>
 
@@ -143,6 +265,7 @@
     <asp:UpdatePanel ID="Pannello" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
             <asp:Timer ID="Timer1" runat="server" Interval="3000" OnTick="Timer1_Tick" />
+            <asp:Timer ID="Timer2" runat="server" Interval="1000" OnTick="Timer2_Tick" Enabled="False" />
             <div class="row">
                 <div class="col-md-6">
                     <div class="row">

@@ -71,8 +71,6 @@
                     ScriptManager.RegisterClientScriptBlock((sender as Control), this.GetType(), "alert", script, true);
                     FunctionsDB.UpadateIsPlaying(Master.resultUser, 0);
                     FunctionsDB.UpdateUserExit(Master.resultUser);
-                    room.DeleteCardsUser(Master.resultUser);
-                    room.DeleteUser(indexRoom, Master.resultUser);
                     FunctionsDB.DeleteCardsWhite(indexRoom, Master.resultUser);
                     if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
                     {
@@ -82,6 +80,9 @@
                     {
                         FunctionsDB.DeleteCardsBlack(indexRoom);
                     }
+                    room.DeleteCardsUser(Master.resultUser);
+                    room.DeleteUser(indexRoom, Master.resultUser);
+                    FunctionsDB.DeleteUserExit(Master.resultUser);
                 }
                 if(numberWinners == 1)
                 {
@@ -96,8 +97,6 @@
                     ScriptManager.RegisterClientScriptBlock((sender as Control), this.GetType(), "alert", script, true);
                     FunctionsDB.UpadateIsPlaying(Master.resultUser, 0);
                     FunctionsDB.UpdateUserExit(Master.resultUser);
-                    room.DeleteCardsUser(Master.resultUser);
-                    room.DeleteUser(indexRoom, Master.resultUser);
                     FunctionsDB.DeleteCardsWhite(indexRoom, Master.resultUser);
                     if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
                     {
@@ -107,6 +106,9 @@
                     {
                         FunctionsDB.DeleteCardsBlack(indexRoom);
                     }
+                    room.DeleteCardsUser(Master.resultUser);
+                    room.DeleteUser(indexRoom, Master.resultUser);
+                    FunctionsDB.DeleteUserExit(Master.resultUser);
                 }
 
                 //room.DeleteCardsUser(Master.resultUser);
@@ -123,9 +125,9 @@
                 //{
                 //    FunctionsDB.DeleteCardsBlack(indexRoom);
                 //}
-               
-                Timer7.Enabled = true;
-                //Response.Redirect("~/index.aspx");
+
+                //Timer7.Enabled = true;
+                Response.Redirect("~/index.aspx");
             }
             
             //se l'utente è il master visualizzo solo la carta master 
@@ -1955,8 +1957,6 @@
                 UpdateMatches();
                 FunctionsDB.UpdateUserExit(Master.resultUser);
                 FunctionsDB.UpadateIsPlaying(Master.resultUser, 0);
-                room.DeleteCardsUser(Master.resultUser);
-                room.DeleteUser(indexRoom, Master.resultUser);
                 FunctionsDB.DeleteCardsWhite(indexRoom, Master.resultUser);
                 if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
                 {
@@ -1966,6 +1966,8 @@
                 {
                     FunctionsDB.DeleteCardsBlack(indexRoom);
                 }
+                room.DeleteCardsUser(Master.resultUser);
+                room.DeleteUser(indexRoom, Master.resultUser);
                 string script = "alert(\"The game is over because a user has left the game.\");";
                 ScriptManager.RegisterClientScriptBlock((sender as Control), this.GetType(), "alert", script, true);
                 Timer5.Enabled = false;
@@ -1990,8 +1992,6 @@
                 UpdateMatches();
                 FunctionsDB.UpdateUserExit(Master.resultUser);
                 FunctionsDB.UpadateIsPlaying(Master.resultUser, 0);
-                room.DeleteCardsUser(Master.resultUser);
-                room.DeleteUser(indexRoom, Master.resultUser);
                 FunctionsDB.DeleteCardsWhite(indexRoom, Master.resultUser);
                 if (FunctionsDB.CheckCardsUser(indexRoom, Master.resultUser))
                 {
@@ -2001,6 +2001,8 @@
                 {
                     FunctionsDB.DeleteCardsBlack(indexRoom);
                 }
+                room.DeleteCardsUser(Master.resultUser);
+                room.DeleteUser(indexRoom, Master.resultUser);
                 string script = "alert(\"The game is over because a user has left the game.\");";
                 ScriptManager.RegisterClientScriptBlock((sender as Control), this.GetType(), "alert", script, true);
                 Timer5.Enabled = false;
@@ -2049,11 +2051,17 @@
     protected void Timer7_Tick(object sender, EventArgs e)
     {
         Session["time7"] = Convert.ToInt16(Session["time7"]) - 1;
-        totalSeconds = Convert.ToInt16(Session["time7"]);
-        seconds = totalSeconds % 60;
-        minutes = totalSeconds / 60;
-        time = minutes + ":" + seconds;
-        Response.Redirect("~/index.aspx");
+        if (Convert.ToInt16(Session["time7"]) <= 0)
+        {
+             Response.Redirect("~/index.aspx");
+        }
+        else
+        {
+            totalSeconds = Convert.ToInt16(Session["time7"]);
+            seconds = totalSeconds % 60;
+            minutes = totalSeconds / 60;
+            time = minutes + ":" + seconds;
+        }
     }
 </script>
 

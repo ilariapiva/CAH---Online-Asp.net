@@ -87,15 +87,16 @@ namespace CAHOnline
         }
 
         //Questa funzione permette di selezionare la pwd criptata in base all'email
-        private static String SelectPwd(String email)
+        private static String SelectPwdEmail(String emailOrUser)
         {
             string strcn1 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
             SqlConnection cn1 = new SqlConnection(strcn1);
             cn1.Open();
 
-            String strsql = "SELECT pwd FROM tblAccount WHERE email = @email";
+            String strsql = "SELECT pwd FROM tblAccount WHERE email = @email or username = @username";
             SqlCommand cmd = new SqlCommand(strsql, cn1);
-            cmd.Parameters.AddWithValue("email", email);
+            cmd.Parameters.AddWithValue("email", emailOrUser);
+            cmd.Parameters.AddWithValue("username", emailOrUser);
 
             String value = "";
             var dr1 = cmd.ExecuteReader();
@@ -112,9 +113,9 @@ namespace CAHOnline
         }
 
         //Questa funzione controlla che l'email e la pwd siano inseriti nel DB
-        public static bool Login(String email, String pwd)
+        public static bool LoginEmail(String email, String pwd)
         {
-            String pass = SelectPwd(email);
+            String pass = SelectPwdEmail(email);
 
             if (pass == "")
             {
@@ -182,7 +183,7 @@ namespace CAHOnline
 
             String pass = Hashing.HashPassword(pwd);
 
-            String strsql = @"INSERT INTO tblAccount(email, username, pwd, matchesPlayed, matchesWon, matchesMissed, matchesEqualized) 
+            String strsql = @"INSERT INTO tblAccount(email, username, pwd, matchesPlayed, matchesWon, matchesMissed, matchesEqualized, isPlaying) 
                               VALUES (@email, @username, @pwd, '0', '0', '0', '0', '0')";
             SqlCommand cmd = new SqlCommand(strsql, cn4);
             cmd.Parameters.AddWithValue("email", email);
@@ -1729,6 +1730,31 @@ namespace CAHOnline
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             cn77.Close();
+        }
+
+        //Questa funzione permette di selezionare la pwd criptata in base all'email
+        public static String SelectEmailUser(String user)
+        {
+            string strcn78 = "Data Source= .\\;Trusted_Connection=Yes;DATABASE=CAHOnline";
+            SqlConnection cn78 = new SqlConnection(strcn78);
+            cn78.Open();
+
+            String strsql = "SELECT email FROM tblAccount WHERE username = @username";
+            SqlCommand cmd = new SqlCommand(strsql, cn78);
+            cmd.Parameters.AddWithValue("username", user);
+
+            String value = "";
+            var dr41 = cmd.ExecuteReader();
+            if (dr41.HasRows)
+            {
+                dr41.Read();
+                value = dr41["email"].ToString();
+            }
+
+            dr41.Close();
+            cmd.Dispose();
+            cn78.Close();
+            return value;
         }
 
     }

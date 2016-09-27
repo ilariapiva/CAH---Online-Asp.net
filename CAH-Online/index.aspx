@@ -1,4 +1,5 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" %>
+﻿
+<%@ Page Language="C#" MasterPageFile="~/MasterPage.master" %>
 <%@ MasterType VirtualPath="~/MasterPage.master" %>
 <%@ Import Namespace="CAHOnline" %>
 
@@ -19,7 +20,7 @@
             Session["time1"] = 9000;
             Session["time2"] = 1;
             
-            FunctionsDB.UpadateIsPlaying(Master.resultUser, 0);
+            //FunctionsDB.UpadateIsPlaying(Master.resultUser, 0);
             if (room.ExistUserInRoom(Master.resultUser))
             {
                 indexRoom = room.ReturnKeyRoomUser(Master.resultUser);
@@ -35,6 +36,10 @@
         {
             SelectButton.Enabled = false;
         }
+        //else
+        //{
+        //    FunctionsDB.UpadateIsPlaying(Master.resultUser, 0);
+        //}
         //else
         //{
         //    if (room.ExistUserInRoom(Master.resultUser))
@@ -224,6 +229,7 @@
                         {
                             FunctionsDB.DeleteCardsBlack(indexRoom);
                         }
+                        FunctionsDB.DeleteUserExit(Master.resultUser);
                         Response.Redirect("~/waitingRoom.aspx");
                     }
                 }
@@ -242,7 +248,6 @@
         Session["time2"] = Convert.ToInt16(Session["time2"]) - 1;
         if (Convert.ToInt16(Session["time2"]) <= 0)
         {
-            
             Response.Redirect("~/index.aspx");
         }
         else
@@ -275,7 +280,7 @@
                                     <br />
                                 </h1>
                                 <p class="paragraph p3">
-                                    CAH - Online refers to <a class="link" href="https://cardsagainsthumanity.com">Cards Against Humanity</a>, an American board game. 
+                                    CAH - Online refers to <a class="link" href="https://cardsagainsthumanity.com" target="_blank">Cards Against Humanity</a>, an American board game. 
                                     This game is based on the sarcasm and the irony of the phrases created by the players. 
                                     CAH uses the Creative Commons license and is also available with a free license.
                                 </p>
@@ -290,7 +295,7 @@
                                 </h1>
                                 <p class="paragraph p3">
                                     Cards Against Humanity, whose title is a reference to politically incorrect content, has been created by some students of the high school Highlander Park, Illinois. 
-                                    This game has been funded through the website <a class="link" href="https://www.kickstarter.com">Kickstarter</a> and the funding goal has been exceeded three times the target.
+                                    This game has been funded through the website <a class="link" href="https://www.kickstarter.com" target="_blank">Kickstarter</a> and the funding goal has been exceeded three times the target.
                                 </p>
                             </div>
                         </div>

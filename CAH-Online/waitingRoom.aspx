@@ -21,7 +21,7 @@
         {
             if (room.listUserIsFull(indexRoom))
             {
-                //FunctionsDB.UpdateMatchesPlayed(Master.resultUser);
+                FunctionsDB.UpdateMatchesPlayed(Master.resultUser);
                 Response.Redirect("~/game.aspx");
             }
         }
@@ -30,17 +30,17 @@
             stateChanged = true;
             Session["time1"] = 15;
             Session["time2"] = 1;
-            FunctionsDB.UpadateIsPlaying(Master.resultUser, 1);
+            //FunctionsDB.UpadateIsPlaying(Master.resultUser, 1);
             
-            int isUserExit = FunctionsDB.UserExit(Master.resultUser);
-            if(isUserExit == 1)
-            {
-                string script = "alert(\"There are not enough players waiting to start a game!\");";
-                ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
-                Timer1.Enabled = false;
-                Timer1.Dispose();
-                Timer2.Enabled = true;
-            }
+            //int isUserExit = FunctionsDB.UserExit(Master.resultUser);
+            //if(isUserExit == 1)
+            //{
+            //    string script = "alert(\"There are not enough players waiting to start a game!\");";
+            //    ScriptManager.RegisterStartupScript(this, GetType(), "", script, true);
+            //    Timer1.Enabled = false;
+            //    Timer1.Dispose();
+            //    Timer2.Enabled = true;
+            //}
         }
         if(stateChanged)
         {
@@ -96,6 +96,7 @@
                     {
                         FunctionsDB.DeleteCardsBlack(indexRoom);
                     }
+                    FunctionsDB.DeleteUserExit(Master.resultUser);
                 }
                 Timer1.Enabled = false;
                 Timer1.Dispose();
@@ -151,7 +152,7 @@
             {
                 FunctionsDB.DeleteUserExit(Master.resultUser);
             }
-            FunctionsDB.UpadateIsPlaying(Master.resultUser, 0);
+            FunctionsDB.DeleteUserExit(Master.resultUser);
         }
         Response.Redirect("~/index.aspx");
     }
@@ -165,6 +166,7 @@
         <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
         <asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="Timer1_Tick"></asp:Timer>
         <asp:Timer ID="Timer2" runat="server" Interval="1000" OnTick="Timer2_Tick" Enabled="False"></asp:Timer>
+        <asp:Timer ID="Timer3" runat="server" Interval="1000" Enabled="False"></asp:Timer>
     </div>
     <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
         <ContentTemplate>

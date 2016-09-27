@@ -110,7 +110,7 @@
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ControlToValidate="txtPassword" ErrorMessage="X" runat="server" ForeColor="#FF3300" />
                 </div>
                 <div style="margin-top: 25px">
-                    <asp:LinkButton ID="btnRegister" runat="server" CssClass="btn waves-effect waves-light btn-x" OnClick="btnRegister_Click">Sign In<i class="material-icons right">send</i></asp:LinkButton>
+                    <asp:LinkButton ID="btnRegister" runat="server" CssClass="btn waves-effect waves-light btn-x" OnClick="btnRegister_Click">Sign Up<i class="material-icons right">send</i></asp:LinkButton>
                     <asp:Label ID="lblMsg" ForeColor="#FF3300" runat="server" />
                 </div>
             </div>

@@ -85,6 +85,11 @@
             lblPwd.Text = "X";
         }
     }
+
+    protected void btnAnnulla_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/index.aspx");
+    }
 </script>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <link rel="stylesheet" type="text/css" href="css/gears.css" />
@@ -123,8 +128,13 @@
                             <asp:TextBox ID="txtPassword" TextMode="Password" placeholder="Password" runat="server" Width="400px" ForeColor="White" />
                             <asp:Label ID="lblPwd" runat="server" class="info-error" ForeColor="#FF3300"></asp:Label>
                         </div>
+                         <div style="margin-top: 25px">
+                            <asp:LinkButton ID="btnAnnulla" runat="server" CssClass="btn waves-effect waves-light btn-x btn-cancel" OnClick="btnAnnulla_Click">Cancel
+                                <i class="material-icons right">send</i>
+                            </asp:LinkButton>
+                        </div>
                         <div style="margin-top: 25px">
-                            <asp:LinkButton ID="btnSalva" runat="server" CssClass="btn waves-effect waves-light btn-x" OnClick="btnSalva_Click">Save
+                            <asp:LinkButton ID="btnSalva" runat="server" CssClass="btn waves-effect waves-light btn-x btn-save" OnClick="btnSalva_Click">Save
                                 <i class="material-icons right">send</i>
                             </asp:LinkButton>
                         </div>

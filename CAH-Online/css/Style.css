@@ -115,7 +115,7 @@
 
 .password {
     color: #FFFFFF;
-    margin-right: 65px;
+    margin-right: 100px;
 }
 
 .email {
@@ -237,4 +237,14 @@
     width: 800px;
     border-radius: 2px;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.btn-cancel
+{
+    float: left;
+}
+
+.btn-save
+{
+    float: right;
 }

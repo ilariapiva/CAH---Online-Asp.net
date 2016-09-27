@@ -6,7 +6,7 @@
 <script runat="server">
 
     Account userEmail;
-    String pwd, email;
+    String pwd, emailOrUser;
     
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -50,16 +50,24 @@
     protected void btnLogin_Click1(object sender, EventArgs e)
     {
         userEmail = new Account();
-        email = "";
+        emailOrUser = "";
         pwd = "";
 
-        email = txtEmail.Text;
+        emailOrUser = txtEmailOrUser.Text;
         pwd = txtPassword.Text;
 
         //Controllo che l'email e la pwd corrispondano ad uno user registrato e poi memorizzo tramite i cookies l'email e accedo alla pagina principale
-        if (FunctionsDB.Login(email, pwd))
+        if (FunctionsDB.LoginEmail(emailOrUser, pwd))
         {
-            userEmail.Email = txtEmail.Text;
+            if(emailOrUser.Contains('@'))
+            {
+              userEmail.Email = txtEmailOrUser.Text;  
+            }
+            else
+            {
+                String email = FunctionsDB.SelectEmailUser(emailOrUser);
+                userEmail.Email = email;
+            }
 
             //FunctionsDB.WriteCookie(userEmail);
             FunctionsDB.CookiesResponse(userEmail);//Memorizzo l'email nei cookies
@@ -85,11 +93,11 @@
                 <h6 class="h6-text">Log In to start playing the online version of<br />
                     Cards Against Humanity!</h6>
                 <div style="margin-top: 75px">
-                    <asp:Label ID="lblEmail" runat="server" Text="E-mail address:" CssClass="profile-x email"></asp:Label>
-                    <asp:TextBox ID="txtEmail" placeholder="Email" runat="server" Width="400px" ForeColor="White" />
+                    <asp:Label ID="lblEmail" runat="server" Text="E-mail or Username:" CssClass="profile-x email"></asp:Label>
+                    <asp:TextBox ID="txtEmailOrUser" placeholder="Email or Username" runat="server" Width="400px" ForeColor="White" />
                     <%--<asp:RegularExpressionValidator ID="revEmail" runat="server" ErrorMessage="Sintassi email non valida" ValidationExpression=".*@.*\..*" ControlToValidate="txtEmail" ForeColor="#FF3300" />--%>
-                    <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ErrorMessage="X" ValidationExpression=".*@.*\..*" ControlToValidate="txtEmail" ForeColor="#FF3300" Font-Bold="True" Font-Size="Larger" />
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ControlToValidate="txtEmail" ErrorMessage="X" runat="server" ForeColor="#FF3300" />
+                    <%--<asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ErrorMessage="X" ForeColor="#FF3300" Font-Bold="True" Font-Size="Larger" />--%>
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ControlToValidate="txtEmailOrUser" ErrorMessage="X" runat="server" ForeColor="#FF3300" />
                 </div>
                 <div style="margin-top: 25px">
                     <asp:Label ID="lblPassword" runat="server" Text="Password:" CssClass="profile-x password"></asp:Label>
